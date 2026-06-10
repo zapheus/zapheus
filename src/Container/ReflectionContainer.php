@@ -17,25 +17,27 @@ class ReflectionContainer implements ContainerInterface
      * @param string $id
      *
      * @return mixed
-     * @throws \Zapheus\Container\NotFoundException
+     * @throws \InvalidArgumentException
+     * @throws \RuntimeException
      */
     public function get($id)
     {
-        if ($this->has($id) === false)
+        if (! $this->has($id))
         {
-            throw new NotFoundException("Class ($id) does not exists");
+            throw new NotFoundException('Class "' . $id . '" does not exist.');
         }
 
-        $reflection = new \ReflectionClass($id);
+        /** @var class-string $id */
+        $reflect = new \ReflectionClass($id);
 
-        if ($constructor = $reflection->getConstructor())
+        $args = array();
+
+        if ($const = $reflect->getConstructor())
         {
-            $arguments = $this->arguments($constructor);
-
-            return $reflection->newInstanceArgs($arguments);
+            $args = $this->resolve($const);
         }
 
-        return new $id;
+        return $reflect->newInstanceArgs($args);
     }
 
     /**
@@ -51,35 +53,78 @@ class ReflectionContainer implements ContainerInterface
     }
 
     /**
-     * Resolves the specified parameters from a container.
+     * Resolves constructor parameters via reflection.
      *
-     * @param \ReflectionFunctionAbstract $reflection
+     * @param \ReflectionMethod $reflect
      *
-     * @return array
+     * @return array<integer, mixed>
      */
-    protected function arguments(\ReflectionFunctionAbstract $reflection)
+    protected function resolve(\ReflectionMethod $reflect)
     {
-        $arguments = array();
+        $params = $reflect->getParameters();
 
-        foreach ($reflection->getParameters() as $key => $parameter)
+        $items = array();
+
+        foreach ($params as $key => $param)
         {
-            $name = $parameter->getName();
-
-            if ($class = $parameter->getClass())
+            if ($class = $this->getParam($param))
             {
                 $name = $class->getName();
-            }
 
-            try
-            {
-                $arguments[$key] = $parameter->getDefaultValue();
-            }
-            catch (\ReflectionException $exception)
-            {
-                $arguments[$key] = $this->get((string) $name);
+                $items[$key] = $this->get($name);
             }
         }
 
-        return $arguments;
+        return $items;
+    }
+
+    /**
+     * @codeCoverageIgnore
+     *
+     * Returns the ReflectionClass for a parameter,
+     * compatible with PHP 5.3 through 8.x.
+     *
+     * @param \ReflectionParameter $param
+     *
+     * @return \ReflectionClass<object>|null
+     */
+    protected function getParam(\ReflectionParameter $param)
+    {
+        $php8 = version_compare(PHP_VERSION, '8.0.0', '>=');
+
+        if (! $php8)
+        {
+            $fn = array($param, 'getClass');
+
+            return call_user_func($fn);
+        }
+
+        $fn = array($param, 'getType');
+
+        $type = call_user_func($fn);
+
+        $builtIn = true;
+
+        if ($type)
+        {
+            /** @var callable */
+            $fn = array($type, 'isBuiltin');
+
+            /** @var boolean */
+            $builtIn = call_user_func($fn);
+        }
+
+        if ($builtIn)
+        {
+            return null;
+        }
+
+        /** @var callable */
+        $class = array($type, 'getName');
+
+        /** @var class-string */
+        $fn = call_user_func($class);
+
+        return new \ReflectionClass($fn);
     }
 }

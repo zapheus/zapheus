@@ -48,7 +48,7 @@ class Resolver implements ResolverInterface
 
         $parameters = $this->arguments($reflection, $parameters);
 
-        return call_user_func_array($handler, $parameters);
+        return call_user_func_array($handler, array_values($parameters));
     }
 
     /**
@@ -118,7 +118,7 @@ class Resolver implements ResolverInterface
             $arguments = $this->arguments($constructor);
         }
 
-        return $reflection->newInstanceArgs($arguments);
+        return $reflection->newInstanceArgs(array_values($arguments));
     }
 
     /**

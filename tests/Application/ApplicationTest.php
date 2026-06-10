@@ -194,7 +194,7 @@ class ApplicationTest extends AbstractTestCase
      */
     protected function doSetUp()
     {
-        parent::setUp();
+        parent::doSetUp();
 
         $this->app = $this->application();
 

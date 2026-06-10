@@ -65,7 +65,7 @@ class CoordinatorTest extends AbstractTestCase
      */
     protected function doSetUp()
     {
-        parent::setUp();
+        parent::doSetUp();
 
         $this->app = new Coordinator($this->application());
 

@@ -53,7 +53,7 @@ class MiddlelayerTest extends AbstractTestCase
      */
     protected function doSetUp()
     {
-        parent::setUp();
+        parent::doSetUp();
 
         $this->app = new Middlelayer($this->application());
 

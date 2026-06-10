@@ -19,7 +19,7 @@ use Zapheus\Routing\Router;
 class MiddlelayerTest extends AbstractTestCase
 {
     /**
-     * Tests AbstractApplication::run.
+     * @runInSeparateProcess
      *
      * @return void
      */

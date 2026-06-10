@@ -15,7 +15,7 @@ use Zapheus\Fixture\Http\Controllers\HailController;
 class CoordinatorTest extends AbstractTestCase
 {
     /**
-     * Tests AbstractApplication::run.
+     * @runInSeparateProcess
      *
      * @return void
      */
@@ -31,7 +31,7 @@ class CoordinatorTest extends AbstractTestCase
     }
 
     /**
-     * Tests AbstractApplication::run without dependencies.
+     * @runInSeparateProcess
      *
      * @return void
      */

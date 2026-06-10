@@ -64,7 +64,7 @@ class ApplicationTest extends AbstractTestCase
     }
 
     /**
-     * Tests Application::handle with middleware.
+     * @runInSeparateProcess
      *
      * @return void
      */
@@ -132,7 +132,7 @@ class ApplicationTest extends AbstractTestCase
     }
 
     /**
-     * Tests AbstractApplication::run.
+     * @runInSeparateProcess
      *
      * @return void
      */
@@ -148,7 +148,7 @@ class ApplicationTest extends AbstractTestCase
     }
 
     /**
-     * Tests AbstractApplication::run with another resolver.
+     * @runInSeparateProcess
      *
      * @return void
      */
@@ -168,7 +168,7 @@ class ApplicationTest extends AbstractTestCase
     }
 
     /**
-     * Tests AbstractApplication::run with another response.
+     * @runInSeparateProcess
      *
      * @return void
      */

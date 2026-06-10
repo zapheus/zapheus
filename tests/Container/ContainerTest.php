@@ -46,7 +46,7 @@ class ContainerTest extends Testcase
     {
         $exception = 'Zapheus\Container\NotFoundException';
 
-        $this->doSetExpectedException($exception);
+        $this->doExpectException($exception);
 
         $this->container->get('hail');
     }

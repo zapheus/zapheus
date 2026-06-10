@@ -39,7 +39,7 @@ class RendererTest extends Testcase
      */
     public function testRenderMethodWithInvalidArgumentException()
     {
-        $this->doSetExpectedException('InvalidArgumentException');
+        $this->doExpectException('InvalidArgumentException');
 
         $this->renderer->render('InvalidFile');
     }

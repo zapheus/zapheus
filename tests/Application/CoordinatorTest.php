@@ -53,7 +53,7 @@ class CoordinatorTest extends AbstractTestCase
      */
     public function testUnknownMethod()
     {
-        $this->doSetExpectedException('BadMethodCallException');
+        $this->doExpectException('BadMethodCallException');
 
         $this->app->test();
     }

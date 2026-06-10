@@ -93,7 +93,7 @@ class DispatcherTest extends Testcase
      */
     public function testDispatchMethodWithLogicException()
     {
-        $this->doSetExpectedException('LogicException');
+        $this->doExpectException('LogicException');
 
         $this->dispatcher->dispatch($this->request);
     }

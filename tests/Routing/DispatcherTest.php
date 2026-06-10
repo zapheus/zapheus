@@ -118,7 +118,7 @@ class DispatcherTest extends Testcase
      */
     public function testDispatchMethodWithUnexpectedValueException()
     {
-        $this->doSetExpectedException('UnexpectedValueException');
+        $this->doExpectException('UnexpectedValueException');
 
         $resolver = $this->dispatcher->dispatch('GET', '/404');
     }

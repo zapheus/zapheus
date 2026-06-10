@@ -2,13 +2,16 @@
 
 namespace Zapheus\Http\Message;
 
+use Zapheus\Testcase;
+
 /**
  * Response Test
  *
  * @package Zapheus
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class ResponseTest extends \PHPUnit_Framework_TestCase
+class ResponseTest extends Testcase
 {
     /**
      * @var \Zapheus\Http\Message\ResponseFactory
@@ -20,7 +23,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    public function setUp()
+    protected function doSetUp()
     {
         $this->factory = new ResponseFactory(new Response);
     }

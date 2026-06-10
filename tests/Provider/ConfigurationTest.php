@@ -2,13 +2,16 @@
 
 namespace Zapheus\Provider;
 
+use Zapheus\Testcase;
+
 /**
  * Configuration Test
  *
  * @package Zapheus
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class ConfigurationTest extends \PHPUnit_Framework_TestCase
+class ConfigurationTest extends Testcase
 {
     /**
      * @var \Zapheus\Provider\ConfigurationInterface
@@ -20,7 +23,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    public function setUp()
+    protected function doSetUp()
     {
         $data = array('user' => array());
 

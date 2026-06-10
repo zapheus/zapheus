@@ -2,9 +2,8 @@
 
 [![Latest Version on Packagist][ico-version]][link-packagist]
 [![Software License][ico-license]][link-license]
-[![Build Status][ico-travis]][link-travis]
-[![Coverage Status][ico-scrutinizer]][link-scrutinizer]
-[![Quality Score][ico-code-quality]][link-code-quality]
+[![Build Status][ico-build]][link-build]
+[![Coverage Status][ico-coverage]][link-coverage]
 [![Total Downloads][ico-downloads]][link-downloads]
 
 Inspired from PHP frameworks of all shape and sizes, Zapheus is a web application framework with a goal to be easy to use, educational, and fully extensible to the core. Whether a simple API project or a full enterprise application, Zapheus will try to adapt it according to developer's needs.
@@ -29,13 +28,13 @@ echo $app->run();
 
 ## Installation
 
-Install `Zapheus` via [Composer](https://getcomposer.org/):
+Install the `Zapheus` package via [Composer](https://getcomposer.org/):
 
 ``` bash
 $ composer require zapheus/zapheus
 ```
 
-## Basic Usage
+## Basic usage
 
 ### Using `Coordinator`
 
@@ -167,34 +166,27 @@ $laravel = $container->get(Container::class);
 
 ## Changelog
 
-Please see [CHANGELOG][link-changelog] for more information what has changed recently.
+Please see [CHANGELOG][link-changelog] for more recent changes and latest updates.
 
-## Testing
+## Contributing
 
-``` bash
-$ composer test
-```
-
-## Credits
-
-- [All contributors][link-contributors]
+See [CONTRIBUTING][link-contributing] on how to contribute to the project.
 
 ## License
 
 The MIT License (MIT). Please see [LICENSE][link-license] for more information.
 
-[ico-code-quality]: https://img.shields.io/scrutinizer/g/zapheus/zapheus.svg?style=flat-square
+[ico-build]: https://img.shields.io/github/actions/workflow/status/zapheus/zapheus/build.yml?style=flat-square
+[ico-coverage]: https://img.shields.io/codecov/c/github/zapheus/zapheus?style=flat-square
 [ico-downloads]: https://img.shields.io/packagist/dt/zapheus/zapheus.svg?style=flat-square
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
-[ico-scrutinizer]: https://img.shields.io/scrutinizer/coverage/g/zapheus/zapheus.svg?style=flat-square
-[ico-travis]: https://img.shields.io/travis/zapheus/zapheus/master.svg?style=flat-square
 [ico-version]: https://img.shields.io/packagist/v/zapheus/zapheus.svg?style=flat-square
 
+[link-build]: https://github.com/zapheus/zapheus/actions
 [link-changelog]: https://github.com/zapheus/zapheus/blob/master/CHANGELOG.md
-[link-code-quality]: https://scrutinizer-ci.com/g/zapheus/zapheus
+[link-contributing]: https://github.com/zapheus/zapheus/blob/master/CONTRIBUTING.md
 [link-contributors]: https://github.com/zapheus/zapheus/contributors
+[link-coverage]: https://app.codecov.io/gh/zapheus/zapheus
 [link-downloads]: https://packagist.org/packages/zapheus/zapheus
 [link-license]: https://github.com/zapheus/zapheus/blob/master/LICENSE.md
 [link-packagist]: https://packagist.org/packages/zapheus/zapheus
-[link-scrutinizer]: https://scrutinizer-ci.com/g/zapheus/zapheus/code-structure
-[link-travis]: https://travis-ci.org/zapheus/zapheus

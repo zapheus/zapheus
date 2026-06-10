@@ -2,13 +2,16 @@
 
 namespace Zapheus\Http\Message;
 
+use Zapheus\Testcase;
+
 /**
  * Request Test
  *
  * @package Zapheus
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class RequestTest extends \PHPUnit_Framework_TestCase
+class RequestTest extends Testcase
 {
     /**
      * @var \Zapheus\Http\Message\RequestFactory
@@ -20,7 +23,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    public function setUp()
+    protected function doSetUp()
     {
         $_SERVER['REQUEST_METHOD'] = 'GET';
 

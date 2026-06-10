@@ -4,13 +4,13 @@ namespace Zapheus\Application;
 
 use Zapheus\Coordinator;
 use Zapheus\Fixture\Http\Controllers\HailController;
-use Zapheus\Fixture\Http\Controllers\LaudController;
 
 /**
  * Coordinator Test
  *
  * @package Zapheus
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
 class CoordinatorTest extends AbstractTestCase
 {
@@ -19,7 +19,7 @@ class CoordinatorTest extends AbstractTestCase
      *
      * @return void
      */
-    public function setUp()
+    protected function doSetUp()
     {
         parent::setUp();
 
@@ -93,7 +93,7 @@ class CoordinatorTest extends AbstractTestCase
      */
     public function testUnknownMethod()
     {
-        $this->setExpectedException('BadMethodCallException');
+        $this->doSetExpectedException('BadMethodCallException');
 
         $this->app->test();
     }

@@ -7,14 +7,16 @@ use Zapheus\Fixture\Http\Controllers\HailController;
 use Zapheus\Fixture\Http\Controllers\LaudController;
 use Zapheus\Fixture\Http\Controllers\TestController;
 use Zapheus\Fixture\Http\Middlewares\LastMiddleware;
+use Zapheus\Testcase;
 
 /**
  * Resolver Test
  *
  * @package Zapheus
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class ResolverTest extends \PHPUnit_Framework_TestCase
+class ResolverTest extends Testcase
 {
     /**
      * @var \Zapheus\Routing\ResolverInterface
@@ -26,7 +28,7 @@ class ResolverTest extends \PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    public function setUp()
+    protected function doSetUp()
     {
         $container = new Container;
 

@@ -2,13 +2,16 @@
 
 namespace Zapheus\Http\Message;
 
+use Zapheus\Testcase;
+
 /**
  * Stream Test
  *
  * @package Zapheus
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class StreamTest extends \PHPUnit_Framework_TestCase
+class StreamTest extends Testcase
 {
     /**
      * @var resource
@@ -25,7 +28,7 @@ class StreamTest extends \PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    public function setUp()
+    protected function doSetUp()
     {
         $search = 'Http' . DIRECTORY_SEPARATOR . 'Message';
 

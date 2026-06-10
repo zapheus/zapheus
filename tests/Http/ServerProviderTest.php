@@ -7,14 +7,16 @@ use Zapheus\Container\Container;
 use Zapheus\Fixture\Http\Middlewares\JsonMiddleware;
 use Zapheus\Fixture\Http\Middlewares\LastMiddleware;
 use Zapheus\Provider\Configuration;
+use Zapheus\Testcase;
 
 /**
  * Server Provider Test
  *
  * @package Zapheus
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class ServerProviderTest extends \PHPUnit_Framework_TestCase
+class ServerProviderTest extends Testcase
 {
     /**
      * @var \Zapheus\Container\WritableInterface
@@ -31,7 +33,7 @@ class ServerProviderTest extends \PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    public function setUp()
+    protected function doSetUp()
     {
         list($config, $container) = array(new Configuration, new Container);
 

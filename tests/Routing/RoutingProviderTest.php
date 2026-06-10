@@ -5,14 +5,16 @@ namespace Zapheus\Routing;
 use Zapheus\Application;
 use Zapheus\Container\Container;
 use Zapheus\Provider\Configuration;
+use Zapheus\Testcase;
 
 /**
  * Routing Provider Test
  *
  * @package Zapheus
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class RoutingProviderTest extends \PHPUnit_Framework_TestCase
+class RoutingProviderTest extends Testcase
 {
     /**
      * @var \Zapheus\Container\WritableInterface
@@ -34,7 +36,7 @@ class RoutingProviderTest extends \PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    public function setUp()
+    protected function doSetUp()
     {
         list($config, $container) = array(new Configuration, new Container);
 

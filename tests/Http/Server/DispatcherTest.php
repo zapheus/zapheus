@@ -7,15 +7,16 @@ use Zapheus\Fixture\Http\Middlewares\JsonMiddleware;
 use Zapheus\Http\Message\RequestFactory;
 use Zapheus\Http\Message\ResponseFactory;
 use Zapheus\Http\Message\Stream;
-use Zapheus\Http\Server\Dispatcher;
+use Zapheus\Testcase;
 
 /**
  * Dispatcher Test
  *
  * @package Zapheus
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class DispatcherTest extends \PHPUnit_Framework_TestCase
+class DispatcherTest extends Testcase
 {
     /**
      * @var \Zapheus\Http\Server\DispatcherInterface
@@ -32,7 +33,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    public function setUp()
+    protected function doSetUp()
     {
         list($items, $server) = array(array(), array());
 
@@ -135,7 +136,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
      */
     public function testDispatchMethodWithLogicException()
     {
-        $this->setExpectedException('LogicException');
+        $this->doSetExpectedException('LogicException');
 
         $this->dispatcher->dispatch($this->request);
     }

@@ -4,14 +4,16 @@ namespace Zapheus\Application;
 
 use Zapheus\Application;
 use Zapheus\Http\Message\RequestFactory;
+use Zapheus\Testcase;
 
 /**
  * Abstract Test Case
  *
  * @package Zapheus
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
-abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
+abstract class AbstractTestCase extends Testcase
 {
     /**
      * @var \Zapheus\Application
@@ -23,7 +25,7 @@ abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    public function setUp()
+    protected function doSetUp()
     {
         $_SERVER['REQUEST_METHOD'] = 'GET';
 
@@ -47,7 +49,8 @@ abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
     /**
      * Defines the instance to the application.
      *
-     * @param  mixed $instance
+     * @param mixed $instance
+     *
      * @return string
      */
     protected function define($instance)
@@ -62,8 +65,9 @@ abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
     /**
      * Creates a dummy request instance.
      *
-     * @param  string $method
-     * @param  string $uri
+     * @param string $method
+     * @param string $uri
+     *
      * @return \Zapheus\Application
      */
     protected function request($method, $uri)

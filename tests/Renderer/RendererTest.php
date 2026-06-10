@@ -2,15 +2,16 @@
 
 namespace Zapheus\Renderer;
 
-use Zapheus\Renderer\Renderer;
+use Zapheus\Testcase;
 
 /**
  * Renderer Test
  *
  * @package Zapheus
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class RendererTest extends \PHPUnit_Framework_TestCase
+class RendererTest extends Testcase
 {
     /**
      * @var \Zapheus\Renderer\RendererInterface
@@ -22,7 +23,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    public function setUp()
+    protected function doSetUp()
     {
         $path = __DIR__ . '/../Fixture/Views';
 
@@ -50,7 +51,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
      */
     public function testRenderMethodWithInvalidArgumentException()
     {
-        $this->setExpectedException('InvalidArgumentException');
+        $this->doSetExpectedException('InvalidArgumentException');
 
         $this->renderer->render('InvalidFile');
     }

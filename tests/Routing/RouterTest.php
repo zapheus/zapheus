@@ -2,15 +2,16 @@
 
 namespace Zapheus\Routing;
 
-use Zapheus\Routing\Router;
+use Zapheus\Testcase;
 
 /**
  * Router Test
  *
  * @package Zapheus
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class RouterTest extends \PHPUnit_Framework_TestCase
+class RouterTest extends Testcase
 {
     /**
      * @var \Zapheus\Routing\RouterInterface
@@ -22,7 +23,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    public function setUp()
+    protected function doSetUp()
     {
         $this->router = new Router;
     }

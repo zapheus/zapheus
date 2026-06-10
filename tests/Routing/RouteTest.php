@@ -2,15 +2,16 @@
 
 namespace Zapheus\Routing;
 
-use Zapheus\Routing\Route;
+use Zapheus\Testcase;
 
 /**
  * Route Test
  *
  * @package Zapheus
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class RouteTest extends \PHPUnit_Framework_TestCase
+class RouteTest extends Testcase
 {
     /**
      * @var \Zapheus\Routing\Route
@@ -22,7 +23,7 @@ class RouteTest extends \PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    public function setUp()
+    protected function doSetUp()
     {
         $this->route = new Route('GET', '/test', 'HailController@greet');
     }

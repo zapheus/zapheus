@@ -2,13 +2,16 @@
 
 namespace Zapheus\Http\Message;
 
+use Zapheus\Testcase;
+
 /**
  * URI Test
  *
  * @package Zapheus
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class UriTest extends \PHPUnit_Framework_TestCase
+class UriTest extends Testcase
 {
     /**
      * @var \Zapheus\Http\Message\UriFactory
@@ -20,7 +23,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    public function setUp()
+    protected function doSetUp()
     {
         $this->factory = new UriFactory; // to pass null
 

@@ -13,7 +13,8 @@ use Zapheus\Routing\Router;
  * Middlelayer Test
  *
  * @package Zapheus
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
 class MiddlelayerTest extends AbstractTestCase
 {
@@ -22,7 +23,7 @@ class MiddlelayerTest extends AbstractTestCase
      *
      * @return void
      */
-    public function setUp()
+    protected function doSetUp()
     {
         parent::setUp();
 
@@ -62,7 +63,7 @@ class MiddlelayerTest extends AbstractTestCase
      */
     public function testUnknownMethod()
     {
-        $this->setExpectedException('BadMethodCallException');
+        $this->doSetExpectedException('BadMethodCallException');
 
         $this->app->test();
     }

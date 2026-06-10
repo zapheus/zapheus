@@ -2,13 +2,16 @@
 
 namespace Zapheus\Http\Message;
 
+use Zapheus\Testcase;
+
 /**
  * File Test
  *
  * @package Zapheus
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class FileTest extends \PHPUnit_Framework_TestCase
+class FileTest extends Testcase
 {
     /**
      * @var \Zapheus\Http\Message\FileInterface
@@ -25,7 +28,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    public function setUp()
+    protected function doSetUp()
     {
         $name = __DIR__ . '/../../Fixture/Views/HelloWorld.php';
 
@@ -137,7 +140,8 @@ class FileTest extends \PHPUnit_Framework_TestCase
     /**
      * Creates a new \File instance.
      *
-     * @param  string $filename
+     * @param string $filename
+     *
      * @return \File
      */
     protected function instance($filename)

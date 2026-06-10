@@ -18,7 +18,8 @@ use Zapheus\Routing\Router;
  * Application Test
  *
  * @package Zapheus
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
 class ApplicationTest extends AbstractTestCase
 {
@@ -27,7 +28,7 @@ class ApplicationTest extends AbstractTestCase
      *
      * @return void
      */
-    public function setUp()
+    protected function doSetUp()
     {
         parent::setUp();
 

@@ -6,7 +6,8 @@ namespace Zapheus\Fixture\Http\Controllers;
  * Laud Controller
  *
  * @package Zapheus
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
 class LaudController
 {

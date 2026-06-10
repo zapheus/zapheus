@@ -11,15 +11,17 @@ use Zapheus\Http\Server\MiddlewareInterface;
  * JSON Middleware
  *
  * @package Zapheus
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
 class JsonMiddleware implements MiddlewareInterface
 {
     /**
      * Processes an incoming request and returns a response.
      *
-     * @param  \Zapheus\Http\Message\RequestInterface $request
-     * @param  \Zapheus\Http\Server\HandlerInterface  $handler
+     * @param \Zapheus\Http\Message\RequestInterface $request
+     * @param \Zapheus\Http\Server\HandlerInterface  $handler
+     *
      * @return \Zapheus\Http\Message\ResponseInterface
      */
     public function process(RequestInterface $request, HandlerInterface $handler)

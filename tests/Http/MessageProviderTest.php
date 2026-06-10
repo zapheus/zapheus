@@ -5,14 +5,16 @@ namespace Zapheus\Http;
 use Zapheus\Application;
 use Zapheus\Container\Container;
 use Zapheus\Provider\Configuration;
+use Zapheus\Testcase;
 
 /**
  * Message Provider Test
  *
  * @package Zapheus
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class MessageProviderTest extends \PHPUnit_Framework_TestCase
+class MessageProviderTest extends Testcase
 {
     /**
      * @var \Zapheus\Container\WritableInterface
@@ -29,7 +31,7 @@ class MessageProviderTest extends \PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    public function setUp()
+    protected function doSetUp()
     {
         list($config, $container) = array(new Configuration, new Container);
 

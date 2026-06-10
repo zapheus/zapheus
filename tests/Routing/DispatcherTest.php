@@ -5,17 +5,16 @@ namespace Zapheus\Routing;
 use Zapheus\Container\ReflectionContainer;
 use Zapheus\Fixture\Http\Controllers\HailController;
 use Zapheus\Fixture\Http\Controllers\LaudController;
-use Zapheus\Routing\Dispatcher;
-use Zapheus\Routing\Resolver;
-use Zapheus\Routing\Router;
+use Zapheus\Testcase;
 
 /**
  * Dispatcher Test
  *
  * @package Zapheus
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class DispatcherTest extends \PHPUnit_Framework_TestCase
+class DispatcherTest extends Testcase
 {
     /**
      * @var \Zapheus\Routing\DispatcherInterface
@@ -27,7 +26,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    public function setUp()
+    protected function doSetUp()
     {
         list($hail, $laud) = array(new HailController, null);
 
@@ -151,7 +150,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
      */
     public function testDispatchMethodWithUnexpectedValueException()
     {
-        $this->setExpectedException('UnexpectedValueException');
+        $this->doSetExpectedException('UnexpectedValueException');
 
         $resolver = $this->dispatcher->dispatch('GET', '/404');
     }

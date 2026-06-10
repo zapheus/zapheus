@@ -2,16 +2,17 @@
 
 namespace Zapheus\Container;
 
-use Zapheus\Container\ReflectionContainer;
 use Zapheus\Fixture\Http\Controllers\HailController;
+use Zapheus\Testcase;
 
 /**
  * Container Test
  *
  * @package Zapheus
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class ContainerTest extends \PHPUnit_Framework_TestCase
+class ContainerTest extends Testcase
 {
     /**
      * @var \Zapheus\Container\ContainerInterface
@@ -23,7 +24,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    public function setUp()
+    protected function doSetUp()
     {
         $this->container = new Container;
     }
@@ -55,7 +56,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     {
         $exception = 'Zapheus\Container\NotFoundException';
 
-        $this->setExpectedException($exception);
+        $this->doSetExpectedException($exception);
 
         $this->container->get('hail');
     }

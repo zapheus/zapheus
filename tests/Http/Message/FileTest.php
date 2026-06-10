@@ -24,20 +24,6 @@ class FileTest extends Testcase
     protected $filename;
 
     /**
-     * Sets up the uploaded file instance.
-     *
-     * @return void
-     */
-    protected function doSetUp()
-    {
-        $name = __DIR__ . '/../../Fixture/Views/HelloWorld.php';
-
-        $this->filename = $name;
-
-        $this->file = $this->instance($name);
-    }
-
-    /**
      * Tests FileInterface::error.
      *
      * @return void
@@ -135,6 +121,20 @@ class FileTest extends Testcase
         $result = $this->file->type();
 
         $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * Sets up the uploaded file instance.
+     *
+     * @return void
+     */
+    protected function doSetUp()
+    {
+        $name = __DIR__ . '/../../Fixture/Views/HelloWorld.php';
+
+        $this->filename = $name;
+
+        $this->file = $this->instance($name);
     }
 
     /**

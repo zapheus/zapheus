@@ -24,24 +24,6 @@ class ResolverTest extends Testcase
     protected $resolver;
 
     /**
-     * Sets up the resolver instance.
-     *
-     * @return void
-     */
-    protected function doSetUp()
-    {
-        $container = new Container;
-
-        $laud = new LaudController(new HailController);
-
-        $test = new TestController($laud);
-
-        $container->set(get_class($test), $test);
-
-        $this->resolver = new Resolver($container);
-    }
-
-    /**
      * Tests ResolverInterface::resolve.
      *
      * @return void
@@ -67,5 +49,23 @@ class ResolverTest extends Testcase
         $result = $this->resolver->resolve($route);
 
         $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * Sets up the resolver instance.
+     *
+     * @return void
+     */
+    protected function doSetUp()
+    {
+        $container = new Container;
+
+        $laud = new LaudController(new HailController);
+
+        $test = new TestController($laud);
+
+        $container->set(get_class($test), $test);
+
+        $this->resolver = new Resolver($container);
     }
 }

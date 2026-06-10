@@ -29,31 +29,6 @@ class DispatcherTest extends Testcase
     protected $request;
 
     /**
-     * Sets up the dispatcher instance.
-     *
-     * @return void
-     */
-    protected function doSetUp()
-    {
-        list($items, $server) = array(array(), array());
-
-        $items[] = new JsonMiddleware;
-
-        $this->dispatcher = new Dispatcher($items);
-
-        $server['REQUEST_METHOD'] = 'GET';
-        $server['REQUEST_URI'] = '/';
-        $server['SERVER_NAME'] = 'roug.in';
-        $server['SERVER_PORT'] = 8000;
-
-        $factory = new RequestFactory;
-
-        $factory->server($server);
-
-        $this->request = $factory->make();
-    }
-
-    /**
      * Tests DispatcherInterface::dispatch.
      *
      * @return void
@@ -112,6 +87,18 @@ class DispatcherTest extends Testcase
     }
 
     /**
+     * Tests DispatcherInterface::dispatch with \LogicException.
+     *
+     * @return void
+     */
+    public function testDispatchMethodWithLogicException()
+    {
+        $this->doSetExpectedException('LogicException');
+
+        $this->dispatcher->dispatch($this->request);
+    }
+
+    /**
      * Tests DispatcherInterface::dispatch with string.
      *
      * @return void
@@ -130,14 +117,27 @@ class DispatcherTest extends Testcase
     }
 
     /**
-     * Tests DispatcherInterface::dispatch with \LogicException.
+     * Sets up the dispatcher instance.
      *
      * @return void
      */
-    public function testDispatchMethodWithLogicException()
+    protected function doSetUp()
     {
-        $this->doSetExpectedException('LogicException');
+        list($items, $server) = array(array(), array());
 
-        $this->dispatcher->dispatch($this->request);
+        $items[] = new JsonMiddleware;
+
+        $this->dispatcher = new Dispatcher($items);
+
+        $server['REQUEST_METHOD'] = 'GET';
+        $server['REQUEST_URI'] = '/';
+        $server['SERVER_NAME'] = 'roug.in';
+        $server['SERVER_PORT'] = 8000;
+
+        $factory = new RequestFactory;
+
+        $factory->server($server);
+
+        $this->request = $factory->make();
     }
 }

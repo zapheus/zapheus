@@ -19,18 +19,6 @@ class RendererTest extends Testcase
     protected $renderer;
 
     /**
-     * Sets up the renderer instance.
-     *
-     * @return void
-     */
-    protected function doSetUp()
-    {
-        $path = __DIR__ . '/../Fixture/Views';
-
-        $this->renderer = new Renderer($path);
-    }
-
-    /**
      * Tests RendererInterface::render.
      *
      * @return void
@@ -54,5 +42,17 @@ class RendererTest extends Testcase
         $this->doSetExpectedException('InvalidArgumentException');
 
         $this->renderer->render('InvalidFile');
+    }
+
+    /**
+     * Sets up the renderer instance.
+     *
+     * @return void
+     */
+    protected function doSetUp()
+    {
+        $path = __DIR__ . '/../Fixture/Views';
+
+        $this->renderer = new Renderer($path);
     }
 }

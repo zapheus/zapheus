@@ -26,22 +26,6 @@ class RendererProviderTest extends Testcase
     protected $provider;
 
     /**
-     * Sets up the provider instance.
-     *
-     * @return void
-     */
-    protected function doSetUp()
-    {
-        list($config, $container) = array(new Configuration, new Container);
-
-        $config->set('app.views', __DIR__ . '/../Fixture/Views');
-
-        $this->container = $container->set(RendererProvider::CONFIG, $config);
-
-        $this->provider = new RendererProvider;
-    }
-
-    /**
      * Tests ProviderInterface::register.
      *
      * @return void
@@ -57,5 +41,21 @@ class RendererProviderTest extends Testcase
         $result = $renderer->render('loremipsum');
 
         $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * Sets up the provider instance.
+     *
+     * @return void
+     */
+    protected function doSetUp()
+    {
+        list($config, $container) = array(new Configuration, new Container);
+
+        $config->set('app.views', __DIR__ . '/../Fixture/Views');
+
+        $this->container = $container->set(RendererProvider::CONFIG, $config);
+
+        $this->provider = new RendererProvider;
     }
 }

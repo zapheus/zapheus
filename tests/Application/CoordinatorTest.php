@@ -15,46 +15,6 @@ use Zapheus\Fixture\Http\Controllers\HailController;
 class CoordinatorTest extends AbstractTestCase
 {
     /**
-     * Sets up the application instance.
-     *
-     * @return void
-     */
-    protected function doSetUp()
-    {
-        parent::setUp();
-
-        $this->app = new Coordinator($this->application());
-
-        $this->define(new HailController);
-
-        $hail = 'Zapheus\Fixture\Http\Controllers\HailController';
-
-        $laud = 'Zapheus\Fixture\Http\Controllers\LaudController';
-
-        $this->app->connect('/greet', $laud . '@greet');
-
-        $this->app->delete('/greet', $laud . '@greet');
-
-        $this->app->get('/greet', $laud . '@greet');
-
-        $this->app->get('/hello', $hail . '@greet');
-
-        $this->app->head('/greet', $laud . '@greet');
-
-        $this->app->options('/greet', $laud . '@greet');
-
-        $this->app->patch('/greet', $laud . '@greet');
-
-        $this->app->post('/greet', $laud . '@greet');
-
-        $this->app->purge('/greet', $laud . '@greet');
-
-        $this->app->put('/greet', $laud . '@greet');
-
-        $this->app->trace('/greet', $laud . '@greet');
-    }
-
-    /**
      * Tests AbstractApplication::run.
      *
      * @return void
@@ -96,5 +56,45 @@ class CoordinatorTest extends AbstractTestCase
         $this->doSetExpectedException('BadMethodCallException');
 
         $this->app->test();
+    }
+
+    /**
+     * Sets up the application instance.
+     *
+     * @return void
+     */
+    protected function doSetUp()
+    {
+        parent::setUp();
+
+        $this->app = new Coordinator($this->application());
+
+        $this->define(new HailController);
+
+        $hail = 'Zapheus\Fixture\Http\Controllers\HailController';
+
+        $laud = 'Zapheus\Fixture\Http\Controllers\LaudController';
+
+        $this->app->connect('/greet', $laud . '@greet');
+
+        $this->app->delete('/greet', $laud . '@greet');
+
+        $this->app->get('/greet', $laud . '@greet');
+
+        $this->app->get('/hello', $hail . '@greet');
+
+        $this->app->head('/greet', $laud . '@greet');
+
+        $this->app->options('/greet', $laud . '@greet');
+
+        $this->app->patch('/greet', $laud . '@greet');
+
+        $this->app->post('/greet', $laud . '@greet');
+
+        $this->app->purge('/greet', $laud . '@greet');
+
+        $this->app->put('/greet', $laud . '@greet');
+
+        $this->app->trace('/greet', $laud . '@greet');
     }
 }

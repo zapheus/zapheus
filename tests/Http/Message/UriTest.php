@@ -19,34 +19,6 @@ class UriTest extends Testcase
     protected $factory;
 
     /**
-     * Sets up the URI instance.
-     *
-     * @return void
-     */
-    protected function doSetUp()
-    {
-        $this->factory = new UriFactory; // to pass null
-
-        $url = 'https://me@roug.in:400/about';
-
-        $this->factory = new UriFactory(new Uri($url));
-    }
-
-    /**
-     * Tests UriInterface::__toString.
-     *
-     * @return void
-     */
-    public function testToStringMagicMethod()
-    {
-        $expected = 'https://me@roug.in:400/about';
-
-        $result = (string) $this->factory->make();
-
-        $this->assertEquals($expected, $result);
-    }
-
-    /**
      * Tests UriInterface::authority.
      *
      * @return void
@@ -153,6 +125,20 @@ class UriTest extends Testcase
     }
 
     /**
+     * Tests UriInterface::__toString.
+     *
+     * @return void
+     */
+    public function testToStringMagicMethod()
+    {
+        $expected = 'https://me@roug.in:400/about';
+
+        $result = (string) $this->factory->make();
+
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
      * Tests UriInterface::user.
      *
      * @return void
@@ -182,5 +168,19 @@ class UriTest extends Testcase
         $result = $this->factory->make()->user();
 
         $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * Sets up the URI instance.
+     *
+     * @return void
+     */
+    protected function doSetUp()
+    {
+        $this->factory = new UriFactory; // to pass null
+
+        $url = 'https://me@roug.in:400/about';
+
+        $this->factory = new UriFactory(new Uri($url));
     }
 }

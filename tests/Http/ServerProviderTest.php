@@ -29,6 +29,32 @@ class ServerProviderTest extends Testcase
     protected $provider;
 
     /**
+     * Tests ProviderInterface::register.
+     *
+     * @return void
+     */
+    public function testRegisterMethod()
+    {
+        $message = new MessageProvider;
+
+        $container = $message->register($this->container);
+
+        $container = $this->provider->register($container);
+
+        $dispatcher = $container->get(Application::MIDDLEWARE);
+
+        $request = $container->get(Application::REQUEST);
+
+        $expected = array('application/json');
+
+        $response = $dispatcher->dispatch($request);
+
+        $result = $response->header('Content-Type');
+
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
      * Sets up the provider instance.
      *
      * @return void
@@ -56,31 +82,5 @@ class ServerProviderTest extends Testcase
         $this->container = $container;
 
         $this->provider = new ServerProvider;
-    }
-
-    /**
-     * Tests ProviderInterface::register.
-     *
-     * @return void
-     */
-    public function testRegisterMethod()
-    {
-        $message = new MessageProvider;
-
-        $container = $message->register($this->container);
-
-        $container = $this->provider->register($container);
-
-        $dispatcher = $container->get(Application::MIDDLEWARE);
-
-        $request = $container->get(Application::REQUEST);
-
-        $expected = array('application/json');
-
-        $response = $dispatcher->dispatch($request);
-
-        $result = $response->header('Content-Type');
-
-        $this->assertEquals($expected, $result);
     }
 }

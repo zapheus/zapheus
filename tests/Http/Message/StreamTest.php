@@ -24,24 +24,6 @@ class StreamTest extends Testcase
     protected $stream;
 
     /**
-     * Sets up the stream instance.
-     *
-     * @return void
-     */
-    protected function doSetUp()
-    {
-        $search = 'Http' . DIRECTORY_SEPARATOR . 'Message';
-
-        $root = str_replace($search, 'Fixture', __DIR__);
-
-        $file = (string) $root . '/Views/LoremIpsum.php';
-
-        $this->resource = $resource = fopen($file, 'r');
-
-        $this->stream = new Stream($this->resource);
-    }
-
-    /**
      * Tests StreamInterface::read.
      *
      * @return void
@@ -71,5 +53,23 @@ class StreamTest extends Testcase
         $this->stream->close();
 
         $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * Sets up the stream instance.
+     *
+     * @return void
+     */
+    protected function doSetUp()
+    {
+        $search = 'Http' . DIRECTORY_SEPARATOR . 'Message';
+
+        $root = str_replace($search, 'Fixture', __DIR__);
+
+        $file = (string) $root . '/Views/LoremIpsum.php';
+
+        $this->resource = $resource = fopen($file, 'r');
+
+        $this->stream = new Stream($this->resource);
     }
 }

@@ -19,28 +19,6 @@ use Zapheus\Routing\Router;
 class MiddlelayerTest extends AbstractTestCase
 {
     /**
-     * Sets up the application instance.
-     *
-     * @return void
-     */
-    protected function doSetUp()
-    {
-        parent::setUp();
-
-        $this->app = new Middlelayer($this->application());
-
-        $controller = $this->define(new HailController);
-
-        $handler = (string) $controller . '@greet';
-
-        $router = new Router(array(new Route('GET', '/hi', $handler)));
-
-        $middleware = new RouterMiddleware(new Dispatcher($router));
-
-        $this->app->pipe($middleware);
-    }
-
-    /**
      * Tests AbstractApplication::run.
      *
      * @return void
@@ -66,5 +44,27 @@ class MiddlelayerTest extends AbstractTestCase
         $this->doSetExpectedException('BadMethodCallException');
 
         $this->app->test();
+    }
+
+    /**
+     * Sets up the application instance.
+     *
+     * @return void
+     */
+    protected function doSetUp()
+    {
+        parent::setUp();
+
+        $this->app = new Middlelayer($this->application());
+
+        $controller = $this->define(new HailController);
+
+        $handler = (string) $controller . '@greet';
+
+        $router = new Router(array(new Route('GET', '/hi', $handler)));
+
+        $middleware = new RouterMiddleware(new Dispatcher($router));
+
+        $this->app->pipe($middleware);
     }
 }

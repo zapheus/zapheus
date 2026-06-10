@@ -19,16 +19,6 @@ class ResponseTest extends Testcase
     protected $factory;
 
     /**
-     * Sets up the factory instance.
-     *
-     * @return void
-     */
-    protected function doSetUp()
-    {
-        $this->factory = new ResponseFactory(new Response);
-    }
-
-    /**
      * Tests ResponseInterface::code.
      *
      * @return void
@@ -56,5 +46,15 @@ class ResponseTest extends Testcase
         $result = $this->factory->make()->reason();
 
         $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * Sets up the factory instance.
+     *
+     * @return void
+     */
+    protected function doSetUp()
+    {
+        $this->factory = new ResponseFactory(new Response);
     }
 }

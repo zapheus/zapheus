@@ -19,16 +19,6 @@ class RouterTest extends Testcase
     protected $router;
 
     /**
-     * Sets up the router instance.
-     *
-     * @return void
-     */
-    protected function doSetUp()
-    {
-        $this->router = new Router;
-    }
-
-    /**
      * Tests RouterInterface::add.
      *
      * @return void
@@ -65,5 +55,15 @@ class RouterTest extends Testcase
         $result = $this->router->routes();
 
         $this->assertCount($expected, $result);
+    }
+
+    /**
+     * Sets up the router instance.
+     *
+     * @return void
+     */
+    protected function doSetUp()
+    {
+        $this->router = new Router;
     }
 }

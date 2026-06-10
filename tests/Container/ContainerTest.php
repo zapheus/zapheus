@@ -20,16 +20,6 @@ class ContainerTest extends Testcase
     protected $container;
 
     /**
-     * Sets up the container instance.
-     *
-     * @return void
-     */
-    protected function doSetUp()
-    {
-        $this->container = new Container;
-    }
-
-    /**
      * Tests ContainerInterface::get method.
      *
      * @return void
@@ -71,5 +61,15 @@ class ContainerTest extends Testcase
         $this->container->set('hail', new HailController);
 
         $this->assertTrue($this->container->has('hail'));
+    }
+
+    /**
+     * Sets up the container instance.
+     *
+     * @return void
+     */
+    protected function doSetUp()
+    {
+        $this->container = new Container;
     }
 }

@@ -32,28 +32,6 @@ class RoutingProviderTest extends Testcase
     protected $router;
 
     /**
-     * Sets up the provider instance.
-     *
-     * @return void
-     */
-    protected function doSetUp()
-    {
-        list($config, $container) = array(new Configuration, new Container);
-
-        $route = new Route('GET', '/', 'HailController@index');
-
-        $this->router = new Router(array($route));
-
-        $container->set(get_class($this->router), $this->router);
-
-        $config->set('app.router', 'Zapheus\Routing\Router');
-
-        $this->container = $container->set(RoutingProvider::CONFIG, $config);
-
-        $this->provider = new RoutingProvider;
-    }
-
-    /**
      * Tests ProviderInterface::register.
      *
      * @return void
@@ -95,5 +73,27 @@ class RoutingProviderTest extends Testcase
         $result = $dispatcher->dispatch('GET', '/');
 
         $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * Sets up the provider instance.
+     *
+     * @return void
+     */
+    protected function doSetUp()
+    {
+        list($config, $container) = array(new Configuration, new Container);
+
+        $route = new Route('GET', '/', 'HailController@index');
+
+        $this->router = new Router(array($route));
+
+        $container->set(get_class($this->router), $this->router);
+
+        $config->set('app.router', 'Zapheus\Routing\Router');
+
+        $this->container = $container->set(RoutingProvider::CONFIG, $config);
+
+        $this->provider = new RoutingProvider;
     }
 }

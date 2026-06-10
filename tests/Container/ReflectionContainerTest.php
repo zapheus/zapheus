@@ -21,16 +21,6 @@ class ReflectionContainerTest extends Testcase
     protected $container;
 
     /**
-     * Sets up the container instance.
-     *
-     * @return void
-     */
-    protected function doSetUp()
-    {
-        $this->container = new ReflectionContainer;
-    }
-
-    /**
      * Tests ContainerInterface::get.
      *
      * @return void
@@ -72,5 +62,15 @@ class ReflectionContainerTest extends Testcase
         $this->doSetExpectedException($exception);
 
         $this->container->get('hail');
+    }
+
+    /**
+     * Sets up the container instance.
+     *
+     * @return void
+     */
+    protected function doSetUp()
+    {
+        $this->container = new ReflectionContainer;
     }
 }

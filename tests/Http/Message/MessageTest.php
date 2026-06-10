@@ -19,16 +19,6 @@ class MessageTest extends Testcase
     protected $factory;
 
     /**
-     * Sets up the factory instance.
-     *
-     * @return void
-     */
-    protected function doSetUp()
-    {
-        $this->factory = new MessageFactory;
-    }
-
-    /**
      * Tests MessageInterface::header.
      *
      * @return void
@@ -108,5 +98,15 @@ class MessageTest extends Testcase
         $result = $this->factory->make()->version();
 
         $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * Sets up the factory instance.
+     *
+     * @return void
+     */
+    protected function doSetUp()
+    {
+        $this->factory = new MessageFactory;
     }
 }

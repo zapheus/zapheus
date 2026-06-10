@@ -19,20 +19,6 @@ class ConfigurationTest extends Testcase
     protected $config;
 
     /**
-     * Sets up the configuration instance.
-     *
-     * @return void
-     */
-    protected function doSetUp()
-    {
-        $data = array('user' => array());
-
-        $data['user']['name'] = 'Rougin';
-
-        $this->config = new Configuration($data);
-    }
-
-    /**
      * Tests ConfigurationInterface::all.
      *
      * @return void
@@ -156,5 +142,19 @@ class ConfigurationTest extends Testcase
         $result = $this->config->get('user.name');
 
         $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * Sets up the configuration instance.
+     *
+     * @return void
+     */
+    protected function doSetUp()
+    {
+        $data = array('user' => array());
+
+        $data['user']['name'] = 'Rougin';
+
+        $this->config = new Configuration($data);
     }
 }

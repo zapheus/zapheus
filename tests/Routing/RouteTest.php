@@ -19,16 +19,6 @@ class RouteTest extends Testcase
     protected $route;
 
     /**
-     * Sets up the route instance.
-     *
-     * @return void
-     */
-    protected function doSetUp()
-    {
-        $this->route = new Route('GET', '/test', 'HailController@greet');
-    }
-
-    /**
      * Tests Route::uri.
      *
      * @return void
@@ -40,5 +30,15 @@ class RouteTest extends Testcase
         $result = $this->route->uri();
 
         $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * Sets up the route instance.
+     *
+     * @return void
+     */
+    protected function doSetUp()
+    {
+        $this->route = new Route('GET', '/test', 'HailController@greet');
     }
 }

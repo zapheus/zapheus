@@ -27,6 +27,26 @@ class MessageProviderTest extends Testcase
     protected $provider;
 
     /**
+     * Tests ProviderInterface::register.
+     *
+     * @return void
+     */
+    public function testRegisterMethod()
+    {
+        $container = $this->provider->register($this->container);
+
+        $request = $container->get(Application::REQUEST);
+
+        $expected = 'roug.in';
+
+        $server = $request->server();
+
+        $result = $server['SERVER_NAME'];
+
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
      * Sets up the provider instance.
      *
      * @return void
@@ -49,25 +69,5 @@ class MessageProviderTest extends Testcase
         $this->container = $container;
 
         $this->provider = new MessageProvider;
-    }
-
-    /**
-     * Tests ProviderInterface::register.
-     *
-     * @return void
-     */
-    public function testRegisterMethod()
-    {
-        $container = $this->provider->register($this->container);
-
-        $request = $container->get(Application::REQUEST);
-
-        $expected = 'roug.in';
-
-        $server = $request->server();
-
-        $result = $server['SERVER_NAME'];
-
-        $this->assertEquals($expected, $result);
     }
 }

@@ -19,40 +19,6 @@ class RequestTest extends Testcase
     protected $factory;
 
     /**
-     * Sets up the request instance.
-     *
-     * @return void
-     */
-    protected function doSetUp()
-    {
-        $_SERVER['REQUEST_METHOD'] = 'GET';
-
-        $_SERVER['REQUEST_URI'] = '/';
-
-        $_SERVER['SERVER_NAME'] = 'roug.in';
-
-        $_SERVER['SERVER_PORT'] = 8000;
-
-        $_SERVER['HTTPS'] = 'off';
-
-        $_FILES['file']['error'] = 0;
-
-        $file = __DIR__ . '/../../Fixture/Views/LoremIpsum.php';
-
-        $_FILES['file']['name'] = basename($file);
-
-        $_FILES['file']['tmp_name'] = (string) $file;
-
-        $request = new Request('GET', '/', $_SERVER);
-
-        $factory = new RequestFactory($request);
-
-        $factory->server($_SERVER);
-
-        $this->factory = $factory;
-    }
-
-    /**
      * Tests RequestInterface::attribute.
      *
      * @return void
@@ -268,5 +234,39 @@ class RequestTest extends Testcase
         $result = $this->factory->make()->uri();
 
         $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * Sets up the request instance.
+     *
+     * @return void
+     */
+    protected function doSetUp()
+    {
+        $_SERVER['REQUEST_METHOD'] = 'GET';
+
+        $_SERVER['REQUEST_URI'] = '/';
+
+        $_SERVER['SERVER_NAME'] = 'roug.in';
+
+        $_SERVER['SERVER_PORT'] = 8000;
+
+        $_SERVER['HTTPS'] = 'off';
+
+        $_FILES['file']['error'] = 0;
+
+        $file = __DIR__ . '/../../Fixture/Views/LoremIpsum.php';
+
+        $_FILES['file']['name'] = basename($file);
+
+        $_FILES['file']['tmp_name'] = (string) $file;
+
+        $request = new Request('GET', '/', $_SERVER);
+
+        $factory = new RequestFactory($request);
+
+        $factory->server($_SERVER);
+
+        $this->factory = $factory;
     }
 }

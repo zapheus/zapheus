@@ -22,38 +22,6 @@ class DispatcherTest extends Testcase
     protected $dispatcher;
 
     /**
-     * Sets up the dispatcher instance.
-     *
-     * @return void
-     */
-    protected function doSetUp()
-    {
-        list($hail, $laud) = array(new HailController, null);
-
-        $laud = new LaudController($hail);
-
-        $router = new Router;
-
-        $router->get('/greeeeet', get_class($hail) . '@greet');
-
-        $router->get('/test/wow', array(get_class($hail), 'greet'));
-
-        $router->get('/helloo/{name}', function ($name = 'Doe')
-        {
-            $message = (string) sprintf('my name is %s', $name);
-
-            return 'Hello, ' . $message . ' and this is a test.';
-        });
-
-        $router->get('/test/{name}', function ($name)
-        {
-            return 'Hello everyone! I am ' . $name;
-        });
-
-        $this->dispatcher = new Dispatcher($router);
-    }
-
-    /**
      * Tests DispatcherInterface::dispatch.
      *
      * @return void
@@ -153,5 +121,37 @@ class DispatcherTest extends Testcase
         $this->doSetExpectedException('UnexpectedValueException');
 
         $resolver = $this->dispatcher->dispatch('GET', '/404');
+    }
+
+    /**
+     * Sets up the dispatcher instance.
+     *
+     * @return void
+     */
+    protected function doSetUp()
+    {
+        list($hail, $laud) = array(new HailController, null);
+
+        $laud = new LaudController($hail);
+
+        $router = new Router;
+
+        $router->get('/greeeeet', get_class($hail) . '@greet');
+
+        $router->get('/test/wow', array(get_class($hail), 'greet'));
+
+        $router->get('/helloo/{name}', function ($name = 'Doe')
+        {
+            $message = (string) sprintf('my name is %s', $name);
+
+            return 'Hello, ' . $message . ' and this is a test.';
+        });
+
+        $router->get('/test/{name}', function ($name)
+        {
+            return 'Hello everyone! I am ' . $name;
+        });
+
+        $this->dispatcher = new Dispatcher($router);
     }
 }

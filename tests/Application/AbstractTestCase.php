@@ -21,22 +21,6 @@ abstract class AbstractTestCase extends Testcase
     protected $app;
 
     /**
-     * Sets up the application instance.
-     *
-     * @return void
-     */
-    protected function doSetUp()
-    {
-        $_SERVER['REQUEST_METHOD'] = 'GET';
-
-        $_SERVER['REQUEST_URI'] = '/';
-
-        $_SERVER['SERVER_NAME'] = 'roug.in';
-
-        $_SERVER['SERVER_PORT'] = 8000;
-    }
-
-    /**
      * Returns an application instance.
      *
      * @return \Zapheus\Application
@@ -60,6 +44,22 @@ abstract class AbstractTestCase extends Testcase
         $this->app->set($class, $instance);
 
         return (string) $class;
+    }
+
+    /**
+     * Sets up the application instance.
+     *
+     * @return void
+     */
+    protected function doSetUp()
+    {
+        $_SERVER['REQUEST_METHOD'] = 'GET';
+
+        $_SERVER['REQUEST_URI'] = '/';
+
+        $_SERVER['SERVER_NAME'] = 'roug.in';
+
+        $_SERVER['SERVER_PORT'] = 8000;
     }
 
     /**

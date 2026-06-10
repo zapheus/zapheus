@@ -24,44 +24,43 @@ use Zapheus\Routing\Router;
 class ApplicationTest extends AbstractTestCase
 {
     /**
-     * Sets up the application instance.
+     * Tests Application::config with array data.
      *
      * @return void
      */
-    protected function doSetUp()
+    public function testConfigMethodWithArrayData()
     {
-        parent::setUp();
+        $application = $this->application();
 
-        $this->app = $this->application();
+        $application->config(array('framework' => 'Zapheus'));
 
-        $controller = $this->define(new HailController);
+        $config = $application->get(ServerProvider::CONFIG);
 
-        $handler = (string) $controller . '@greet';
+        $expected = (string) 'Zapheus';
 
-        $route = new Route('GET', '/', $handler);
+        $result = (string) $config->get('framework');
 
-        $json = new Route('POST', '/json', $handler, new JsonMiddleware);
+        $this->assertEquals($expected, $result);
+    }
 
-        $test = new Route('GET', '/test', function ()
-        {
-            $factory = new ResponseFactory;
+    /**
+     * Tests Application::config with string data.
+     *
+     * @return void
+     */
+    public function testConfigMethodWithStringData()
+    {
+        $application = $this->application();
 
-            $factory->write('Hello, Zapheus');
+        $application->config(__DIR__ . '/../Fixture/Config');
 
-            return $factory->make();
-        });
+        $config = $application->get(ServerProvider::CONFIG);
 
-        $router = new Router(array($route, $json, $test));
+        $expected = 'Zapheus Framework';
 
-        $dispatcher = new Dispatcher($router);
+        $result = $config->get('test.settings.app_name');
 
-        $this->app->set(Application::DISPATCHER, $dispatcher);
-
-        $headers = array('X-Framework' => array('Zapheus'));
-
-        $response = new Response(200, (array) $headers);
-
-        $this->app->set(Application::RESPONSE, $response);
+        $this->assertEquals($expected, $result);
     }
 
     /**
@@ -189,42 +188,43 @@ class ApplicationTest extends AbstractTestCase
     }
 
     /**
-     * Tests Application::config with string data.
+     * Sets up the application instance.
      *
      * @return void
      */
-    public function testConfigMethodWithStringData()
+    protected function doSetUp()
     {
-        $application = $this->application();
+        parent::setUp();
 
-        $application->config(__DIR__ . '/../Fixture/Config');
+        $this->app = $this->application();
 
-        $config = $application->get(ServerProvider::CONFIG);
+        $controller = $this->define(new HailController);
 
-        $expected = 'Zapheus Framework';
+        $handler = (string) $controller . '@greet';
 
-        $result = $config->get('test.settings.app_name');
+        $route = new Route('GET', '/', $handler);
 
-        $this->assertEquals($expected, $result);
-    }
+        $json = new Route('POST', '/json', $handler, new JsonMiddleware);
 
-    /**
-     * Tests Application::config with array data.
-     *
-     * @return void
-     */
-    public function testConfigMethodWithArrayData()
-    {
-        $application = $this->application();
+        $test = new Route('GET', '/test', function ()
+        {
+            $factory = new ResponseFactory;
 
-        $application->config(array('framework' => 'Zapheus'));
+            $factory->write('Hello, Zapheus');
 
-        $config = $application->get(ServerProvider::CONFIG);
+            return $factory->make();
+        });
 
-        $expected = (string) 'Zapheus';
+        $router = new Router(array($route, $json, $test));
 
-        $result = (string) $config->get('framework');
+        $dispatcher = new Dispatcher($router);
 
-        $this->assertEquals($expected, $result);
+        $this->app->set(Application::DISPATCHER, $dispatcher);
+
+        $headers = array('X-Framework' => array('Zapheus'));
+
+        $response = new Response(200, (array) $headers);
+
+        $this->app->set(Application::RESPONSE, $response);
     }
 }

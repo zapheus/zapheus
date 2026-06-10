@@ -10,7 +10,8 @@ use Zapheus\Http\Message\RequestInterface;
  * Middleware Dispatcher
  *
  * @package Zapheus
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
 class Dispatcher implements DispatcherInterface
 {
@@ -45,7 +46,8 @@ class Dispatcher implements DispatcherInterface
     /**
      * Sets the container for binding middleware dependencies.
      *
-     * @param  \Zapheus\Container\ContainerInterface $container
+     * @param \Zapheus\Container\ContainerInterface $container
+     *
      * @return self
      */
     public function container(ContainerInterface $container)
@@ -58,7 +60,8 @@ class Dispatcher implements DispatcherInterface
     /**
      * Dispatches the defined middleware stack.
      *
-     * @param  \Zapheus\Http\Message\RequestInterface $request
+     * @param \Zapheus\Http\Message\RequestInterface $request
+     *
      * @return \Zapheus\Http\Message\ResponseInterface
      */
     public function dispatch(RequestInterface $request)
@@ -71,8 +74,9 @@ class Dispatcher implements DispatcherInterface
     /**
      * Processes an incoming request and returns a response.
      *
-     * @param  \Zapheus\Http\Message\RequestInterface $request
-     * @param  \Zapheus\Http\Server\HandlerInterface  $handler
+     * @param \Zapheus\Http\Message\RequestInterface $request
+     * @param \Zapheus\Http\Server\HandlerInterface  $handler
+     *
      * @return \Zapheus\Http\Message\ResponseInterface
      */
     public function process(RequestInterface $request, HandlerInterface $handler)
@@ -89,7 +93,8 @@ class Dispatcher implements DispatcherInterface
     /**
      * Adds a new middleware to the stack.
      *
-     * @param  mixed $middleware
+     * @param mixed $middleware
+     *
      * @return self
      */
     public function pipe($middleware)
@@ -102,7 +107,8 @@ class Dispatcher implements DispatcherInterface
     /**
      * Transforms the specified input into a middleware.
      *
-     * @param  mixed $middleware
+     * @param mixed $middleware
+     *
      * @return \Zapheus\Http\Server\MiddlewareInterface
      */
     protected function transform($middleware)
@@ -123,7 +129,8 @@ class Dispatcher implements DispatcherInterface
     /**
      * Resolves the whole stack through its index.
      *
-     * @param  integer $index
+     * @param integer $index
+     *
      * @return \Zapheus\Http\Server\HandlerInterface
      */
     protected function resolve($index)
@@ -135,7 +142,7 @@ class Dispatcher implements DispatcherInterface
 
         $next = $this->resolve($index + 1);
 
-        $item = $this->stack[(integer) $index];
+        $item = $this->stack[(int) $index];
 
         return new NextHandler($item, $next);
     }

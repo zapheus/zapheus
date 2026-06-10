@@ -6,7 +6,8 @@ namespace Zapheus\Http\Message;
  * URI Factory
  *
  * @package Zapheus
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
 class UriFactory
 {
@@ -85,7 +86,8 @@ class UriFactory
     /**
      * Sets the fragment component.
      *
-     * @param  string $fragment
+     * @param string $fragment
+     *
      * @return self
      */
     public function fragment($fragment)
@@ -98,7 +100,8 @@ class UriFactory
     /**
      * Sets the host component.
      *
-     * @param  string $host
+     * @param string $host
+     *
      * @return self
      */
     public function host($host)
@@ -151,7 +154,8 @@ class UriFactory
     /**
      * Sets the path component.
      *
-     * @param  string $path
+     * @param string $path
+     *
      * @return self
      */
     public function path($path)
@@ -164,7 +168,8 @@ class UriFactory
     /**
      * Sets the port component.
      *
-     * @param  integer $port
+     * @param integer $port
+     *
      * @return self
      */
     public function port($port)
@@ -177,7 +182,8 @@ class UriFactory
     /**
      * Sets the query component.
      *
-     * @param  string $query
+     * @param string $query
+     *
      * @return self
      */
     public function query($query)
@@ -190,7 +196,8 @@ class UriFactory
     /**
      * Sets the scheme component.
      *
-     * @param  string $scheme
+     * @param string $scheme
+     *
      * @return self
      */
     public function scheme($scheme)
@@ -203,7 +210,8 @@ class UriFactory
     /**
      * Sets the user component.
      *
-     * @param  string $user
+     * @param string $user
+     *
      * @return self
      */
     public function user($user, $pass = null)

@@ -9,7 +9,8 @@ use Zapheus\Provider\ProviderInterface;
  * Renderer Provider
  *
  * @package App
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
 class RendererProvider implements ProviderInterface
 {
@@ -33,7 +34,8 @@ class RendererProvider implements ProviderInterface
     /**
      * Registers the bindings in the container.
      *
-     * @param  \Zapheus\Container\WritableInterface $container
+     * @param \Zapheus\Container\WritableInterface $container
+     *
      * @return \Zapheus\Container\ContainerInterface
      */
     public function register(WritableInterface $container)

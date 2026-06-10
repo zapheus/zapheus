@@ -6,7 +6,8 @@ namespace Zapheus\Http\Message;
  * Stream
  *
  * @package Zapheus
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
 class Stream implements StreamInterface
 {
@@ -60,7 +61,8 @@ class Stream implements StreamInterface
     /**
      * Reads data from the stream.
      *
-     * @param  integer $length
+     * @param integer $length
+     *
      * @return string
      */
     public function read($length)
@@ -81,7 +83,8 @@ class Stream implements StreamInterface
     /**
      * Writes data to the stream.
      *
-     * @param  string $string
+     * @param string $string
+     *
      * @return integer
      */
     public function write($string)

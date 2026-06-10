@@ -5,15 +5,14 @@ namespace Zapheus\Http\Server;
 use Zapheus\Application;
 use Zapheus\Container\WritableInterface;
 use Zapheus\Http\Message\RequestInterface;
-use Zapheus\Http\Message\ResponseInterface;
-use Zapheus\Routing\Resolver;
 use Zapheus\Routing\RouteInterface;
 
 /**
  * Routing Handler
  *
  * @package Zapheus
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
 class RoutingHandler implements HandlerInterface
 {
@@ -35,7 +34,8 @@ class RoutingHandler implements HandlerInterface
     /**
      * Dispatch the next available middleware and return the response.
      *
-     * @param  \Zapheus\Http\Message\RequestInterface $request
+     * @param \Zapheus\Http\Message\RequestInterface $request
+     *
      * @return \Zapheus\Http\Message\ResponseInterface
      */
     public function handle(RequestInterface $request)
@@ -59,8 +59,9 @@ class RoutingHandler implements HandlerInterface
     /**
      * Dispatches against the provided HTTP method verb and URI.
      *
-     * @param  string $method
-     * @param  string $uri
+     * @param string $method
+     * @param string $uri
+     *
      * @return \Zapheus\Routing\RouteInterface
      */
     protected function dispatch(RequestInterface $request)

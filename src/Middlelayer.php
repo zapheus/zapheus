@@ -11,7 +11,8 @@ use Zapheus\Http\Server\HandlerInterface;
  * Middlelayer
  *
  * @package Zapheus
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
 class Middlelayer implements HandlerInterface
 {
@@ -44,7 +45,8 @@ class Middlelayer implements HandlerInterface
     /**
      * Handles the request and returns a response.
      *
-     * @param  \Zapheus\Http\Message\RequestInterface $request
+     * @param \Zapheus\Http\Message\RequestInterface $request
+     *
      * @return \Zapheus\Http\Message\ResponseInterface
      */
     public function handle(RequestInterface $request)
@@ -73,10 +75,10 @@ class Middlelayer implements HandlerInterface
     /**
      * Calls methods from the Application instance.
      *
-     * @param  string $method
-     * @param  mixed  $parameters
-     * @return mixed
+     * @param string $method
+     * @param mixed  $parameters
      *
+     * @return mixed
      * @throws \BadMethodCallException
      */
     public function __call($method, $parameters)

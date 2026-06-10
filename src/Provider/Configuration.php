@@ -6,7 +6,8 @@ namespace Zapheus\Provider;
  * Configuration
  *
  * @package Zapheus
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
 class Configuration implements ConfigurationInterface
 {
@@ -28,7 +29,8 @@ class Configuration implements ConfigurationInterface
     /**
      * Returns all the stored configurations.
      *
-     * @param  boolean $dotify
+     * @param boolean $dotify
+     *
      * @return array
      */
     public function all($dotify = false)
@@ -39,9 +41,10 @@ class Configuration implements ConfigurationInterface
     /**
      * Returns the value from the specified key.
      *
-     * @param  string     $key
-     * @param  mixed|null $default
-     * @param  boolean    $dotify
+     * @param string     $key
+     * @param mixed|null $default
+     * @param boolean    $dotify
+     *
      * @return mixed
      */
     public function get($key, $default = null, $dotify = false)
@@ -75,7 +78,8 @@ class Configuration implements ConfigurationInterface
     /**
      * Loads an array of values from a specified file or directory.
      *
-     * @param  string $path
+     * @param string $path
+     *
      * @return void
      */
     public function load($path)
@@ -106,9 +110,10 @@ class Configuration implements ConfigurationInterface
     /**
      * Converts the data into dot notation values.
      *
-     * @param  array  $data
-     * @param  array  $result
-     * @param  string $key
+     * @param array  $data
+     * @param array  $result
+     * @param string $key
+     *
      * @return array
      */
     protected function dotify(array $data, $result = array(), $key = '')
@@ -135,8 +140,9 @@ class Configuration implements ConfigurationInterface
     /**
      * Sets the value to the specified key.
      *
-     * @param  string $key
-     * @param  mixed  $value
+     * @param string $key
+     * @param mixed  $value
+     *
      * @return self
      */
     public function set($key, $value)
@@ -151,8 +157,9 @@ class Configuration implements ConfigurationInterface
     /**
      * Renames the item into a dot notation one.
      *
-     * @param  string $item
-     * @param  string $path
+     * @param string $item
+     * @param string $path
+     *
      * @return string
      */
     protected function rename($item, $path)
@@ -169,9 +176,10 @@ class Configuration implements ConfigurationInterface
     /**
      * Saves the specified key in the list of data.
      *
-     * @param  array &$keys
-     * @param  array &$data
-     * @param  mixed $value
+     * @param array &$keys
+     * @param array &$data
+     * @param mixed $value
+     *
      * @return mixed
      */
     protected function save(array &$keys, &$data, $value)

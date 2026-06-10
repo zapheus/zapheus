@@ -6,7 +6,8 @@ namespace Zapheus\Routing;
  * Route
  *
  * @package Zapheus
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
 class Route implements RouteInterface
 {
@@ -137,8 +138,9 @@ class Route implements RouteInterface
     /**
      * Capture the specified regular expressions.
      *
-     * @param  string $pattern
-     * @param  string $search
+     * @param string $pattern
+     * @param string $search
+     *
      * @return string
      */
     protected function capture($pattern, $search)

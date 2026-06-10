@@ -13,7 +13,8 @@ use Zapheus\Provider\ProviderInterface;
  * Message Provider
  *
  * @package Zapheus
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
 class MessageProvider implements ProviderInterface
 {
@@ -24,7 +25,8 @@ class MessageProvider implements ProviderInterface
     /**
      * Registers the bindings in the container.
      *
-     * @param  \Zapheus\Container\WritableInterface $container
+     * @param \Zapheus\Container\WritableInterface $container
+     *
      * @return \Zapheus\Container\ContainerInterface
      */
     public function register(WritableInterface $container)

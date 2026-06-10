@@ -6,7 +6,8 @@ namespace Zapheus\Http\Message;
  * Message Factory
  *
  * @package Zapheus
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
 class MessageFactory
 {
@@ -47,8 +48,9 @@ class MessageFactory
     /**
      * Sets a message header value.
      *
-     * @param  string $name
-     * @param  mixed  $value
+     * @param string $name
+     * @param mixed  $value
+     *
      * @return self
      */
     public function header($name, $value)
@@ -61,8 +63,9 @@ class MessageFactory
     /**
      * Sets the message header values.
      *
-     * @param  string $name
-     * @param  mixed  $value
+     * @param string $name
+     * @param mixed  $value
+     *
      * @return self
      */
     public function headers(array $headers)
@@ -85,7 +88,8 @@ class MessageFactory
     /**
      * Sets the server parameters ($_SERVER).
      *
-     * @param  array $server
+     * @param array $server
+     *
      * @return self
      */
     public function server(array $server)
@@ -106,7 +110,8 @@ class MessageFactory
     /**
      * Sets the stream instance.
      *
-     * @param  \Zapheus\Http\Message\StreamInterface $stream
+     * @param \Zapheus\Http\Message\StreamInterface $stream
+     *
      * @return self
      */
     public function stream(StreamInterface $stream)
@@ -119,7 +124,8 @@ class MessageFactory
     /**
      * Sets the protocol version.
      *
-     * @param  string $version
+     * @param string $version
+     *
      * @return self
      */
     public function version($version)
@@ -132,7 +138,8 @@ class MessageFactory
     /**
      * Writes data directly to the stream.
      *
-     * @param  string $output
+     * @param string $output
+     *
      * @return self
      */
     public function write($output)

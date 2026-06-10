@@ -8,7 +8,8 @@ use Zapheus\Http\Message\RequestInterface;
  * Next Handler
  *
  * @package Zapheus
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
 class NextHandler implements HandlerInterface
 {
@@ -38,7 +39,8 @@ class NextHandler implements HandlerInterface
     /**
      * Handles the request and returns a response.
      *
-     * @param  \Zapheus\Http\Message\RequestInterface $request
+     * @param \Zapheus\Http\Message\RequestInterface $request
+     *
      * @return \Zapheus\Http\Message\ResponseInterface
      */
     public function __invoke(RequestInterface $request)
@@ -49,7 +51,8 @@ class NextHandler implements HandlerInterface
     /**
      * Handles the request and returns a response.
      *
-     * @param  \Zapheus\Http\Message\RequestInterface $request
+     * @param \Zapheus\Http\Message\RequestInterface $request
+     *
      * @return \Zapheus\Http\Message\ResponseInterface
      */
     public function handle(RequestInterface $request)

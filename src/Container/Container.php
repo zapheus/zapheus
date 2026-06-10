@@ -6,7 +6,8 @@ namespace Zapheus\Container;
  * Container
  *
  * @package Zapheus
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
 class Container implements WritableInterface
 {
@@ -28,9 +29,9 @@ class Container implements WritableInterface
     /**
      * Finds an entry of the container by its identifier and returns it.
      *
-     * @param  string $id
-     * @return mixed
+     * @param string $id
      *
+     * @return mixed
      * @throws \Zapheus\Container\NotFoundException
      */
     public function get($id)
@@ -46,7 +47,8 @@ class Container implements WritableInterface
     /**
      * Returns true if the container can return an entry for the given identifier.
      *
-     * @param  string $id
+     * @param string $id
+     *
      * @return boolean
      */
     public function has($id)
@@ -57,8 +59,9 @@ class Container implements WritableInterface
     /**
      * Sets a new instance to the container.
      *
-     * @param  string $id
-     * @param  mixed  $concrete
+     * @param string $id
+     * @param mixed  $concrete
+     *
      * @return self
      */
     public function set($id, $concrete)

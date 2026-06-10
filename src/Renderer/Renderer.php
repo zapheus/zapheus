@@ -6,7 +6,8 @@ namespace Zapheus\Renderer;
  * Renderer
  *
  * @package Zapheus
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
 class Renderer implements RendererInterface
 {
@@ -28,10 +29,10 @@ class Renderer implements RendererInterface
     /**
      * Renders a file from a specified template.
      *
-     * @param  string $template
-     * @param  array  $data
-     * @return string
+     * @param string $template
+     * @param array  $data
      *
+     * @return string
      * @throws \InvalidArgumentException
      */
     public function render($template, array $data = array())
@@ -58,10 +59,11 @@ class Renderer implements RendererInterface
     /**
      * Checks if the specified file exists.
      *
-     * @param  array          $files
-     * @param  string         $path
-     * @param  string|integer $source
-     * @param  string         $template
+     * @param array          $files
+     * @param string         $path
+     * @param integer|string $source
+     * @param string         $template
+     *
      * @return string|null
      */
     protected function check(array $files, $path, $source, $template)
@@ -90,8 +92,9 @@ class Renderer implements RendererInterface
     /**
      * Extracts the contents of the specified file.
      *
-     * @param  string $filepath
-     * @param  array  $data
+     * @param string $filepath
+     * @param array  $data
+     *
      * @return string
      */
     protected function extract($filepath, array $data)
@@ -112,7 +115,8 @@ class Renderer implements RendererInterface
     /**
      * Returns an array of filepaths from a specified directory.
      *
-     * @param  string $path
+     * @param string $path
+     *
      * @return string[]
      */
     protected function files($path)

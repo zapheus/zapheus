@@ -6,7 +6,8 @@ namespace Zapheus\Http\Message;
  * File Factory
  *
  * @package Zapheus
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
 class FileFactory
 {
@@ -28,7 +29,8 @@ class FileFactory
     /**
      * Sets the error associated with the uploaded file.
      *
-     * @param  $error integer
+     * @param $error integer
+     *
      * @return void
      */
     public function error($error)
@@ -41,7 +43,8 @@ class FileFactory
     /**
      * Sets the filename of the uploaded file.
      *
-     * @param  string $file
+     * @param string $file
+     *
      * @return self
      */
     public function file($file)
@@ -64,7 +67,8 @@ class FileFactory
     /**
      * Sets the name of the uploaded file.
      *
-     * @param  string $name
+     * @param string $name
+     *
      * @return self
      */
     public function name($name)
@@ -77,8 +81,9 @@ class FileFactory
     /**
      * Parses the $_FILES into multiple \File instances.
      *
-     * @param  array $uploaded
-     * @param  array $files
+     * @param array $uploaded
+     * @param array $files
+     *
      * @return \Zapheus\Http\Message\FileInterface[]
      */
     public function normalize(array $uploaded, $files = array())
@@ -107,7 +112,8 @@ class FileFactory
     /**
      * Diverse the $_FILES into a consistent result.
      *
-     * @param  array $uploaded
+     * @param array $uploaded
+     *
      * @return array
      */
     protected function diverse(array $uploaded)

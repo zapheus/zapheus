@@ -6,7 +6,8 @@ namespace Zapheus\Http\Message;
  * Request Factory
  *
  * @package Zapheus
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
 class RequestFactory extends MessageFactory
 {
@@ -21,7 +22,7 @@ class RequestFactory extends MessageFactory
     protected $cookies = array();
 
     /**
-     * @var array|null|object
+     * @var array|object|null
      */
     protected $data = array();
 
@@ -91,8 +92,9 @@ class RequestFactory extends MessageFactory
     /**
      * Sets a single attribute value.
      *
-     * @param  string $key
-     * @param  mixed  $value
+     * @param string $key
+     * @param mixed  $value
+     *
      * @return self
      */
     public function attribute($key, $value)
@@ -105,7 +107,8 @@ class RequestFactory extends MessageFactory
     /**
      * Sets the attributes value.
      *
-     * @param  array $attributes
+     * @param array $attributes
+     *
      * @return self
      */
     public function attributes(array $attributes)
@@ -118,8 +121,9 @@ class RequestFactory extends MessageFactory
     /**
      * Sets a single cookie parameter.
      *
-     * @param  string $key
-     * @param  mixed  $value
+     * @param string $key
+     * @param mixed  $value
+     *
      * @return mixed
      */
     public function cookie($key, $value)
@@ -132,7 +136,8 @@ class RequestFactory extends MessageFactory
     /**
      * Sets the cookies parameter ($_COOKIE).
      *
-     * @param  array $cookies
+     * @param array $cookies
+     *
      * @return self
      */
     public function cookies(array $cookies)
@@ -145,7 +150,8 @@ class RequestFactory extends MessageFactory
     /**
      * Sets the data parameter ($_POST).
      *
-     * @param  array $data
+     * @param array $data
+     *
      * @return self
      */
     public function data($data)
@@ -158,7 +164,8 @@ class RequestFactory extends MessageFactory
     /**
      * Sets the files parameter.
      *
-     * @param  \Zapheus\Http\Message\FileInterface[] $files
+     * @param \Zapheus\Http\Message\FileInterface[] $files
+     *
      * @return self
      */
     public function files(array $files)
@@ -181,7 +188,8 @@ class RequestFactory extends MessageFactory
     /**
      * Sets the HTTP method.
      *
-     * @param  string $method
+     * @param string $method
+     *
      * @return self
      */
     public function method($method)
@@ -194,7 +202,8 @@ class RequestFactory extends MessageFactory
     /**
      * Sets the query parameters ($_GET).
      *
-     * @param  array $queries
+     * @param array $queries
+     *
      * @return self
      */
     public function queries(array $queries)
@@ -207,8 +216,9 @@ class RequestFactory extends MessageFactory
     /**
      * Sets a single query parameter.
      *
-     * @param  string $name
-     * @param  mixed  $value
+     * @param string $name
+     * @param mixed  $value
+     *
      * @return self
      */
     public function query($name, $value)
@@ -221,7 +231,8 @@ class RequestFactory extends MessageFactory
     /**
      * Sets the server parameters ($_SERVER).
      *
-     * @param  array $server
+     * @param array $server
+     *
      * @return self
      */
     public function server(array $server)
@@ -253,7 +264,8 @@ class RequestFactory extends MessageFactory
     /**
      * Sets the request target.
      *
-     * @param  string $target
+     * @param string $target
+     *
      * @return self
      */
     public function target($target)
@@ -266,7 +278,8 @@ class RequestFactory extends MessageFactory
     /**
      * Sets the URI instance.
      *
-     * @param  \Zapheus\Http\Message\UriInterface $uri
+     * @param \Zapheus\Http\Message\UriInterface $uri
+     *
      * @return self
      */
     public function uri(UriInterface $uri)

@@ -15,7 +15,8 @@ use Zapheus\Provider\ProviderInterface;
  * Application
  *
  * @package Zapheus
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
 class Application implements HandlerInterface, WritableInterface
 {
@@ -68,7 +69,8 @@ class Application implements HandlerInterface, WritableInterface
     /**
      * Adds a new provider to be registered.
      *
-     * @param  \Zapheus\Provider\ProviderInterface $provider
+     * @param \Zapheus\Provider\ProviderInterface $provider
+     *
      * @return self
      */
     public function add(ProviderInterface $provider)
@@ -85,7 +87,8 @@ class Application implements HandlerInterface, WritableInterface
     /**
      * Creates a new configuration based on given data.
      *
-     * @param  array|string $data
+     * @param array|string $data
+     *
      * @return self
      */
     public function config($data)
@@ -107,7 +110,8 @@ class Application implements HandlerInterface, WritableInterface
     /**
      * Emits the headers from the response instance.
      *
-     * @param  \Zapheus\Http\Message\ResponseInterface $response
+     * @param \Zapheus\Http\Message\ResponseInterface $response
+     *
      * @return \Zapheus\Http\Message\ResponseInterface
      */
     public function emit(ResponseInterface $response)
@@ -131,9 +135,9 @@ class Application implements HandlerInterface, WritableInterface
     /**
      * Finds an entry of the container by its identifier and returns it.
      *
-     * @param  string $id
-     * @return mixed
+     * @param string $id
      *
+     * @return mixed
      * @throws \Zapheus\Container\NotFoundException
      */
     public function get($id)
@@ -144,7 +148,8 @@ class Application implements HandlerInterface, WritableInterface
     /**
      * Dispatches the request and returns into a response.
      *
-     * @param  \Zapheus\Http\Message\RequestInterface $request
+     * @param \Zapheus\Http\Message\RequestInterface $request
+     *
      * @return \Zapheus\Http\Message\ResponseInterface
      */
     public function handle(RequestInterface $request)
@@ -164,7 +169,8 @@ class Application implements HandlerInterface, WritableInterface
     /**
      * Returns true if the container can return an entry for the given identifier.
      *
-     * @param  string $id
+     * @param string $id
+     *
      * @return boolean
      */
     public function has($id)
@@ -199,10 +205,10 @@ class Application implements HandlerInterface, WritableInterface
     /**
      * Sets a new instance to the container.
      *
-     * @param  string $id
-     * @param  mixed  $concrete
-     * @return self
+     * @param string $id
+     * @param mixed  $concrete
      *
+     * @return self
      * @throws \Zapheus\Container\ContainerException
      */
     public function set($id, $concrete)

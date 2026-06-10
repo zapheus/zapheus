@@ -6,7 +6,8 @@ namespace Zapheus\Routing;
  * Route Dispatcher
  *
  * @package Zapheus
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
 class Dispatcher implements DispatcherInterface
 {
@@ -28,10 +29,10 @@ class Dispatcher implements DispatcherInterface
     /**
      * Dispatches against the provided HTTP method verb and URI.
      *
-     * @param  string $method
-     * @param  string $uri
-     * @return \Zapheus\Routing\RouteInterface
+     * @param string $method
+     * @param string $uri
      *
+     * @return \Zapheus\Routing\RouteInterface
      * @throws \UnexpectedValueException
      */
     public function dispatch($method, $uri)
@@ -61,8 +62,9 @@ class Dispatcher implements DispatcherInterface
     /**
      * Matches the route from the parsed URI.
      *
-     * @param  string $method
-     * @param  string $uri
+     * @param string $method
+     * @param string $uri
+     *
      * @return array|null
      */
     protected function match($method, $uri)

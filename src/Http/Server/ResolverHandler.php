@@ -13,7 +13,8 @@ use Zapheus\Routing\RouteInterface;
  * Resolver Handler
  *
  * @package Zapheus
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
 class ResolverHandler implements HandlerInterface
 {
@@ -31,7 +32,7 @@ class ResolverHandler implements HandlerInterface
      * Initializes the handler instance.
      *
      * @param \Zapheus\Container\WritableInterface $container
-     * @param \Zapheus\Routing\RouteInterface       $route
+     * @param \Zapheus\Routing\RouteInterface      $route
      */
     public function __construct(WritableInterface $container, RouteInterface $route)
     {
@@ -43,7 +44,8 @@ class ResolverHandler implements HandlerInterface
     /**
      * Dispatch the next available middleware and return the response.
      *
-     * @param  \Zapheus\Http\Message\RequestInterface $request
+     * @param \Zapheus\Http\Message\RequestInterface $request
+     *
      * @return \Zapheus\Http\Message\ResponseInterface
      */
     public function handle(RequestInterface $request)
@@ -65,7 +67,8 @@ class ResolverHandler implements HandlerInterface
     /**
      * Converts the given result into a ResponseInterface.
      *
-     * @param  mixed $result
+     * @param mixed $result
+     *
      * @return \Zapheus\Http\Message\ResponseInterface
      */
     protected function response($result)

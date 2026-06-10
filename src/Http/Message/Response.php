@@ -6,7 +6,8 @@ namespace Zapheus\Http\Message;
  * Response
  *
  * @package Zapheus
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
 class Response extends Message implements ResponseInterface
 {
@@ -94,7 +95,7 @@ class Response extends Message implements ResponseInterface
     {
         parent::__construct($headers, $stream, $version);
 
-        $this->code = (integer) $code;
+        $this->code = (int) $code;
     }
 
     /**

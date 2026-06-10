@@ -6,7 +6,8 @@ namespace Zapheus\Http\Message;
  * URI Interface
  *
  * @package Zapheus
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
 interface UriInterface
 {
@@ -41,7 +42,7 @@ interface UriInterface
     /**
      * Returns the port component of the URI.
      *
-     * @return null|integer
+     * @return integer|null
      */
     public function port();
 

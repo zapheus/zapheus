@@ -10,7 +10,8 @@ use Zapheus\Provider\ProviderInterface;
  * Routing Provider
  *
  * @package App
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
 class RoutingProvider implements ProviderInterface
 {
@@ -36,7 +37,8 @@ class RoutingProvider implements ProviderInterface
     /**
      * Registers the bindings in the container.
      *
-     * @param  \Zapheus\Container\WritableInterface $container
+     * @param \Zapheus\Container\WritableInterface $container
+     *
      * @return \Zapheus\Container\ContainerInterface
      */
     public function register(WritableInterface $container)

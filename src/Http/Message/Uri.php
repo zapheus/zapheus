@@ -6,7 +6,8 @@ namespace Zapheus\Http\Message;
  * Uniform Resource Identifier (URI)
  *
  * @package Zapheus
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
 class Uri implements UriInterface
 {
@@ -145,11 +146,11 @@ class Uri implements UriInterface
     /**
      * Returns the port component of the URI.
      *
-     * @return null|integer
+     * @return integer|null
      */
     public function port()
     {
-        return (integer) $this->port;
+        return (int) $this->port;
 
         // getPort
         // withPort

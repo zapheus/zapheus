@@ -6,14 +6,16 @@ namespace Zapheus\Http\Message;
  * Message Interface
  *
  * @package Zapheus
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
 interface MessageInterface
 {
     /**
      * Returns a message header value by the given case-insensitive name.
      *
-     * @param  string $name
+     * @param string $name
+     *
      * @return array
      */
     public function header($name);

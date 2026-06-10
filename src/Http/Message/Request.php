@@ -6,7 +6,8 @@ namespace Zapheus\Http\Message;
  * Request
  *
  * @package Zapheus
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
 class Request extends Message implements RequestInterface
 {
@@ -21,7 +22,7 @@ class Request extends Message implements RequestInterface
     protected $cookies = array();
 
     /**
-     * @var array|null|object
+     * @var array|object|null
      */
     protected $data = array();
 
@@ -62,7 +63,7 @@ class Request extends Message implements RequestInterface
      * @param string                                     $target
      * @param array                                      $server
      * @param array                                      $cookies
-     * @param array|null|object                          $data
+     * @param array|object|null                          $data
      * @param \Zapheus\Http\Message\FileInterface[]      $files
      * @param array                                      $queries
      * @param array                                      $attributes
@@ -97,7 +98,8 @@ class Request extends Message implements RequestInterface
     /**
      * Returns an instance with the specified derived request attribute.
      *
-     * @param  string $name
+     * @param string $name
+     *
      * @return mixed
      */
     public function attribute($name)
@@ -127,7 +129,8 @@ class Request extends Message implements RequestInterface
     /**
      * Returns the specified cookie from request.
      *
-     * @param  string $name
+     * @param string $name
+     *
      * @return array
      */
     public function cookie($name)
@@ -156,7 +159,7 @@ class Request extends Message implements RequestInterface
     /**
      * Returns any parameters provided in the request body.
      *
-     * @return array|null|object
+     * @return array|object|null
      */
     public function data()
     {
@@ -208,7 +211,8 @@ class Request extends Message implements RequestInterface
     /**
      * Returns the specified query string argument.
      *
-     * @param  string $name
+     * @param string $name
+     *
      * @return mixed
      */
     public function query($name)
@@ -224,7 +228,8 @@ class Request extends Message implements RequestInterface
     /**
      * Returns the server parameter/s.
      *
-     * @param  string|null $name
+     * @param string|null $name
+     *
      * @return array
      */
     public function server($name = null)

@@ -8,7 +8,8 @@ use Zapheus\Http\Message\RequestInterface;
  * Error Handler
  *
  * @package Zapheus
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
 class ErrorHandler implements HandlerInterface
 {
@@ -40,7 +41,8 @@ class ErrorHandler implements HandlerInterface
     /**
      * Handles the request and returns a response.
      *
-     * @param  \Zapheus\Http\Message\RequestInterface $request
+     * @param \Zapheus\Http\Message\RequestInterface $request
+     *
      * @return \Zapheus\Http\Message\ResponseInterface
      */
     public function handle(RequestInterface $request)

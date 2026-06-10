@@ -6,14 +6,16 @@ namespace Zapheus\Http\Message;
  * Request Interface
  *
  * @package Zapheus
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
 interface RequestInterface extends MessageInterface
 {
     /**
      * Returns an instance with the specified derived request attribute.
      *
-     * @param  string $name
+     * @param string $name
+     *
      * @return mixed
      */
     public function attribute($name);
@@ -28,7 +30,8 @@ interface RequestInterface extends MessageInterface
     /**
      * Returns the specified cookie from request.
      *
-     * @param  string $name
+     * @param string $name
+     *
      * @return array
      */
     public function cookie($name);
@@ -43,7 +46,7 @@ interface RequestInterface extends MessageInterface
     /**
      * Returns any parameters provided in the request body.
      *
-     * @return array|null|object
+     * @return array|object|null
      */
     public function data();
 
@@ -71,7 +74,8 @@ interface RequestInterface extends MessageInterface
     /**
      * Returns the specified query string argument.
      *
-     * @param  string $name
+     * @param string $name
+     *
      * @return mixed
      */
     public function query($name);
@@ -79,7 +83,8 @@ interface RequestInterface extends MessageInterface
     /**
      * Returns the server parameter/s.
      *
-     * @param  string|null $name
+     * @param string|null $name
+     *
      * @return array
      */
     public function server($name = null);

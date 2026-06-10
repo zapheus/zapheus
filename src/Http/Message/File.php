@@ -6,7 +6,8 @@ namespace Zapheus\Http\Message;
  * File
  *
  * @package Zapheus
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
 class File implements FileInterface
 {
@@ -112,7 +113,6 @@ class File implements FileInterface
      * Returns a stream representing the uploaded file.
      *
      * @return \Zapheus\Http\Message\StreamInterface
-     *
      * @throws \RuntimeException
      */
     public function stream()

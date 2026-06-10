@@ -6,7 +6,8 @@ namespace Zapheus\Routing;
  * Router
  *
  * @package Zapheus
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
 class Router implements RouterInterface
 {
@@ -33,7 +34,8 @@ class Router implements RouterInterface
     /**
      * Adds a new RouteInterface to the collection.
      *
-     * @param  \Zapheus\Routing\RouteInterface $route
+     * @param \Zapheus\Routing\RouteInterface $route
+     *
      * @return self
      */
     public function add(RouteInterface $route)
@@ -46,9 +48,10 @@ class Router implements RouterInterface
     /**
      * Adds a new route instance in CONNECT HTTP method.
      *
-     * @param  string                $uri
-     * @param  callable|string       $handler
-     * @param  array|callable|string $middlewares
+     * @param string                $uri
+     * @param callable|string       $handler
+     * @param array|callable|string $middlewares
+     *
      * @return self
      */
     public function connect($uri, $handler, $middlewares = array())
@@ -59,9 +62,10 @@ class Router implements RouterInterface
     /**
      * Adds a new route instance in DELETE HTTP method.
      *
-     * @param  string                $uri
-     * @param  callable|string       $handler
-     * @param  array|callable|string $middlewares
+     * @param string                $uri
+     * @param callable|string       $handler
+     * @param array|callable|string $middlewares
+     *
      * @return self
      */
     public function delete($uri, $handler, $middlewares = array())
@@ -72,9 +76,10 @@ class Router implements RouterInterface
     /**
      * Adds a new route instance in GET HTTP method.
      *
-     * @param  string                $uri
-     * @param  callable|string       $handler
-     * @param  array|callable|string $middlewares
+     * @param string                $uri
+     * @param callable|string       $handler
+     * @param array|callable|string $middlewares
+     *
      * @return self
      */
     public function get($uri, $handler, $middlewares = array())
@@ -85,7 +90,8 @@ class Router implements RouterInterface
     /**
      * Checks if the router contains the specified route.
      *
-     * @param  \Zapheus\Routing\Route $route
+     * @param \Zapheus\Routing\Route $route
+     *
      * @return boolean
      */
     public function has(Route $route)
@@ -96,9 +102,10 @@ class Router implements RouterInterface
     /**
      * Adds a new route instance in HEAD HTTP method.
      *
-     * @param  string                $uri
-     * @param  callable|string       $handler
-     * @param  array|callable|string $middlewares
+     * @param string                $uri
+     * @param callable|string       $handler
+     * @param array|callable|string $middlewares
+     *
      * @return self
      */
     public function head($uri, $handler, $middlewares = array())
@@ -109,9 +116,10 @@ class Router implements RouterInterface
     /**
      * Adds a new route instance in OPTIONS HTTP method.
      *
-     * @param  string                $uri
-     * @param  callable|string       $handler
-     * @param  array|callable|string $middlewares
+     * @param string                $uri
+     * @param callable|string       $handler
+     * @param array|callable|string $middlewares
+     *
      * @return self
      */
     public function options($uri, $handler, $middlewares = array())
@@ -122,9 +130,10 @@ class Router implements RouterInterface
     /**
      * Adds a new route instance in PATCH HTTP method.
      *
-     * @param  string                $uri
-     * @param  callable|string       $handler
-     * @param  array|callable|string $middlewares
+     * @param string                $uri
+     * @param callable|string       $handler
+     * @param array|callable|string $middlewares
+     *
      * @return self
      */
     public function patch($uri, $handler, $middlewares = array())
@@ -135,9 +144,10 @@ class Router implements RouterInterface
     /**
      * Adds a new route instance in POST HTTP method.
      *
-     * @param  string                $uri
-     * @param  callable|string       $handler
-     * @param  array|callable|string $middlewares
+     * @param string                $uri
+     * @param callable|string       $handler
+     * @param array|callable|string $middlewares
+     *
      * @return self
      */
     public function post($uri, $handler, $middlewares = array())
@@ -148,9 +158,10 @@ class Router implements RouterInterface
     /**
      * Adds a new route instance in PURGE HTTP method.
      *
-     * @param  string                $uri
-     * @param  callable|string       $handler
-     * @param  array|callable|string $middlewares
+     * @param string                $uri
+     * @param callable|string       $handler
+     * @param array|callable|string $middlewares
+     *
      * @return self
      */
     public function purge($uri, $handler, $middlewares = array())
@@ -161,9 +172,10 @@ class Router implements RouterInterface
     /**
      * Adds a new route instance in PUT HTTP method.
      *
-     * @param  string                $uri
-     * @param  callable|string       $handler
-     * @param  array|callable|string $middlewares
+     * @param string                $uri
+     * @param callable|string       $handler
+     * @param array|callable|string $middlewares
+     *
      * @return self
      */
     public function put($uri, $handler, $middlewares = array())
@@ -184,9 +196,10 @@ class Router implements RouterInterface
     /**
      * Adds a new route instance in TRACE HTTP method.
      *
-     * @param  string                $uri
-     * @param  callable|string       $handler
-     * @param  array|callable|string $middlewares
+     * @param string                $uri
+     * @param callable|string       $handler
+     * @param array|callable|string $middlewares
+     *
      * @return self
      */
     public function trace($uri, $handler, $middlewares = array())
@@ -197,10 +210,11 @@ class Router implements RouterInterface
     /**
      * Prepares a new route instance.
      *
-     * @param  string                $method
-     * @param  string                $uri
-     * @param  callable|string       $handler
-     * @param  array|callable|string $middlewares
+     * @param string                $method
+     * @param string                $uri
+     * @param callable|string       $handler
+     * @param array|callable|string $middlewares
+     *
      * @return \Zapheus\Routing\Route
      */
     protected function route($method, $uri, $handler, $middlewares)

@@ -8,7 +8,8 @@ use Zapheus\Http\Message\RequestInterface;
  * Last Middleware
  *
  * @package Zapheus
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
 class LastMiddleware implements MiddlewareInterface
 {
@@ -30,8 +31,9 @@ class LastMiddleware implements MiddlewareInterface
     /**
      * Processes an incoming request and returns a response.
      *
-     * @param  \Zapheus\Http\Message\RequestInterface $request
-     * @param  \Zapheus\Http\Server\HandlerInterface  $handler
+     * @param \Zapheus\Http\Message\RequestInterface $request
+     * @param \Zapheus\Http\Server\HandlerInterface  $handler
+     *
      * @return \Zapheus\Http\Message\ResponseInterface
      */
     public function process(RequestInterface $request, HandlerInterface $handler)

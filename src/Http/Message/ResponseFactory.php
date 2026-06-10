@@ -6,7 +6,8 @@ namespace Zapheus\Http\Message;
  * Response Factory
  *
  * @package Zapheus
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
 class ResponseFactory extends MessageFactory
 {
@@ -35,7 +36,8 @@ class ResponseFactory extends MessageFactory
     /**
      * Sets the HTTP code.
      *
-     * @param  integer $code
+     * @param integer $code
+     *
      * @return self
      */
     public function code($code)

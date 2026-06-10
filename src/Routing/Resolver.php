@@ -8,7 +8,8 @@ use Zapheus\Container\ContainerInterface;
  * Resolver
  *
  * @package Zapheus
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
 class Resolver implements ResolverInterface
 {
@@ -30,7 +31,8 @@ class Resolver implements ResolverInterface
     /**
      * Resolves the specified route instance.
      *
-     * @param  \Zapheus\Routing\RouteInterface $route
+     * @param \Zapheus\Routing\RouteInterface $route
+     *
      * @return mixed
      */
     public function resolve(RouteInterface $route)
@@ -52,8 +54,9 @@ class Resolver implements ResolverInterface
     /**
      * Resolves the specified parameters from a container.
      *
-     * @param  \ReflectionFunctionAbstract $reflection
-     * @param  array                       $parameters
+     * @param \ReflectionFunctionAbstract $reflection
+     * @param array                       $parameters
+     *
      * @return array
      */
     protected function arguments(\ReflectionFunctionAbstract $reflection, $parameters = array())
@@ -93,7 +96,8 @@ class Resolver implements ResolverInterface
     /**
      * Returns the instance of the identifier from the container.
      *
-     * @param  string $class
+     * @param string $class
+     *
      * @return mixed
      */
     protected function instance($class)
@@ -120,7 +124,8 @@ class Resolver implements ResolverInterface
     /**
      * Returns a ReflectionFunctionAbstract instance.
      *
-     * @param  array|callable $handler
+     * @param array|callable $handler
+     *
      * @return \ReflectionFunctionAbstract
      */
     protected function reflection($handler)

@@ -6,7 +6,8 @@ namespace Zapheus\Routing;
  * Route Interface
  *
  * @package Zapheus
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
 interface RouteInterface
 {

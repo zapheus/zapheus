@@ -3,7 +3,6 @@
 namespace Zapheus\Routing;
 
 use Zapheus\Contract\Routing\Dispatcher as Contract;
-use Zapheus\Contract\Routing\Route;
 use Zapheus\Contract\Routing\Router;
 
 /**

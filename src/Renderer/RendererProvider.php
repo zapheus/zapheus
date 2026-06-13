@@ -20,8 +20,6 @@ class RendererProvider implements Provider
     protected $paths = array();
 
     /**
-     * Initializes the renderer instance.
-     *
      * @param array<string, string>|string $paths
      */
     public function __construct($paths = array())

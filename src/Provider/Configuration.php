@@ -17,8 +17,6 @@ class Configuration implements Contract
     protected $data = array();
 
     /**
-     * Initializes the configuration instance.
-     *
      * @param array<string, mixed> $data
      */
     public function __construct(array $data = array())

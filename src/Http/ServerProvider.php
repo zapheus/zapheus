@@ -20,8 +20,6 @@ class ServerProvider implements Provider
     protected $middlewares = array();
 
     /**
-     * Initializes the middleware instance.
-     *
      * @param \Zapheus\Contract\Http\Server\Middleware[] $middlewares
      */
     public function __construct(array $middlewares = array())

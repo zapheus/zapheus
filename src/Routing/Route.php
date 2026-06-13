@@ -37,8 +37,6 @@ class Route implements Contract
     protected $uri;
 
     /**
-     * Initializes the route instance.
-     *
      * @param string                                                               $method
      * @param string                                                               $uri
      * @param array<class-string, string>|callable|string                          $handler

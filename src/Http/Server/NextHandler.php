@@ -24,8 +24,6 @@ class NextHandler implements Handler
     protected $handler;
 
     /**
-     * Initializes the handler instance.
-     *
      * @param \Zapheus\Contract\Http\Server\Middleware $middleware
      * @param \Zapheus\Contract\Http\Server\Handler    $handler
      */

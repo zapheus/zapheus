@@ -17,8 +17,6 @@ class Stream implements Contract
     protected $stream;
 
     /**
-     * Initializes the stream instance.
-     *
      * @param resource $stream
      */
     public function __construct($stream)

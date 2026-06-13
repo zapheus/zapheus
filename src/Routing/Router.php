@@ -23,8 +23,6 @@ class Router implements Contract
     protected $routes = array();
 
     /**
-     * Initializes the router instance.
-     *
      * @param \Zapheus\Routing\Route[] $routes
      */
     public function __construct(array $routes = array())

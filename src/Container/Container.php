@@ -17,8 +17,6 @@ class Container implements Writable
     protected $objects = array();
 
     /**
-     * Initializes the container instance.
-     *
      * @param mixed[] $objects
      */
     public function __construct(array $objects = array())
@@ -38,7 +36,9 @@ class Container implements Writable
     {
         if ($this->has($id) === false)
         {
-            throw new NotFoundException("Alias ($id) is not defined");
+            $text = 'Alias (' . $id . ') is not defined';
+
+            throw new NotFoundException($text);
         }
 
         return $this->objects[$id];

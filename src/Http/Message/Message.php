@@ -28,8 +28,6 @@ class Message implements Contract
     protected $version = '1.1';
 
     /**
-     * Initializes the message instance.
-     *
      * @param array<string, string[]> $headers
      * @param string                  $version
      */

@@ -84,8 +84,6 @@ class Response extends Message implements Contract
     );
 
     /**
-     * Initializes the response instance.
-     *
      * @param integer                 $code
      * @param array<string, string[]> $headers
      * @param string                  $version

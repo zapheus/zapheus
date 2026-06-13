@@ -18,8 +18,6 @@ class Dispatcher implements Contract
     protected $router;
 
     /**
-     * Initializes the dispatcher instance.
-     *
      * @param \Zapheus\Contract\Routing\Router $router
      */
     public function __construct(RouterContract $router)

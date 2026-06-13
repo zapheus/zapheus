@@ -26,8 +26,6 @@ class Resolver implements Contract
     protected $reflect;
 
     /**
-     * Initializes the resolver instance.
-     *
      * @param \Zapheus\Contract\Container\Container $container
      */
     public function __construct(Container $container)

@@ -42,8 +42,6 @@ class File implements Contract
     protected $type;
 
     /**
-     * Initializes the uploaded file instance.
-     *
      * @param string  $file
      * @param string  $name
      * @param integer $error

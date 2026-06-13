@@ -28,8 +28,6 @@ class ResolverHandler implements Handler
     protected $route;
 
     /**
-     * Initializes the handler instance.
-     *
      * @param \Zapheus\Contract\Container\Writable $container
      * @param \Zapheus\Contract\Routing\Route      $route
      */

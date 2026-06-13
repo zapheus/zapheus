@@ -21,8 +21,6 @@ class RoutingHandler implements Handler
     protected $container;
 
     /**
-     * Initializes the handler instance.
-     *
      * @param \Zapheus\Contract\Container\Writable $container
      */
     public function __construct(Writable $container)

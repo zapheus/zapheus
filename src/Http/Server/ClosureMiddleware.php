@@ -19,8 +19,6 @@ class ClosureMiddleware implements Middleware
     protected $callback;
 
     /**
-     * Initializes the middleware instance.
-     *
      * @param callable $callback
      */
     public function __construct($callback)

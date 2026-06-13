@@ -17,8 +17,6 @@ class Renderer implements Contract
     protected $paths = array();
 
     /**
-     * Initializes the renderer instance.
-     *
      * @param array<string, string>|string $paths
      */
     public function __construct($paths)

@@ -19,8 +19,6 @@ class LastMiddleware implements Middleware
     protected $handler;
 
     /**
-     * Initializes the middleware instance.
-     *
      * @param \Zapheus\Contract\Http\Server\Handler $handler
      */
     public function __construct(Handler $handler)

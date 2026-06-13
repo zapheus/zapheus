@@ -59,8 +59,6 @@ class Request extends Message implements Contract
     protected $uri;
 
     /**
-     * Initializes the request instance.
-     *
      * @param string                                               $method
      * @param string                                               $target
      * @param array<string, string>                                $server

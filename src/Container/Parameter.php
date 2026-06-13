@@ -12,16 +12,14 @@ class Parameter
     /**
      * @var \ReflectionParameter
      */
-    protected $param;
+    protected $self;
 
     /**
-     * Initializes the parameter instance.
-     *
-     * @param \ReflectionParameter $param
+     * @param \ReflectionParameter $self
      */
-    public function __construct(\ReflectionParameter $param)
+    public function __construct(\ReflectionParameter $self)
     {
-        $this->param = $param;
+        $this->self = $self;
     }
 
     /**
@@ -38,19 +36,19 @@ class Parameter
 
         if (! $php8)
         {
-            return call_user_func(array($this->param, 'getClass'));
+            return call_user_func(array($this->self, 'getClass'));
         }
 
-        $type = call_user_func(array($this->param, 'getType'));
+        $type = call_user_func(array($this->self, 'getType'));
 
-        $builtIn = true;
+        $built = true;
 
         if ($type)
         {
-            $builtIn = call_user_func(array($type, 'isBuiltin'));
+            $built = call_user_func(array($type, 'isBuiltin'));
         }
 
-        if ($builtIn)
+        if ($built)
         {
             return null;
         }
@@ -69,6 +67,10 @@ class Parameter
      */
     public function getName()
     {
-        return $this->getClass() ? $this->getClass()->getName() : $this->param->getName();
+        $name = $this->self->getName();
+
+        $class = $this->getClass();
+
+        return $class ? $class->getName() : $name;
     }
 }

@@ -1,15 +1,13 @@
 <?php
 
-namespace Zapheus\Routing;
+namespace Zapheus\Contract\Routing;
 
 /**
- * Route Dispatcher Interface
- *
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-interface DispatcherInterface
+interface Dispatcher
 {
     /**
      * Dispatches against the provided HTTP method verb and URI.
@@ -17,7 +15,7 @@ interface DispatcherInterface
      * @param string $method
      * @param string $uri
      *
-     * @return \Zapheus\Routing\RouteInterface
+     * @return \Zapheus\Contract\Routing\Route
      * @throws \UnexpectedValueException
      */
     public function dispatch($method, $uri);

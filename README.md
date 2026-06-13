@@ -9,18 +9,23 @@
 Inspired from PHP frameworks of all shape and sizes, Zapheus is a web application framework with a goal to be easy to use, educational, and fully extensible to the core. Whether a simple API project or a full enterprise application, Zapheus will try to adapt it according to developer's needs.
 
 ``` php
-// Displays a "Hello World" text.
+use Zapheus\Routing\Router;
+use Zapheus\Application;
 
 require 'vendor/autoload.php';
 
-// Initializes the router application
-$app = new Zapheus\Coordinator;
+// Initializes the application
+$app = new Application;
 
 // Creates a HTTP route of GET /
-$app->get('/', function ()
+$router = new Router;
+
+$router->get('/', function ()
 {
     return 'Hello world!';
 });
+
+$app->set(Application::ROUTER, $router);
 
 // Handles the server request
 echo $app->run();
@@ -36,66 +41,22 @@ $ composer require zapheus/zapheus
 
 ## Basic usage
 
-### Using `Coordinator`
+### Using `Application`
 
 ``` php
 require 'vendor/autoload.php';
 
-// Initializes the router application
-$app = new Zapheus\Coordinator;
+// Initializes the application
+$app = new Zapheus\Application;
 
 // Creates a HTTP route of GET /
-$app->get('/', function ()
-{
-    return 'Hello world!';
-});
-
-// Handles the server request
-echo $app->run();
-```
-
-### Using `Middlelayer`
-
-``` php
-require 'vendor/autoload.php';
-
-// Initializes the middleware application
-$app = new Zapheus\Middlelayer;
-
-// Initializes the router instance
 $router = new Zapheus\Routing\Router;
-
-// Creates a HTTP route of GET /
 $router->get('/', function ()
 {
     return 'Hello world!';
 });
 
-// Pipes the router middleware into the application
-$app->pipe(function ($request, $next) use ($router)
-{
-    // Returns the request attribute value for a route
-    $attribute = Zapheus\Application::ROUTE_ATTRIBUTE;
-
-    // Returns the path from the URI instance
-    $path = $request->uri()->path();
-
-    // Returns the current HTTP method from the $_SERVER
-    $method = $request->method();
-
-    // Creates a new Routing\DispatcherInterface instance
-    $dispatcher = new Zapheus\Routing\Dispatcher($router);
-
-    // Dispatches the router against the current request
-    $route = $dispatcher->dispatch($method, $path);
-
-    // Sets the route attribute into the request in order to be
-    // called inside the Application instance and return the response.
-    $request = $request->push('attributes', $route, $attribute);
-
-    // Go to the next middleware, if there are any
-    return $next->handle($request);
-});
+$app->set('Zapheus\Contract\Routing\Router', $router);
 
 // Handles the server request
 echo $app->run();
@@ -117,7 +78,7 @@ Zapheus takes no dependencies from other frameworks or libraries. Each component
 
 ### Extensible
 
-All of Zapheus' classes have their own easy to understand interfaces. It enables developers to extend or optimize the core functionalities easily.
+All of Zapheus' classes have their own easy to understand interfaces located in the `Contract` namespace. It enables developers to extend or optimize the core functionalities easily.
 
 ### Interoperable
 
@@ -164,6 +125,10 @@ $container = $provider->register(new ZapheusContainer);
 $laravel = $container->get(Container::class);
 ```
 
+## Upgrade Guide
+
+As Zapheus is evolving as a micro-framework, there might be some breaking changes in its internal code during development. The said changes can be found in [UPGRADING][link-upgrading].
+
 ## Changelog
 
 Please see [CHANGELOG][link-changelog] for more recent changes and latest updates.
@@ -190,3 +155,4 @@ The MIT License (MIT). Please see [LICENSE][link-license] for more information.
 [link-downloads]: https://packagist.org/packages/zapheus/zapheus
 [link-license]: https://github.com/zapheus/zapheus/blob/master/LICENSE.md
 [link-packagist]: https://packagist.org/packages/zapheus/zapheus
+[link-upgrading]: https://github.com/zapheus/zapheus/blob/master/UPGRADING.md

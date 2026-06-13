@@ -3,30 +3,29 @@
 namespace Zapheus\Http\Server;
 
 use Zapheus\Application;
-use Zapheus\Container\WritableInterface;
-use Zapheus\Http\Message\RequestInterface;
-use Zapheus\Routing\RouteInterface;
+use Zapheus\Contract\Container\Writable;
+use Zapheus\Contract\Http\Message\Request;
+use Zapheus\Contract\Http\Server\Handler;
+use Zapheus\Contract\Routing\Route;
 
 /**
- * Routing Handler
- *
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class RoutingHandler implements HandlerInterface
+class RoutingHandler implements Handler
 {
     /**
-     * @var \Zapheus\Container\WritableInterface
+     * @var \Zapheus\Contract\Container\Writable
      */
     protected $container;
 
     /**
      * Initializes the handler instance.
      *
-     * @param \Zapheus\Container\WritableInterface $container
+     * @param \Zapheus\Contract\Container\Writable $container
      */
-    public function __construct(WritableInterface $container)
+    public function __construct(Writable $container)
     {
         $this->container = $container;
     }
@@ -34,11 +33,11 @@ class RoutingHandler implements HandlerInterface
     /**
      * Dispatch the next available middleware and return the response.
      *
-     * @param \Zapheus\Http\Message\RequestInterface $request
+     * @param \Zapheus\Contract\Http\Message\Request $request
      *
-     * @return \Zapheus\Http\Message\ResponseInterface
+     * @return \Zapheus\Contract\Http\Message\Response
      */
-    public function handle(RequestInterface $request)
+    public function handle(Request $request)
     {
         $route = $this->dispatch($request);
 
@@ -46,9 +45,9 @@ class RoutingHandler implements HandlerInterface
 
         if (count($route->middlewares()) > 0)
         {
-            $middlewares = (array) $route->middlewares();
+            $middlewares = $route->middlewares();
 
-            $dispatcher = new Dispatcher($middlewares, $this->container);
+            $dispatcher = (new Dispatcher($middlewares))->container($this->container);
 
             return $dispatcher->process($request, $handler);
         }
@@ -59,16 +58,15 @@ class RoutingHandler implements HandlerInterface
     /**
      * Dispatches against the provided HTTP method verb and URI.
      *
-     * @param string $method
-     * @param string $uri
+     * @param \Zapheus\Contract\Http\Message\Request $request
      *
-     * @return \Zapheus\Routing\RouteInterface
+     * @return \Zapheus\Contract\Routing\Route
      */
-    protected function dispatch(RequestInterface $request)
+    protected function dispatch(Request $request)
     {
         $route = $request->attribute(Application::ROUTE_ATTRIBUTE);
 
-        if ($route instanceof RouteInterface)
+        if ($route instanceof Route)
         {
             return $route;
         }

@@ -2,14 +2,14 @@
 
 namespace Zapheus\Http\Message;
 
+use Zapheus\Contract\Http\Message\File as Contract;
+
 /**
- * File
- *
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class File implements FileInterface
+class File implements Contract
 {
     /**
      * @var integer
@@ -27,12 +27,12 @@ class File implements FileInterface
     protected $name;
 
     /**
-     * @var integer|null
+     * @var false|integer|null
      */
     protected $size;
 
     /**
-     * @var string
+     * @var false|string
      */
     protected $type;
 
@@ -81,6 +81,7 @@ class File implements FileInterface
      *
      * @param string $target
      *
+     * @return void
      * @throws \InvalidArgumentException
      * @throws \RuntimeException
      */
@@ -112,7 +113,7 @@ class File implements FileInterface
     /**
      * Returns a stream representing the uploaded file.
      *
-     * @return \Zapheus\Http\Message\StreamInterface
+     * @return \Zapheus\Contract\Http\Message\Stream
      * @throws \RuntimeException
      */
     public function stream()

@@ -2,17 +2,17 @@
 
 namespace Zapheus\Routing;
 
+use Zapheus\Contract\Routing\Route as Contract;
+
 /**
- * Route
- *
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class Route implements RouteInterface
+class Route implements Contract
 {
     /**
-     * @var array|callable|string
+     * @var array<class-string, string>|callable|string
      */
     protected $handler;
 
@@ -22,12 +22,12 @@ class Route implements RouteInterface
     protected $method;
 
     /**
-     * @var array
+     * @var array<mixed>
      */
     protected $middlewares = array();
 
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected $parameters = array();
 
@@ -39,11 +39,11 @@ class Route implements RouteInterface
     /**
      * Initializes the route instance.
      *
-     * @param string                $method
-     * @param string                $uri
-     * @param array|callable|string $handler
-     * @param array|callable|string $middlewares
-     * @param array                 $parameters
+     * @param string                                                               $method
+     * @param string                                                               $uri
+     * @param array<class-string, string>|callable|string                          $handler
+     * @param array<int, \Zapheus\Contract\Http\Server\Middleware>|callable|string $middlewares
+     * @param array<string, string>                                                $parameters
      */
     public function __construct($method, $uri, $handler, $middlewares = array(), $parameters = array())
     {
@@ -66,7 +66,7 @@ class Route implements RouteInterface
     /**
      * Returns the handler.
      *
-     * @return array|callable|string
+     * @return array<class-string, string>|callable|string
      */
     public function handler()
     {
@@ -86,7 +86,7 @@ class Route implements RouteInterface
     /**
      * Returns an array of middlewares.
      *
-     * @return array
+     * @return array<int, \Zapheus\Contract\Http\Server\Middleware>
      */
     public function middlewares()
     {
@@ -96,7 +96,7 @@ class Route implements RouteInterface
     /**
      * Returns the parameters if any.
      *
-     * @return array
+     * @return array<string, string>
      */
     public function parameters()
     {
@@ -122,7 +122,7 @@ class Route implements RouteInterface
         $uri = $this->capture($uri, '/{(' . self::ALLOWED_REGEX . ')}/');
 
         // Add start and end matching
-        return (string) '@^' . $uri . '$@D';
+        return '@^' . $uri . '$@D';
     }
 
     /**
@@ -141,7 +141,7 @@ class Route implements RouteInterface
      * @param string $pattern
      * @param string $search
      *
-     * @return string
+     * @return string|null
      */
     protected function capture($pattern, $search)
     {

@@ -1,22 +1,20 @@
 <?php
 
-namespace Zapheus\Routing;
+namespace Zapheus\Contract\Routing;
 
 /**
- * Route Interface
- *
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-interface RouteInterface
+interface Route
 {
     const ALLOWED_REGEX = '[a-zA-Z0-9\_\-]+';
 
     /**
      * Returns the handler.
      *
-     * @return array|callable|string
+     * @return array<class-string, string>|callable|string
      */
     public function handler();
 
@@ -30,14 +28,14 @@ interface RouteInterface
     /**
      * Returns an array of middlewares.
      *
-     * @return array
+     * @return array<int, \Zapheus\Contract\Http\Server\Middleware>
      */
     public function middlewares();
 
     /**
      * Returns the parameters if any.
      *
-     * @return array
+     * @return array<string, string>
      */
     public function parameters();
 

@@ -2,17 +2,17 @@
 
 namespace Zapheus\Container;
 
+use Zapheus\Contract\Container\Writable;
+
 /**
- * Container
- *
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class Container implements WritableInterface
+class Container implements Writable
 {
     /**
-     * @var array
+     * @var array<mixed>
      */
     protected $objects = array();
 

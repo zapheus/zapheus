@@ -3,8 +3,6 @@
 namespace Zapheus\Container;
 
 /**
- * Not Found Exception
- *
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>

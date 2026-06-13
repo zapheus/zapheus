@@ -1,15 +1,13 @@
 <?php
 
-namespace Zapheus\Http\Message;
+namespace Zapheus\Contract\Http\Message;
 
 /**
- * Response Interface
- *
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-interface ResponseInterface extends MessageInterface
+interface Response extends Message
 {
     /**
      * Returns the response status code.

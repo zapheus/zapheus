@@ -2,12 +2,13 @@
 
 namespace Zapheus\Routing;
 
-use Zapheus\Http\Server\MiddlewareInterface;
+use Zapheus\Contract\Http\Server\Middleware;
+use Zapheus\Contract\Routing\Route as Contract;
 
 class RouteFactory
 {
     /**
-     * @var array|callable|string
+     * @var array<class-string, string>|callable|string
      */
     protected $handler;
 
@@ -17,12 +18,12 @@ class RouteFactory
     protected $method;
 
     /**
-     * @var array
+     * @var array<int, \Zapheus\Contract\Http\Server\Middleware>
      */
     protected $middlewares = array();
 
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected $parameters = array();
 
@@ -31,13 +32,15 @@ class RouteFactory
      */
     protected $uri;
 
-    public function __construct(RouteInterface $route = null)
+    /**
+     * Sets the route instance and copies its properties.
+     *
+     * @param \Zapheus\Contract\Routing\Route $route
+     *
+     * @return self
+     */
+    public function setRoute(Contract $route)
     {
-        if ($route === null)
-        {
-            return;
-        }
-
         $this->handler = $route->handler();
 
         $this->method = $route->method();
@@ -47,8 +50,15 @@ class RouteFactory
         $this->parameters = $route->parameters();
 
         $this->uri = $route->uri();
+
+        return $this;
     }
 
+    /**
+     * @param array<class-string, string>|callable|string $handler
+     *
+     * @return self
+     */
     public function handler($handler)
     {
         $this->handler = $handler;
@@ -56,11 +66,19 @@ class RouteFactory
         return $this;
     }
 
+    /**
+     * @return \Zapheus\Routing\Route
+     */
     public function make()
     {
         return new Route($this->method, $this->uri, $this->handler, $this->middlewares, $this->parameters);
     }
 
+    /**
+     * @param string $method
+     *
+     * @return self
+     */
     public function method($method)
     {
         $this->method = $method;
@@ -68,13 +86,23 @@ class RouteFactory
         return $this;
     }
 
-    public function middleware(MiddlewareInterface $middleware)
+    /**
+     * @param \Zapheus\Contract\Http\Server\Middleware $middleware
+     *
+     * @return self
+     */
+    public function middleware(Middleware $middleware)
     {
         $this->middlewares[] = $middleware;
 
         return $this;
     }
 
+    /**
+     * @param array<int, \Zapheus\Contract\Http\Server\Middleware> $middlewares
+     *
+     * @return self
+     */
     public function middlewares(array $middlewares)
     {
         foreach ($middlewares as $middleware)
@@ -85,6 +113,11 @@ class RouteFactory
         return $this;
     }
 
+    /**
+     * @param array<string, string> $parameters
+     *
+     * @return self
+     */
     public function parameters($parameters)
     {
         $this->parameters = $parameters;
@@ -92,6 +125,11 @@ class RouteFactory
         return $this;
     }
 
+    /**
+     * @param string $uri
+     *
+     * @return self
+     */
     public function uri($uri)
     {
         $this->uri = $uri;

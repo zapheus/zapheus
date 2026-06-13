@@ -1,22 +1,20 @@
 <?php
 
-namespace Zapheus\Routing;
+namespace Zapheus\Contract\Routing;
 
 /**
- * Resolver Interface
- *
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-interface ResolverInterface
+interface Resolver
 {
     /**
      * Resolves the specified route instance.
      *
-     * @param \Zapheus\Routing\RouteInterface $route
+     * @param \Zapheus\Contract\Routing\Route $route
      *
      * @return mixed
      */
-    public function resolve(RouteInterface $route);
+    public function resolve(Route $route);
 }

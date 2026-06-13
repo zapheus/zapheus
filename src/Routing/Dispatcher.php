@@ -2,26 +2,28 @@
 
 namespace Zapheus\Routing;
 
+use Zapheus\Contract\Routing\Dispatcher as Contract;
+use Zapheus\Contract\Routing\Route;
+use Zapheus\Contract\Routing\Router;
+
 /**
- * Route Dispatcher
- *
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class Dispatcher implements DispatcherInterface
+class Dispatcher implements Contract
 {
     /**
-     * @var \Zapheus\Routing\RouterInterface
+     * @var \Zapheus\Contract\Routing\Router
      */
     protected $router;
 
     /**
      * Initializes the dispatcher instance.
      *
-     * @param \Zapheus\Routing\RouterInterface $router
+     * @param \Zapheus\Contract\Routing\Router $router
      */
-    public function __construct(RouterInterface $router)
+    public function __construct(Router $router)
     {
         $this->router = $router;
     }
@@ -32,7 +34,7 @@ class Dispatcher implements DispatcherInterface
      * @param string $method
      * @param string $uri
      *
-     * @return \Zapheus\Routing\RouteInterface
+     * @return \Zapheus\Contract\Routing\Route
      * @throws \UnexpectedValueException
      */
     public function dispatch($method, $uri)
@@ -41,15 +43,16 @@ class Dispatcher implements DispatcherInterface
 
         if (($result = $this->match($method, $uri)) !== null)
         {
-            list($matches, $route) = (array) $result;
+            $matches = $result[0];
+            $route   = $result[1];
 
             $filtered = array_filter(array_keys($matches), 'is_string');
 
-            $flipped = (array) array_flip($filtered);
+            $flipped = array_flip($filtered);
 
             $values = array_intersect_key($matches, $flipped);
 
-            $factory = new RouteFactory($route);
+            $factory = (new RouteFactory)->setRoute($route);
 
             return $factory->parameters($values)->make();
         }
@@ -65,13 +68,13 @@ class Dispatcher implements DispatcherInterface
      * @param string $method
      * @param string $uri
      *
-     * @return array|null
+     * @return array{0: array<string>, 1: \Zapheus\Contract\Routing\Route}|null
      */
     protected function match($method, $uri)
     {
         $result = null;
 
-        foreach ((array) $this->router->routes() as $route)
+        foreach ($this->router->routes() as $route)
         {
             $matched = preg_match($route->regex(), $uri, $matches);
 

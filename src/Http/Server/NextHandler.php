@@ -2,34 +2,34 @@
 
 namespace Zapheus\Http\Server;
 
-use Zapheus\Http\Message\RequestInterface;
+use Zapheus\Contract\Http\Message\Request;
+use Zapheus\Contract\Http\Server\Handler;
+use Zapheus\Contract\Http\Server\Middleware;
 
 /**
- * Next Handler
- *
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class NextHandler implements HandlerInterface
+class NextHandler implements Handler
 {
     /**
-     * @var \Zapheus\Http\Server\MiddlewareInterface
+     * @var \Zapheus\Contract\Http\Server\Middleware
      */
     protected $middleware;
 
     /**
-     * @var \Zapheus\Http\Server\HandlerInterface
+     * @var \Zapheus\Contract\Http\Server\Handler
      */
     protected $handler;
 
     /**
      * Initializes the handler instance.
      *
-     * @param \Zapheus\Http\Server\MiddlewareInterface $middleware
-     * @param \Zapheus\Http\Server\HandlerInterface    $handler
+     * @param \Zapheus\Contract\Http\Server\Middleware $middleware
+     * @param \Zapheus\Contract\Http\Server\Handler    $handler
      */
-    public function __construct(MiddlewareInterface $middleware, HandlerInterface $handler)
+    public function __construct(Middleware $middleware, Handler $handler)
     {
         $this->middleware = $middleware;
 
@@ -39,11 +39,11 @@ class NextHandler implements HandlerInterface
     /**
      * Handles the request and returns a response.
      *
-     * @param \Zapheus\Http\Message\RequestInterface $request
+     * @param \Zapheus\Contract\Http\Message\Request $request
      *
-     * @return \Zapheus\Http\Message\ResponseInterface
+     * @return \Zapheus\Contract\Http\Message\Response
      */
-    public function __invoke(RequestInterface $request)
+    public function __invoke(Request $request)
     {
         return $this->handle($request);
     }
@@ -51,11 +51,11 @@ class NextHandler implements HandlerInterface
     /**
      * Handles the request and returns a response.
      *
-     * @param \Zapheus\Http\Message\RequestInterface $request
+     * @param \Zapheus\Contract\Http\Message\Request $request
      *
-     * @return \Zapheus\Http\Message\ResponseInterface
+     * @return \Zapheus\Contract\Http\Message\Response
      */
-    public function handle(RequestInterface $request)
+    public function handle(Request $request)
     {
         return $this->middleware->process($request, $this->handler);
     }

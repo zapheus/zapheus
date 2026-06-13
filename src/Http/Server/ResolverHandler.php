@@ -3,38 +3,37 @@
 namespace Zapheus\Http\Server;
 
 use Zapheus\Application;
-use Zapheus\Container\WritableInterface;
-use Zapheus\Http\Message\RequestInterface;
-use Zapheus\Http\Message\ResponseInterface;
+use Zapheus\Contract\Container\Writable;
+use Zapheus\Contract\Http\Message\Request;
+use Zapheus\Contract\Http\Message\Response;
+use Zapheus\Contract\Http\Server\Handler;
+use Zapheus\Contract\Routing\Route;
 use Zapheus\Routing\Resolver;
-use Zapheus\Routing\RouteInterface;
 
 /**
- * Resolver Handler
- *
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class ResolverHandler implements HandlerInterface
+class ResolverHandler implements Handler
 {
     /**
-     * @var \Zapheus\Container\WritableInterface
+     * @var \Zapheus\Contract\Container\Writable
      */
     protected $container;
 
     /**
-     * @var \Zapheus\Routing\RouteInterface
+     * @var \Zapheus\Contract\Routing\Route
      */
     protected $route;
 
     /**
      * Initializes the handler instance.
      *
-     * @param \Zapheus\Container\WritableInterface $container
-     * @param \Zapheus\Routing\RouteInterface      $route
+     * @param \Zapheus\Contract\Container\Writable $container
+     * @param \Zapheus\Contract\Routing\Route      $route
      */
-    public function __construct(WritableInterface $container, RouteInterface $route)
+    public function __construct(Writable $container, Route $route)
     {
         $this->container = $container;
 
@@ -44,11 +43,11 @@ class ResolverHandler implements HandlerInterface
     /**
      * Dispatch the next available middleware and return the response.
      *
-     * @param \Zapheus\Http\Message\RequestInterface $request
+     * @param \Zapheus\Contract\Http\Message\Request $request
      *
-     * @return \Zapheus\Http\Message\ResponseInterface
+     * @return \Zapheus\Contract\Http\Message\Response
      */
-    public function handle(RequestInterface $request)
+    public function handle(Request $request)
     {
         if ($this->container->has(Application::RESOLVER) === true)
         {
@@ -65,17 +64,17 @@ class ResolverHandler implements HandlerInterface
     }
 
     /**
-     * Converts the given result into a ResponseInterface.
+     * Converts the given result into a Response.
      *
      * @param mixed $result
      *
-     * @return \Zapheus\Http\Message\ResponseInterface
+     * @return \Zapheus\Contract\Http\Message\Response
      */
     protected function response($result)
     {
         $response = $this->container->get(Application::RESPONSE);
 
-        if ($result instanceof ResponseInterface)
+        if ($result instanceof Response)
         {
             return $result;
         }

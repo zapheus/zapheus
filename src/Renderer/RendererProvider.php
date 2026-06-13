@@ -2,19 +2,17 @@
 
 namespace Zapheus\Renderer;
 
-use Zapheus\Container\WritableInterface;
-use Zapheus\Provider\ProviderInterface;
+use Zapheus\Contract\Container\Writable;
+use Zapheus\Contract\Provider\Provider;
 
 /**
- * Renderer Provider
- *
- * @package App
+ * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class RendererProvider implements ProviderInterface
+class RendererProvider implements Provider
 {
-    const RENDERER = 'Zapheus\Renderer\RendererInterface';
+    const RENDERER = 'Zapheus\Contract\Renderer\Renderer';
 
     /**
      * @var string[]
@@ -24,27 +22,27 @@ class RendererProvider implements ProviderInterface
     /**
      * Initializes the renderer instance.
      *
-     * @param array|string $paths
+     * @param array<string, string>|string $paths
      */
     public function __construct($paths = array())
     {
-        $this->paths = (array) $paths;
+        $this->paths = is_array($paths) ? $paths : array($paths);
     }
 
     /**
      * Registers the bindings in the container.
      *
-     * @param \Zapheus\Container\WritableInterface $container
+     * @param \Zapheus\Contract\Container\Writable $container
      *
-     * @return \Zapheus\Container\ContainerInterface
+     * @return \Zapheus\Contract\Container\Container
      */
-    public function register(WritableInterface $container)
+    public function register(Writable $container)
     {
         $config = $container->get(self::CONFIG);
 
         $paths = $config->get('app.views', $this->paths);
 
-        $renderer = new Renderer((array) $paths);
+        $renderer = new Renderer(is_array($paths) ? $paths : array($paths));
 
         return $container->set(self::RENDERER, $renderer);
     }

@@ -2,55 +2,51 @@
 
 namespace Zapheus\Http\Server;
 
-use Zapheus\Container\ContainerInterface;
 use Zapheus\Container\ReflectionContainer;
-use Zapheus\Http\Message\RequestInterface;
+use Zapheus\Contract\Container\Container;
+use Zapheus\Contract\Http\Message\Request;
+use Zapheus\Contract\Http\Server\Dispatcher as Contract;
+use Zapheus\Contract\Http\Server\Handler;
+use Zapheus\Contract\Http\Server\Middleware;
 
 /**
- * Middleware Dispatcher
- *
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class Dispatcher implements DispatcherInterface
+class Dispatcher implements Contract
 {
     /**
-     * @var \Zapheus\Container\ContainerInterface
+     * @var \Zapheus\Contract\Container\Container
      */
     protected $container;
 
     /**
-     * @var array
+     * @var array<int, \Zapheus\Contract\Http\Server\Middleware>
      */
     protected $stack = array();
 
     /**
      * Initializes the dispatcher instance.
      *
-     * @param \Zapheus\Http\Server\MiddlewareInterface[] $stack
-     * @param \Zapheus\Container\ContainerInterface|null $container
+     * @param array<int, \Zapheus\Contract\Http\Server\Middleware> $stack
      */
-    public function __construct(array $stack = array(), ContainerInterface $container = null)
+    public function __construct(array $stack = array())
     {
-        $this->container($container ?: new ReflectionContainer);
-
-        foreach ((array) $stack as $key => $item)
+        foreach ($stack as $key => $item)
         {
-            $middleware = $this->transform($item);
-
-            array_push($this->stack, $middleware);
+            array_push($this->stack, $item);
         }
     }
 
     /**
      * Sets the container for binding middleware dependencies.
      *
-     * @param \Zapheus\Container\ContainerInterface $container
+     * @param \Zapheus\Contract\Container\Container $container
      *
      * @return self
      */
-    public function container(ContainerInterface $container)
+    public function container(Container $container)
     {
         $this->container = $container;
 
@@ -60,11 +56,11 @@ class Dispatcher implements DispatcherInterface
     /**
      * Dispatches the defined middleware stack.
      *
-     * @param \Zapheus\Http\Message\RequestInterface $request
+     * @param \Zapheus\Contract\Http\Message\Request $request
      *
-     * @return \Zapheus\Http\Message\ResponseInterface
+     * @return \Zapheus\Contract\Http\Message\ResponseInterface
      */
-    public function dispatch(RequestInterface $request)
+    public function dispatch(Request $request)
     {
         $resolved = $this->resolve(0);
 
@@ -74,12 +70,12 @@ class Dispatcher implements DispatcherInterface
     /**
      * Processes an incoming request and returns a response.
      *
-     * @param \Zapheus\Http\Message\RequestInterface $request
-     * @param \Zapheus\Http\Server\HandlerInterface  $handler
+     * @param \Zapheus\Contract\Http\Message\Request $request
+     * @param \Zapheus\Contract\Http\Server\Handler  $handler
      *
-     * @return \Zapheus\Http\Message\ResponseInterface
+     * @return \Zapheus\Contract\Http\Message\ResponseInterface
      */
-    public function process(RequestInterface $request, HandlerInterface $handler)
+    public function process(Request $request, Handler $handler)
     {
         $this->stack[] = new LastMiddleware($handler);
 
@@ -109,12 +105,17 @@ class Dispatcher implements DispatcherInterface
      *
      * @param mixed $middleware
      *
-     * @return \Zapheus\Http\Server\MiddlewareInterface
+     * @return \Zapheus\Contract\Http\Server\Middleware
      */
     protected function transform($middleware)
     {
         if (is_string($middleware))
         {
+            if ($this->container === null)
+            {
+                $this->container = new ReflectionContainer;
+            }
+
             return $this->container->get($middleware);
         }
 
@@ -131,7 +132,7 @@ class Dispatcher implements DispatcherInterface
      *
      * @param integer $index
      *
-     * @return \Zapheus\Http\Server\HandlerInterface
+     * @return \Zapheus\Contract\Http\Server\Handler
      */
     protected function resolve($index)
     {
@@ -142,7 +143,7 @@ class Dispatcher implements DispatcherInterface
 
         $next = $this->resolve($index + 1);
 
-        $item = $this->stack[(int) $index];
+        $item = $this->transform($this->stack[$index]);
 
         return new NextHandler($item, $next);
     }

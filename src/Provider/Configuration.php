@@ -2,24 +2,24 @@
 
 namespace Zapheus\Provider;
 
+use Zapheus\Contract\Provider\Configuration as Contract;
+
 /**
- * Configuration
- *
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class Configuration implements ConfigurationInterface
+class Configuration implements Contract
 {
     /**
-     * @var array
+     * @var array<string, mixed>
      */
     protected $data = array();
 
     /**
      * Initializes the configuration instance.
      *
-     * @param array $data
+     * @param array<string, mixed> $data
      */
     public function __construct(array $data = array())
     {
@@ -31,7 +31,7 @@ class Configuration implements ConfigurationInterface
      *
      * @param boolean $dotify
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function all($dotify = false)
     {
@@ -57,7 +57,7 @@ class Configuration implements ConfigurationInterface
 
         for ($i = 0; $i < $length; $i++)
         {
-            $index = $keys[(int) $i];
+            $index = $keys[$i];
 
             $items = &$items[$index];
         }
@@ -84,7 +84,8 @@ class Configuration implements ConfigurationInterface
      */
     public function load($path)
     {
-        list($data, $items) = array(array(), array($path));
+        $data  = array();
+        $items = array($path);
 
         if (substr((string) $path, -4) !== '.php')
         {
@@ -94,10 +95,10 @@ class Configuration implements ConfigurationInterface
 
             $regex = new \RegexIterator($iterator, '/^.+\.php$/i', 1);
 
-            $items = (array) array_keys(iterator_to_array($regex));
+            $items = array_keys(iterator_to_array($regex));
         }
 
-        foreach ((array) $items as $item)
+        foreach ($items as $item)
         {
             $name = $this->rename($item, $path);
 
@@ -110,19 +111,19 @@ class Configuration implements ConfigurationInterface
     /**
      * Converts the data into dot notation values.
      *
-     * @param array  $data
-     * @param array  $result
-     * @param string $key
+     * @param array<string, mixed> $data
+     * @param array<string, mixed> $result
+     * @param string               $key
      *
-     * @return array
+     * @return array<string, mixed>
      */
     protected function dotify(array $data, $result = array(), $key = '')
     {
-        foreach ((array) $data as $name => $value)
+        foreach ($data as $name => $value)
         {
             if (is_array($value) && empty($value) === false)
             {
-                $text = (string) $key . $name . '.';
+                $text = $key . $name . '.';
 
                 $item = $this->dotify($value, $result, $text);
 
@@ -164,7 +165,7 @@ class Configuration implements ConfigurationInterface
      */
     protected function rename($item, $path)
     {
-        $name = str_replace($path, '', (string) $item);
+        $name = str_replace($path, '', $item);
 
         $name = str_replace(array('\\', '/'), '.', $name);
 
@@ -176,9 +177,9 @@ class Configuration implements ConfigurationInterface
     /**
      * Saves the specified key in the list of data.
      *
-     * @param array &$keys
-     * @param array &$data
-     * @param mixed $value
+     * @param string[]             &$keys
+     * @param array<string, mixed> &$data
+     * @param mixed                $value
      *
      * @return mixed
      */

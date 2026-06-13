@@ -2,9 +2,9 @@
 
 namespace Zapheus\Http\Message;
 
+use Zapheus\Contract\Http\Message\Response as Contract;
+
 /**
- * Response Factory
- *
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
@@ -17,20 +17,19 @@ class ResponseFactory extends MessageFactory
     protected $code = 200;
 
     /**
-     * Initializes the response instance.
+     * Sets the response instance and copies its properties.
      *
-     * @param \Zapheus\Http\Message\ResponseInterface|null $response
+     * @param \Zapheus\Contract\Http\Message\Response $response
+     *
+     * @return self
      */
-    public function __construct(ResponseInterface $response = null)
+    public function setResponse(Contract $response)
     {
-        parent::__construct($response);
-
-        if ($response === null)
-        {
-            return;
-        }
+        parent::setMessage($response);
 
         $this->code = $response->code();
+
+        return $this;
     }
 
     /**
@@ -50,10 +49,17 @@ class ResponseFactory extends MessageFactory
     /**
      * Creates the response instance.
      *
-     * @return \Zapheus\Http\Message\ResponseInterface
+     * @return \Zapheus\Contract\Http\Message\Response
      */
     public function make()
     {
-        return new Response($this->code, $this->headers, $this->stream, $this->version);
+        $response = new Response($this->code, $this->headers, $this->version);
+
+        if ($this->stream)
+        {
+            $response->setStream($this->stream);
+        }
+
+        return $response;
     }
 }

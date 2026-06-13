@@ -2,28 +2,28 @@
 
 namespace Zapheus\Http\Server;
 
-use Zapheus\Http\Message\RequestInterface;
+use Zapheus\Contract\Http\Message\Request;
+use Zapheus\Contract\Http\Server\Handler;
+use Zapheus\Contract\Http\Server\Middleware;
 
 /**
- * Last Middleware
- *
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class LastMiddleware implements MiddlewareInterface
+class LastMiddleware implements Middleware
 {
     /**
-     * @var \Zapheus\Http\Server\HandlerInterface
+     * @var \Zapheus\Contract\Http\Server\Handler
      */
     protected $handler;
 
     /**
      * Initializes the middleware instance.
      *
-     * @param \Zapheus\Http\Server\HandlerInterface $handler
+     * @param \Zapheus\Contract\Http\Server\Handler $handler
      */
-    public function __construct(HandlerInterface $handler)
+    public function __construct(Handler $handler)
     {
         $this->handler = $handler;
     }
@@ -31,12 +31,12 @@ class LastMiddleware implements MiddlewareInterface
     /**
      * Processes an incoming request and returns a response.
      *
-     * @param \Zapheus\Http\Message\RequestInterface $request
-     * @param \Zapheus\Http\Server\HandlerInterface  $handler
+     * @param \Zapheus\Contract\Http\Message\Request $request
+     * @param \Zapheus\Contract\Http\Server\Handler  $handler
      *
-     * @return \Zapheus\Http\Message\ResponseInterface
+     * @return \Zapheus\Contract\Http\Message\Response
      */
-    public function process(RequestInterface $request, HandlerInterface $handler)
+    public function process(Request $request, Handler $handler)
     {
         return $this->handler->handle($request);
     }

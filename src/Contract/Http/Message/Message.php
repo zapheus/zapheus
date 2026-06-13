@@ -1,36 +1,34 @@
 <?php
 
-namespace Zapheus\Http\Message;
+namespace Zapheus\Contract\Http\Message;
 
 /**
- * Message Interface
- *
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-interface MessageInterface
+interface Message
 {
     /**
      * Returns a message header value by the given case-insensitive name.
      *
      * @param string $name
      *
-     * @return array
+     * @return array<string, string>
      */
     public function header($name);
 
     /**
      * Returns all message header values.
      *
-     * @return array
+     * @return array<string, string[]>
      */
     public function headers();
 
     /**
      * Returns the stream of the message.
      *
-     * @return \Zapheus\Http\Message\StreamInterface
+     * @return \Zapheus\Contract\Http\Message\Stream
      */
     public function stream();
 

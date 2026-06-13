@@ -2,14 +2,14 @@
 
 namespace Zapheus\Renderer;
 
+use Zapheus\Contract\Renderer\Renderer as Contract;
+
 /**
- * Renderer
- *
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class Renderer implements RendererInterface
+class Renderer implements Contract
 {
     /**
      * @var string[]
@@ -19,18 +19,18 @@ class Renderer implements RendererInterface
     /**
      * Initializes the renderer instance.
      *
-     * @param array|string $paths
+     * @param array<string, string>|string $paths
      */
     public function __construct($paths)
     {
-        $this->paths = (array) $paths;
+        $this->paths = is_array($paths) ? $paths : array($paths);
     }
 
     /**
      * Renders a file from a specified template.
      *
-     * @param string $template
-     * @param array  $data
+     * @param string               $template
+     * @param array<string, mixed> $data
      *
      * @return string
      * @throws \InvalidArgumentException
@@ -41,7 +41,7 @@ class Renderer implements RendererInterface
 
         foreach ($this->paths as $key => $path)
         {
-            $files = $this->files((string) $path);
+            $files = $this->files($path);
 
             $item = $this->check($files, $path, $key, "$name.php");
 
@@ -59,10 +59,10 @@ class Renderer implements RendererInterface
     /**
      * Checks if the specified file exists.
      *
-     * @param array          $files
-     * @param string         $path
-     * @param integer|string $source
-     * @param string         $template
+     * @param array<string, string> $files
+     * @param string                $path
+     * @param integer|string        $source
+     * @param string                $template
      *
      * @return string|null
      */
@@ -70,7 +70,7 @@ class Renderer implements RendererInterface
     {
         $file = null;
 
-        foreach ((array) $files as $key => $value)
+        foreach ($files as $key => $value)
         {
             $filepath = str_replace($path, $source, $value);
 
@@ -92,10 +92,10 @@ class Renderer implements RendererInterface
     /**
      * Extracts the contents of the specified file.
      *
-     * @param string $filepath
-     * @param array  $data
+     * @param string               $filepath
+     * @param array<string, mixed> $data
      *
-     * @return string
+     * @return false|string
      */
     protected function extract($filepath, array $data)
     {
@@ -127,6 +127,6 @@ class Renderer implements RendererInterface
 
         $regex = new \RegexIterator($iterator, '/^.+\.php$/i', 1);
 
-        return (array) array_keys(iterator_to_array($regex));
+        return array_keys(iterator_to_array($regex));
     }
 }

@@ -1,15 +1,13 @@
 <?php
 
-namespace Zapheus\Container;
+namespace Zapheus\Contract\Container;
 
 /**
- * Container Interface
- *
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-interface ContainerInterface
+interface Container
 {
     /**
      * Finds an entry of the container by its identifier and returns it.

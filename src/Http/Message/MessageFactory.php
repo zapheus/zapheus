@@ -2,9 +2,9 @@
 
 namespace Zapheus\Http\Message;
 
+use Zapheus\Contract\Http\Message\Message as Contract;
+
 /**
- * Message Factory
- *
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
@@ -12,12 +12,12 @@ namespace Zapheus\Http\Message;
 class MessageFactory
 {
     /**
-     * @var array
+     * @var array<string, mixed>
      */
     protected $headers = array();
 
     /**
-     * @var \Zapheus\Http\Message\StreamInterface
+     * @var \Zapheus\Contract\Http\Message\Stream|null
      */
     protected $stream;
 
@@ -27,22 +27,21 @@ class MessageFactory
     protected $version = '1.1';
 
     /**
-     * Initializes the message instance.
+     * Sets the message instance and copies its properties.
      *
-     * @param \Zapheus\Http\Message\MessageInterface|null $message
+     * @param \Zapheus\Contract\Http\Message\Message $message
+     *
+     * @return self
      */
-    public function __construct(MessageInterface $message = null)
+    public function setMessage(Contract $message)
     {
-        if ($message === null)
-        {
-            return;
-        }
-
         $this->headers = $message->headers();
 
         $this->stream = $message->stream();
 
         $this->version = $message->version();
+
+        return $this;
     }
 
     /**
@@ -55,7 +54,7 @@ class MessageFactory
      */
     public function header($name, $value)
     {
-        $this->headers[$name] = (array) $value;
+        $this->headers[$name] = is_array($value) ? $value : array($value);
 
         return $this;
     }
@@ -63,8 +62,7 @@ class MessageFactory
     /**
      * Sets the message header values.
      *
-     * @param string $name
-     * @param mixed  $value
+     * @param array<string, string[]> $headers
      *
      * @return self
      */
@@ -78,23 +76,30 @@ class MessageFactory
     /**
      * Creates the message instance.
      *
-     * @return \Zapheus\Http\Message\MessageInterface
+     * @return \Zapheus\Contract\Http\Message\Message
      */
     public function make()
     {
-        return new Message($this->headers, $this->stream, $this->version);
+        $message = new Message($this->headers, $this->version);
+
+        if ($this->stream)
+        {
+            $message->setStream($this->stream);
+        }
+
+        return $message;
     }
 
     /**
      * Sets the server parameters ($_SERVER).
      *
-     * @param array $server
+     * @param array<string, string> $server
      *
      * @return self
      */
     public function server(array $server)
     {
-        foreach ((array) $server as $key => $value)
+        foreach ($server as $key => $value)
         {
             $string = strtolower(substr($key, 5));
 
@@ -105,16 +110,18 @@ class MessageFactory
                 $this->headers[$key] = $value;
             }
         }
+
+        return $this;
     }
 
     /**
      * Sets the stream instance.
      *
-     * @param \Zapheus\Http\Message\StreamInterface $stream
+     * @param \Zapheus\Http\Message\Stream $stream
      *
      * @return self
      */
-    public function stream(StreamInterface $stream)
+    public function stream(Stream $stream)
     {
         $this->stream = $stream;
 

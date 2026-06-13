@@ -2,14 +2,14 @@
 
 namespace Zapheus\Http\Message;
 
+use Zapheus\Contract\Http\Message\Stream as Contract;
+
 /**
- * Stream
- *
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class Stream implements StreamInterface
+class Stream implements Contract
 {
     /**
      * @var resource
@@ -63,7 +63,7 @@ class Stream implements StreamInterface
      *
      * @param integer $length
      *
-     * @return string
+     * @return false|string
      */
     public function read($length)
     {
@@ -85,7 +85,7 @@ class Stream implements StreamInterface
      *
      * @param string $string
      *
-     * @return integer
+     * @return false|integer
      */
     public function write($string)
     {

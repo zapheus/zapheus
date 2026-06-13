@@ -2,9 +2,9 @@
 
 namespace Zapheus\Http\Message;
 
+use Zapheus\Contract\Http\Message\Uri as Contract;
+
 /**
- * URI Factory
- *
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
@@ -57,17 +57,14 @@ class UriFactory
     protected $user = '';
 
     /**
-     * Initializes the URI instance.
+     * Sets the URI instance and copies its properties.
      *
-     * @param \Zapheus\Http\Message\UriInterface|null $uri
+     * @param \Zapheus\Contract\Http\Message\Uri $uri
+     *
+     * @return self
      */
-    public function __construct(UriInterface $uri = null)
+    public function setUri(Contract $uri)
     {
-        if ($uri === null)
-        {
-            return;
-        }
-
         $this->fragment = $uri->fragment();
 
         $this->host = $uri->host();
@@ -81,6 +78,8 @@ class UriFactory
         $this->scheme = $uri->scheme();
 
         $this->user = $uri->user();
+
+        return $this;
     }
 
     /**
@@ -114,7 +113,7 @@ class UriFactory
     /**
      * Creates the URI instance.
      *
-     * @return \Zapheus\Http\Message\UriInterface
+     * @return \Zapheus\Contract\Http\Message\Uri
      */
     public function make()
     {
@@ -210,7 +209,8 @@ class UriFactory
     /**
      * Sets the user component.
      *
-     * @param string $user
+     * @param string      $user
+     * @param string|null $pass
      *
      * @return self
      */

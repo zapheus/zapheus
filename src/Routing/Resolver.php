@@ -2,49 +2,69 @@
 
 namespace Zapheus\Routing;
 
-use Zapheus\Container\ContainerInterface;
+use Zapheus\Container\ReflectionContainer;
+use Zapheus\Contract\Container\Container;
+use Zapheus\Contract\Routing\Resolver as Contract;
+use Zapheus\Contract\Routing\Route;
 
 /**
- * Resolver
- *
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class Resolver implements ResolverInterface
+class Resolver implements Contract
 {
     /**
-     * @var \Zapheus\Container\ContainerInterface
+     * @var \Zapheus\Contract\Container\Container
      */
     protected $container;
 
     /**
+     * @var \Zapheus\Container\ReflectionContainer
+     */
+    protected $reflect;
+
+    /**
      * Initializes the resolver instance.
      *
-     * @param \Zapheus\Container\ContainerInterface $container
+     * @param \Zapheus\Contract\Container\Container $container
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(Container $container)
     {
         $this->container = $container;
+
+        $this->reflect = new ReflectionContainer;
     }
 
     /**
      * Resolves the specified route instance.
      *
-     * @param \Zapheus\Routing\RouteInterface $route
+     * @param \Zapheus\Contract\Routing\Route $route
      *
      * @return mixed
      */
-    public function resolve(RouteInterface $route)
+    public function resolve(Route $route)
     {
         if (is_string($handler = $route->handler()))
         {
             $handler = explode('@', $handler);
         }
 
-        $parameters = (array) $route->parameters();
+        $parameters = $route->parameters();
 
-        list($handler, $reflection) = $this->reflection($handler);
+        if (! is_array($handler))
+        {
+            $reflection = new \ReflectionFunction($handler);
+        }
+        else
+        {
+            $class = $handler[0];
+            $method = $handler[1];
+
+            $handler = array($this->instance($class), $method);
+
+            $reflection = new \ReflectionMethod($class, $method);
+        }
 
         $parameters = $this->arguments($reflection, $parameters);
 
@@ -55,13 +75,13 @@ class Resolver implements ResolverInterface
      * Resolves the specified parameters from a container.
      *
      * @param \ReflectionFunctionAbstract $reflection
-     * @param array                       $parameters
+     * @param array<string, string>       $parameters
      *
-     * @return array
+     * @return array<string, mixed>
      */
     protected function arguments(\ReflectionFunctionAbstract $reflection, $parameters = array())
     {
-        $arguments = array();
+        $args = array();
 
         foreach ($reflection->getParameters() as $key => $parameter)
         {
@@ -76,21 +96,21 @@ class Resolver implements ResolverInterface
             {
                 if ($parameter->isDefaultValueAvailable())
                 {
-                    $arguments[$name] = $parameter->getDefaultValue();
+                    $args[$name] = $parameter->getDefaultValue();
                 }
 
                 if ($parameters[$name])
                 {
-                    $arguments[$name] = $parameters[$name];
+                    $args[$name] = $parameters[$name];
                 }
 
                 continue;
             }
 
-            $arguments[$name] = $this->instance($name);
+            $args[$name] = $this->instance($name);
         }
 
-        return $arguments;
+        return $args;
     }
 
     /**
@@ -102,47 +122,11 @@ class Resolver implements ResolverInterface
      */
     protected function instance($class)
     {
-        $reflection = new \ReflectionClass($class);
-
-        $arguments = array();
-
-        $constructor = $reflection->getConstructor();
-
         if ($this->container->has($class))
         {
             return $this->container->get($class);
         }
 
-        if ($constructor !== null)
-        {
-            $arguments = $this->arguments($constructor);
-        }
-
-        return $reflection->newInstanceArgs(array_values($arguments));
-    }
-
-    /**
-     * Returns a ReflectionFunctionAbstract instance.
-     *
-     * @param array|callable $handler
-     *
-     * @return \ReflectionFunctionAbstract
-     */
-    protected function reflection($handler)
-    {
-        if (! is_array($handler))
-        {
-            $instance = new \ReflectionFunction($handler);
-
-            return array($handler, $instance);
-        }
-
-        list($class, $method) = (array) $handler;
-
-        $instance = new \ReflectionMethod($class, $method);
-
-        $handler = array($this->instance($class), $method);
-
-        return array((array) $handler, $instance);
+        return $this->reflect->get($class);
     }
 }

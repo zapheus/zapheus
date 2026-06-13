@@ -2,16 +2,16 @@
 
 namespace Zapheus\Http\Server;
 
-use Zapheus\Http\Message\RequestInterface;
+use Zapheus\Contract\Http\Message\Request;
+use Zapheus\Contract\Http\Server\Handler;
+use Zapheus\Contract\Http\Server\Middleware;
 
 /**
- * Closure Middleware
- *
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class ClosureMiddleware implements MiddlewareInterface
+class ClosureMiddleware implements Middleware
 {
     /**
      * @var callable
@@ -31,12 +31,12 @@ class ClosureMiddleware implements MiddlewareInterface
     /**
      * Processes an incoming request and returns a response.
      *
-     * @param \Zapheus\Http\Message\RequestInterface $request
-     * @param \Zapheus\Http\Server\HandlerInterface  $handler
+     * @param \Zapheus\Contract\Http\Message\Request $request
+     * @param \Zapheus\Contract\Http\Server\Handler  $handler
      *
-     * @return \Zapheus\Http\Message\ResponseInterface
+     * @return \Zapheus\Contract\Http\Message\Response
      */
-    public function process(RequestInterface $request, HandlerInterface $handler)
+    public function process(Request $request, Handler $handler)
     {
         $middleware = $this->callback;
 

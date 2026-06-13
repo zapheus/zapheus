@@ -1,15 +1,13 @@
 <?php
 
-namespace Zapheus\Http\Message;
+namespace Zapheus\Contract\Http\Message;
 
 /**
- * Stream Interface
- *
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-interface StreamInterface
+interface Stream
 {
     /**
      * Closes the stream and any underlying resources.
@@ -37,6 +35,7 @@ interface StreamInterface
     /**
      * Seeks to the beginning of the stream.
      *
+     * @return void
      * @throws \RuntimeException
      */
     public function rewind();

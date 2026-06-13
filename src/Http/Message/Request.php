@@ -2,32 +2,34 @@
 
 namespace Zapheus\Http\Message;
 
+use Zapheus\Contract\Http\Message\Request as Contract;
+use Zapheus\Contract\Http\Message\Stream;
+use Zapheus\Contract\Http\Message\Uri;
+
 /**
- * Request
- *
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class Request extends Message implements RequestInterface
+class Request extends Message implements Contract
 {
     /**
-     * @var array
+     * @var array<string, mixed>
      */
     protected $attributes = array();
 
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected $cookies = array();
 
     /**
-     * @var array|object|null
+     * @var array<string, mixed>|object|null
      */
     protected $data = array();
 
     /**
-     * @var array
+     * @var array<string, \Zapheus\Contract\Http\Message\File>
      */
     protected $files = array();
 
@@ -37,12 +39,12 @@ class Request extends Message implements RequestInterface
     protected $method = 'GET';
 
     /**
-     * @var array
+     * @var array<string, mixed>
      */
     protected $queries = array();
 
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected $server = array();
 
@@ -52,29 +54,27 @@ class Request extends Message implements RequestInterface
     protected $target = '/';
 
     /**
-     * @var \Zapheus\Http\Message\UriInterface
+     * @var \Zapheus\Contract\Http\Message\Uri
      */
     protected $uri;
 
     /**
      * Initializes the request instance.
      *
-     * @param string                                     $method
-     * @param string                                     $target
-     * @param array                                      $server
-     * @param array                                      $cookies
-     * @param array|object|null                          $data
-     * @param \Zapheus\Http\Message\FileInterface[]      $files
-     * @param array                                      $queries
-     * @param array                                      $attributes
-     * @param \Zapheus\Http\Message\UriInterface|null    $uri
-     * @param array                                      $headers
-     * @param \Zapheus\Http\Message\StreamInterface|null $stream
-     * @param string                                     $version
+     * @param string                                             $method
+     * @param string                                             $target
+     * @param array<string, string>                              $server
+     * @param array<string, string>                              $cookies
+     * @param array<string, mixed>|object|null                   $data
+     * @param array<string, \Zapheus\Contract\Http\Message\File> $files
+     * @param array<string, mixed>                               $queries
+     * @param array<string, mixed>                               $attributes
+     * @param array<string, string[]>                            $headers
+     * @param string                                             $version
      */
-    public function __construct($method, $target, array $server = array(), array $cookies = array(), $data = null, array $files = array(), array $queries = array(), array $attributes = array(), UriInterface $uri = null, array $headers = array(), StreamInterface $stream = null, $version = '1.1')
+    public function __construct($method, $target, array $server = array(), array $cookies = array(), $data = null, array $files = array(), array $queries = array(), array $attributes = array(), array $headers = array(), $version = '1.1')
     {
-        parent::__construct($headers, $stream, $version);
+        parent::__construct($headers, $version);
 
         $this->attributes = $attributes;
 
@@ -91,8 +91,34 @@ class Request extends Message implements RequestInterface
         $this->server = $server;
 
         $this->target = $target;
+    }
 
+    /**
+     * Sets the URI instance.
+     *
+     * @param \Zapheus\Contract\Http\Message\Uri $uri
+     *
+     * @return self
+     */
+    public function setUri(Uri $uri)
+    {
         $this->uri = $uri;
+
+        return $this;
+    }
+
+    /**
+     * Sets the stream of the message.
+     *
+     * @param \Zapheus\Contract\Http\Message\Stream $stream
+     *
+     * @return self
+     */
+    public function setStream(Stream $stream)
+    {
+        $this->stream = $stream;
+
+        return $this;
     }
 
     /**
@@ -115,7 +141,7 @@ class Request extends Message implements RequestInterface
     /**
      * Returns an array of attributes derived from the request.
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function attributes()
     {
@@ -131,7 +157,7 @@ class Request extends Message implements RequestInterface
      *
      * @param string $name
      *
-     * @return array
+     * @return array<string, string>|string|null
      */
     public function cookie($name)
     {
@@ -146,7 +172,7 @@ class Request extends Message implements RequestInterface
     /**
      * Returns the cookies from the request.
      *
-     * @return array
+     * @return array<string, string>
      */
     public function cookies()
     {
@@ -159,7 +185,7 @@ class Request extends Message implements RequestInterface
     /**
      * Returns any parameters provided in the request body.
      *
-     * @return array|object|null
+     * @return array<string, mixed>|object|null
      */
     public function data()
     {
@@ -172,7 +198,7 @@ class Request extends Message implements RequestInterface
     /**
      * Returns normalized file upload data.
      *
-     * @return \Zapheus\Http\Message\UploadedFile[]
+     * @return array<string, \Zapheus\Contract\Http\Message\File>
      */
     public function files()
     {
@@ -198,7 +224,7 @@ class Request extends Message implements RequestInterface
     /**
      * Returns the query string arguments.
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function queries()
     {
@@ -230,7 +256,7 @@ class Request extends Message implements RequestInterface
      *
      * @param string|null $name
      *
-     * @return array
+     * @return array<string, string>|string|null
      */
     public function server($name = null)
     {
@@ -269,10 +295,36 @@ class Request extends Message implements RequestInterface
     /**
      * Returns the URI instance.
      *
-     * @return \Zapheus\Http\Message\UriInterface
+     * @return \Zapheus\Contract\Http\Message\Uri
      */
     public function uri()
     {
+        if ($this->uri === null)
+        {
+            $host = 'localhost';
+
+            $scheme = 'http';
+
+            $port = '80';
+
+            if (isset($this->server['SERVER_NAME']))
+            {
+                $host = $this->server['SERVER_NAME'];
+            }
+
+            if (isset($this->server['HTTPS']) && $this->server['HTTPS'] !== 'off')
+            {
+                $scheme = 'https';
+            }
+
+            if (isset($this->server['SERVER_PORT']))
+            {
+                $port = $this->server['SERVER_PORT'];
+            }
+
+            $this->uri = new \Zapheus\Http\Message\Uri($scheme . '://' . $host . ':' . $port . $this->target);
+        }
+
         return $this->uri;
 
         // getUri

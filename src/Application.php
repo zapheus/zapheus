@@ -3,41 +3,39 @@
 namespace Zapheus;
 
 use Zapheus\Container\Container;
-use Zapheus\Container\WritableInterface;
-use Zapheus\Http\Message\RequestInterface;
-use Zapheus\Http\Message\ResponseInterface;
-use Zapheus\Http\Server\HandlerInterface;
+use Zapheus\Contract\Container\Writable;
+use Zapheus\Contract\Http\Message\Request;
+use Zapheus\Contract\Http\Message\Response;
+use Zapheus\Contract\Http\Server\Handler;
+use Zapheus\Contract\Provider\Provider;
 use Zapheus\Http\Server\RoutingHandler;
 use Zapheus\Provider\Configuration;
-use Zapheus\Provider\ProviderInterface;
 
 /**
- * Application
- *
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class Application implements HandlerInterface, WritableInterface
+class Application implements Handler, Writable
 {
-    const CONFIG = 'Zapheus\Provider\ConfigurationInterface';
+    const CONFIG = 'Zapheus\Contract\Provider\Configuration';
 
-    const DISPATCHER = 'Zapheus\Routing\DispatcherInterface';
+    const DISPATCHER = 'Zapheus\Contract\Routing\Dispatcher';
 
-    const MIDDLEWARE = 'Zapheus\Http\Server\DispatcherInterface';
+    const MIDDLEWARE = 'Zapheus\Contract\Http\Server\Dispatcher';
 
-    const REQUEST = 'Zapheus\Http\Message\RequestInterface';
+    const REQUEST = 'Zapheus\Contract\Http\Message\Request';
 
-    const RESOLVER = 'Zapheus\Routing\ResolverInterface';
+    const RESOLVER = 'Zapheus\Contract\Routing\Resolver';
 
-    const RESPONSE = 'Zapheus\Http\Message\ResponseInterface';
+    const RESPONSE = 'Zapheus\Contract\Http\Message\Response';
 
     const ROUTE_ATTRIBUTE = 'zapheus-route';
 
-    const ROUTER = 'Zapheus\Routing\RouterInterface';
+    const ROUTER = 'Zapheus\Contract\Routing\Router';
 
     /**
-     * @var \Zapheus\Container\WritableInterface
+     * @var \Zapheus\Contract\Container\Container
      */
     protected $container;
 
@@ -47,39 +45,55 @@ class Application implements HandlerInterface, WritableInterface
     protected $providers = array();
 
     /**
-     * Initializes the application instance.
+     * Sets the container instance.
      *
-     * @param \Zapheus\Container\WritableInterface|null $container
+     * @param \Zapheus\Contract\Container\Writable $container
+     *
+     * @return self
      */
-    public function __construct(WritableInterface $container = null)
+    public function setContainer(Writable $container)
     {
-        if ($container === null)
+        $this->container = $container;
+
+        return $this;
+    }
+
+    /**
+     * Returns the container instance, creating a default one if not set.
+     *
+     * @return \Zapheus\Contract\Container\Writable
+     */
+    protected function container()
+    {
+        if ($this->container === null)
         {
             $container = new Container;
+
+            if (! $container->has(Provider::CONFIG))
+            {
+                $container->set(Provider::CONFIG, new Configuration);
+            }
+
+            $this->container = $container;
         }
 
-        if (! $container->has(ProviderInterface::CONFIG))
-        {
-            $container->set(ProviderInterface::CONFIG, new Configuration);
-        }
-
-        $this->container = $container;
+        return $this->container;
     }
 
     /**
      * Adds a new provider to be registered.
      *
-     * @param \Zapheus\Provider\ProviderInterface $provider
+     * @param \Zapheus\Contract\Provider\Provider $provider
      *
      * @return self
      */
-    public function add(ProviderInterface $provider)
+    public function add(Provider $provider)
     {
-        $container = $this->container;
+        $container = $this->container();
 
         $this->container = $provider->register($container);
 
-        $this->providers[] = (string) get_class($provider);
+        $this->providers[] = get_class($provider);
 
         return $this;
     }
@@ -87,7 +101,7 @@ class Application implements HandlerInterface, WritableInterface
     /**
      * Creates a new configuration based on given data.
      *
-     * @param array|string $data
+     * @param array<string, mixed>|string $data
      *
      * @return self
      */
@@ -95,14 +109,14 @@ class Application implements HandlerInterface, WritableInterface
     {
         $items = is_array($data) ? $data : array();
 
-        $config = new Provider\Configuration($items);
+        $config = new Configuration($items);
 
         if (is_string($data))
         {
             $config->load($data);
         }
 
-        $interface = ProviderInterface::CONFIG;
+        $interface = Provider::CONFIG;
 
         return $this->set($interface, $config);
     }
@@ -110,11 +124,11 @@ class Application implements HandlerInterface, WritableInterface
     /**
      * Emits the headers from the response instance.
      *
-     * @param \Zapheus\Http\Message\ResponseInterface $response
+     * @param \Zapheus\Contract\Http\Message\Response $response
      *
-     * @return \Zapheus\Http\Message\ResponseInterface
+     * @return \Zapheus\Contract\Http\Message\Response
      */
-    public function emit(ResponseInterface $response)
+    public function emit(Response $response)
     {
         $code = $response->code() . ' ' . $response->reason();
 
@@ -142,19 +156,19 @@ class Application implements HandlerInterface, WritableInterface
      */
     public function get($id)
     {
-        return $this->container->get($id);
+        return $this->container()->get($id);
     }
 
     /**
      * Dispatches the request and returns into a response.
      *
-     * @param \Zapheus\Http\Message\RequestInterface $request
+     * @param \Zapheus\Contract\Http\Message\Request $request
      *
-     * @return \Zapheus\Http\Message\ResponseInterface
+     * @return \Zapheus\Contract\Http\Message\Response
      */
-    public function handle(RequestInterface $request)
+    public function handle(Request $request)
     {
-        $handler = new RoutingHandler($this->container);
+        $handler = new RoutingHandler($this->container());
 
         if (! $this->has(Application::MIDDLEWARE))
         {
@@ -175,7 +189,7 @@ class Application implements HandlerInterface, WritableInterface
      */
     public function has($id)
     {
-        return $this->container->has($id);
+        return $this->container()->has($id);
     }
 
     /**
@@ -191,11 +205,11 @@ class Application implements HandlerInterface, WritableInterface
     /**
      * Runs the application and returns the stream instance.
      *
-     * @return \Zapheus\Http\Message\StreamInterface
+     * @return \Zapheus\Contract\Http\Message\Stream
      */
     public function run()
     {
-        $request = $this->container->get(self::REQUEST);
+        $request = $this->container()->get(self::REQUEST);
 
         $response = $this->handle($request);
 
@@ -213,7 +227,7 @@ class Application implements HandlerInterface, WritableInterface
      */
     public function set($id, $concrete)
     {
-        $this->container->set($id, $concrete);
+        $this->container()->set($id, $concrete);
 
         return $this;
     }

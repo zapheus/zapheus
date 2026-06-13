@@ -1,15 +1,13 @@
 <?php
 
-namespace Zapheus\Http\Message;
+namespace Zapheus\Contract\Http\Message;
 
 /**
- * URI Interface
- *
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-interface UriInterface
+interface Uri
 {
     /**
      * Returns the authority component of the URI.

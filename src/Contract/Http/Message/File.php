@@ -1,15 +1,13 @@
 <?php
 
-namespace Zapheus\Http\Message;
+namespace Zapheus\Contract\Http\Message;
 
 /**
- * File Interface
- *
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-interface FileInterface
+interface File
 {
     /**
      * Returns the error associated with the uploaded file.
@@ -23,6 +21,7 @@ interface FileInterface
      *
      * @param string $target
      *
+     * @return void
      * @throws \InvalidArgumentException
      * @throws \RuntimeException
      */
@@ -45,7 +44,7 @@ interface FileInterface
     /**
      * Returns a stream representing the uploaded file.
      *
-     * @return \Zapheus\Http\Message\StreamInterface
+     * @return \Zapheus\Contract\Http\Message\Stream
      * @throws \RuntimeException
      */
     public function stream();

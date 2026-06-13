@@ -1,15 +1,13 @@
 <?php
 
-namespace Zapheus\Http\Message;
+namespace Zapheus\Contract\Http\Message;
 
 /**
- * Request Interface
- *
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-interface RequestInterface extends MessageInterface
+interface Request extends Message
 {
     /**
      * Returns an instance with the specified derived request attribute.
@@ -23,7 +21,7 @@ interface RequestInterface extends MessageInterface
     /**
      * Returns an array of attributes derived from the request.
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function attributes();
 
@@ -32,28 +30,28 @@ interface RequestInterface extends MessageInterface
      *
      * @param string $name
      *
-     * @return array
+     * @return array<string, string>
      */
     public function cookie($name);
 
     /**
      * Returns the cookies from the request.
      *
-     * @return array
+     * @return array<string, string>
      */
     public function cookies();
 
     /**
      * Returns any parameters provided in the request body.
      *
-     * @return array|object|null
+     * @return array<string, mixed>|object|null
      */
     public function data();
 
     /**
      * Returns normalized file upload data.
      *
-     * @return \Zapheus\Http\Message\UploadedFileInterface[]
+     * @return \Zapheus\Contract\Http\Message\UploadedFileInterface[]
      */
     public function files();
 
@@ -67,7 +65,7 @@ interface RequestInterface extends MessageInterface
     /**
      * Returns the query string arguments.
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function queries();
 
@@ -85,7 +83,7 @@ interface RequestInterface extends MessageInterface
      *
      * @param string|null $name
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function server($name = null);
 
@@ -99,7 +97,7 @@ interface RequestInterface extends MessageInterface
     /**
      * Returns the URI instance.
      *
-     * @return \Zapheus\Http\Message\Uri
+     * @return \Zapheus\Contract\Http\Message\Uri
      */
     public function uri();
 }

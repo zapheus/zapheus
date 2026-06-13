@@ -2,14 +2,14 @@
 
 namespace Zapheus\Http\Message;
 
+use Zapheus\Contract\Http\Message\Uri as Contract;
+
 /**
- * Uniform Resource Identifier (URI)
- *
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class Uri implements UriInterface
+class Uri implements Contract
 {
     /**
      * @var string
@@ -32,7 +32,7 @@ class Uri implements UriInterface
     protected $path = '';
 
     /**
-     * @var integer|null
+     * @var integer|string|null
      */
     protected $port = null;
 

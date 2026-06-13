@@ -1,15 +1,13 @@
 <?php
 
-namespace Zapheus\Container;
+namespace Zapheus\Contract\Container;
 
 /**
- * Writable Interface
- *
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-interface WritableInterface extends ContainerInterface
+interface Writable extends Container
 {
     /**
      * Sets a new instance on the given entry to the container.

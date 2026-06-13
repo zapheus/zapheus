@@ -3,45 +3,48 @@
 namespace Zapheus\Routing;
 
 use Zapheus\Application;
-use Zapheus\Container\WritableInterface;
-use Zapheus\Provider\ProviderInterface;
+use Zapheus\Contract\Container\Writable;
+use Zapheus\Contract\Provider\Provider;
+use Zapheus\Contract\Routing\Router as Contract;
 
 /**
- * Routing Provider
- *
- * @package App
+ * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class RoutingProvider implements ProviderInterface
+class RoutingProvider implements Provider
 {
     const DISPATCHER = Application::DISPATCHER;
 
     const ROUTER = Application::ROUTER;
 
     /**
-     * @var \Zapheus\Routing\RouterInterface
+     * @var \Zapheus\Contract\Routing\Router
      */
     protected $router;
 
     /**
-     * Initializes the provider instance.
+     * Sets the router instance.
      *
-     * @param \Zapheus\Routing\RouterInterface|null $router
+     * @param \Zapheus\Contract\Routing\Router $router
+     *
+     * @return self
      */
-    public function __construct(RouterInterface $router = null)
+    public function setRouter(Contract $router)
     {
-        $this->router = $router === null ? new Router : $router;
+        $this->router = $router;
+
+        return $this;
     }
 
     /**
      * Registers the bindings in the container.
      *
-     * @param \Zapheus\Container\WritableInterface $container
+     * @param \Zapheus\Contract\Container\Writable $container
      *
-     * @return \Zapheus\Container\ContainerInterface
+     * @return \Zapheus\Contract\Container\Container
      */
-    public function register(WritableInterface $container)
+    public function register(Writable $container)
     {
         if ($container->has(self::ROUTER))
         {
@@ -54,7 +57,9 @@ class RoutingProvider implements ProviderInterface
 
         $config = $container->get(self::CONFIG);
 
-        $router = $config->get('app.router', $this->router);
+        $default = $this->router !== null ? $this->router : new Router;
+
+        $router = $config->get('app.router', $default);
 
         if (is_string($router))
         {

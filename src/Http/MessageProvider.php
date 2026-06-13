@@ -3,20 +3,18 @@
 namespace Zapheus\Http;
 
 use Zapheus\Application;
-use Zapheus\Container\WritableInterface;
+use Zapheus\Contract\Container\Writable;
+use Zapheus\Contract\Provider\Provider;
 use Zapheus\Http\Message\FileFactory;
 use Zapheus\Http\Message\RequestFactory;
 use Zapheus\Http\Message\Response;
-use Zapheus\Provider\ProviderInterface;
 
 /**
- * Message Provider
- *
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class MessageProvider implements ProviderInterface
+class MessageProvider implements Provider
 {
     const REQUEST = Application::REQUEST;
 
@@ -25,25 +23,26 @@ class MessageProvider implements ProviderInterface
     /**
      * Registers the bindings in the container.
      *
-     * @param \Zapheus\Container\WritableInterface $container
+     * @param \Zapheus\Contract\Container\Writable $container
      *
-     * @return \Zapheus\Container\ContainerInterface
+     * @return \Zapheus\Contract\Container\Container
      */
-    public function register(WritableInterface $container)
+    public function register(Writable $container)
     {
         $factory = new RequestFactory;
 
-        list($file, $response) = array(new FileFactory, new Response);
+        $file     = new FileFactory;
+        $response = new Response;
 
         $config = $container->get(Application::CONFIG);
 
-        $files = $config->get('app.http.uploaded', (array) $_FILES);
+        $files = $config->get('app.http.uploaded', $_FILES);
 
         $factory->cookies($config->get('app.http.cookies', $_COOKIE));
 
         $factory->data($config->get('app.http.post', $_POST));
 
-        $factory->files($file->normalize((array) $files));
+        $factory->files($file->normalize($files));
 
         $factory->queries($config->get('app.http.get', $_GET));
 

@@ -2,22 +2,23 @@
 
 namespace Zapheus\Http\Message;
 
+use Zapheus\Contract\Http\Message\Message as Contract;
+use Zapheus\Contract\Http\Message\Stream as StreamContract;
+
 /**
- * Message
- *
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class Message implements MessageInterface
+class Message implements Contract
 {
     /**
-     * @var array
+     * @var array<string, string[]>
      */
     protected $headers = array();
 
     /**
-     * @var \Zapheus\Http\Message\StreamInterface
+     * @var \Zapheus\Contract\Http\Message\Stream
      */
     protected $stream;
 
@@ -29,26 +30,28 @@ class Message implements MessageInterface
     /**
      * Initializes the message instance.
      *
-     * @param array                                      $headers
-     * @param \Zapheus\Http\Message\StreamInterface|null $stream
-     * @param string                                     $version
+     * @param array<string, string[]> $headers
+     * @param string                  $version
      */
-    public function __construct(array $headers = array(), StreamInterface $stream = null, $version = '1.1')
+    public function __construct(array $headers = array(), $version = '1.1')
     {
-        $this->headers = (array) $headers;
-
-        if ($stream === null)
-        {
-            $stream = fopen('php://temp', 'r+');
-
-            ! $stream && $stream = null;
-
-            $stream = new Stream($stream);
-        }
-
-        $this->stream = $stream;
+        $this->headers = $headers;
 
         $this->version = $version;
+    }
+
+    /**
+     * Sets the stream of the message.
+     *
+     * @param \Zapheus\Contract\Http\Message\Stream $stream
+     *
+     * @return self
+     */
+    public function setStream(StreamContract $stream)
+    {
+        $this->stream = $stream;
+
+        return $this;
     }
 
     /**
@@ -56,7 +59,7 @@ class Message implements MessageInterface
      *
      * @param string $name
      *
-     * @return array
+     * @return string[]
      */
     public function header($name)
     {
@@ -73,7 +76,7 @@ class Message implements MessageInterface
     /**
      * Returns all message header values.
      *
-     * @return array
+     * @return array<string, string[]>
      */
     public function headers()
     {
@@ -90,10 +93,19 @@ class Message implements MessageInterface
     /**
      * Returns the stream of the message.
      *
-     * @return \Zapheus\Http\Message\StreamInterface
+     * @return \Zapheus\Contract\Http\Message\Stream
      */
     public function stream()
     {
+        if ($this->stream === null)
+        {
+            $stream = fopen('php://temp', 'r+');
+
+            ! $stream && $stream = null;
+
+            $this->stream = new Stream($stream);
+        }
+
         return $this->stream;
 
         // getBody

@@ -3,8 +3,6 @@
 namespace Zapheus\Http\Message;
 
 /**
- * Request Factory
- *
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
@@ -12,22 +10,22 @@ namespace Zapheus\Http\Message;
 class RequestFactory extends MessageFactory
 {
     /**
-     * @var array
+     * @var array<string, mixed>
      */
     protected $attributes = array();
 
     /**
-     * @var array
+     * @var array<string, mixed>
      */
     protected $cookies = array();
 
     /**
-     * @var array|object|null
+     * @var array<string, mixed>|object|null
      */
     protected $data = array();
 
     /**
-     * @var array
+     * @var array<string, \Zapheus\Contract\Http\Message\File>
      */
     protected $files = array();
 
@@ -37,12 +35,12 @@ class RequestFactory extends MessageFactory
     protected $method = 'GET';
 
     /**
-     * @var array
+     * @var array<string, mixed>
      */
     protected $queries = array();
 
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected $server = array();
 
@@ -52,23 +50,20 @@ class RequestFactory extends MessageFactory
     protected $target = '/';
 
     /**
-     * @var \Zapheus\Http\Message\UriInterface
+     * @var \Zapheus\Contract\Http\Message\Uri|null
      */
     protected $uri;
 
     /**
-     * Initializes the request instance.
+     * Sets the request instance and copies its properties.
      *
-     * @param \Zapheus\Http\Message\RequestInterface|null $request
+     * @param \Zapheus\Http\Message\Request $request
+     *
+     * @return self
      */
-    public function __construct(RequestInterface $request = null)
+    public function setRequest(Request $request)
     {
-        parent::__construct($request);
-
-        if ($request === null)
-        {
-            return;
-        }
+        parent::setMessage($request);
 
         $this->attributes = $request->attributes();
 
@@ -87,6 +82,8 @@ class RequestFactory extends MessageFactory
         $this->target = $request->target();
 
         $this->uri = $request->uri();
+
+        return $this;
     }
 
     /**
@@ -107,7 +104,7 @@ class RequestFactory extends MessageFactory
     /**
      * Sets the attributes value.
      *
-     * @param array $attributes
+     * @param array<string, mixed> $attributes
      *
      * @return self
      */
@@ -136,7 +133,7 @@ class RequestFactory extends MessageFactory
     /**
      * Sets the cookies parameter ($_COOKIE).
      *
-     * @param array $cookies
+     * @param array<string, string> $cookies
      *
      * @return self
      */
@@ -150,7 +147,7 @@ class RequestFactory extends MessageFactory
     /**
      * Sets the data parameter ($_POST).
      *
-     * @param array $data
+     * @param array<string, mixed> $data
      *
      * @return self
      */
@@ -164,7 +161,7 @@ class RequestFactory extends MessageFactory
     /**
      * Sets the files parameter.
      *
-     * @param \Zapheus\Http\Message\FileInterface[] $files
+     * @param \Zapheus\Contract\Http\Message\File[] $files
      *
      * @return self
      */
@@ -178,11 +175,23 @@ class RequestFactory extends MessageFactory
     /**
      * Creates the request instance.
      *
-     * @return \Zapheus\Http\Message\RequestInterface
+     * @return \Zapheus\Contract\Http\Message\Request
      */
     public function make()
     {
-        return new Request($this->method, $this->target, $this->server, $this->cookies, $this->data, $this->files, $this->queries, $this->attributes, $this->uri, $this->headers, $this->stream, $this->version);
+        $request = new Request($this->method, $this->target, $this->server, $this->cookies, $this->data, $this->files, $this->queries, $this->attributes, $this->headers, $this->version);
+
+        if ($this->uri)
+        {
+            $request->setUri($this->uri);
+        }
+
+        if ($this->stream)
+        {
+            $request->setStream($this->stream);
+        }
+
+        return $request;
     }
 
     /**
@@ -202,7 +211,7 @@ class RequestFactory extends MessageFactory
     /**
      * Sets the query parameters ($_GET).
      *
-     * @param array $queries
+     * @param array<string, mixed> $queries
      *
      * @return self
      */
@@ -231,7 +240,7 @@ class RequestFactory extends MessageFactory
     /**
      * Sets the server parameters ($_SERVER).
      *
-     * @param array $server
+     * @param array<string, string> $server
      *
      * @return self
      */
@@ -278,11 +287,11 @@ class RequestFactory extends MessageFactory
     /**
      * Sets the URI instance.
      *
-     * @param \Zapheus\Http\Message\UriInterface $uri
+     * @param \Zapheus\Http\Message\Uri $uri
      *
      * @return self
      */
-    public function uri(UriInterface $uri)
+    public function uri(Uri $uri)
     {
         $this->uri = $uri;
 

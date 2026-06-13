@@ -2,14 +2,14 @@
 
 namespace Zapheus\Container;
 
+use Zapheus\Contract\Container\Container as Contract;
+
 /**
- * Reflection Container
- *
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class ReflectionContainer implements ContainerInterface
+class ReflectionContainer implements Contract
 {
     /**
      * Finds an entry of the container by its identifier and returns it.

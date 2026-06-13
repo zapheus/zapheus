@@ -2,14 +2,14 @@
 
 namespace Zapheus\Http\Message;
 
+use Zapheus\Contract\Http\Message\Response as Contract;
+
 /**
- * Response
- *
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class Response extends Message implements ResponseInterface
+class Response extends Message implements Contract
 {
     /**
      * @var integer
@@ -17,7 +17,7 @@ class Response extends Message implements ResponseInterface
     protected $code = 200;
 
     /**
-     * @var array
+     * @var array<int, string>
      */
     protected $reasons = array(
         100 => 'Continue',
@@ -86,14 +86,13 @@ class Response extends Message implements ResponseInterface
     /**
      * Initializes the response instance.
      *
-     * @param integer                                    $code
-     * @param array                                      $headers
-     * @param \Zapheus\Http\Message\StreamInterface|null $stream
-     * @param string                                     $version
+     * @param integer                 $code
+     * @param array<string, string[]> $headers
+     * @param string                  $version
      */
-    public function __construct($code = 200, array $headers = array(), StreamInterface $stream = null, $version = '1.1')
+    public function __construct($code = 200, array $headers = array(), $version = '1.1')
     {
-        parent::__construct($headers, $stream, $version);
+        parent::__construct($headers, $version);
 
         $this->code = (int) $code;
     }

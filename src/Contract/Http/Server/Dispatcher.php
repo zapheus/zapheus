@@ -1,26 +1,24 @@
 <?php
 
-namespace Zapheus\Http\Server;
+namespace Zapheus\Contract\Http\Server;
 
-use Zapheus\Http\Message\RequestInterface;
+use Zapheus\Contract\Http\Message\Request;
 
 /**
- * Dispatcher Interface
- *
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-interface DispatcherInterface extends MiddlewareInterface
+interface Dispatcher extends Middleware
 {
     /**
      * Dispatches the defined middleware stack.
      *
-     * @param \Zapheus\Http\Message\RequestInterface $request
+     * @param \Zapheus\Contract\Http\Message\Request $request
      *
-     * @return \Zapheus\Http\Message\ResponseInterface
+     * @return \Zapheus\Contract\Http\Message\Response
      */
-    public function dispatch(RequestInterface $request);
+    public function dispatch(Request $request);
 
     /**
      * Adds a new middleware to the stack.

@@ -2,16 +2,15 @@
 
 namespace Zapheus\Http\Server;
 
-use Zapheus\Http\Message\RequestInterface;
+use Zapheus\Contract\Http\Message\Request;
+use Zapheus\Contract\Http\Server\Handler;
 
 /**
- * Error Handler
- *
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class ErrorHandler implements HandlerInterface
+class ErrorHandler implements Handler
 {
     /**
      * @var string
@@ -21,7 +20,7 @@ class ErrorHandler implements HandlerInterface
     /**
      * @var string
      */
-    protected $response = 'Zapheus\Http\Message\ResponseInterface';
+    protected $response = 'Zapheus\Contract\Http\Message\Response';
 
     /**
      * @var string
@@ -30,22 +29,34 @@ class ErrorHandler implements HandlerInterface
 
     /**
      * Initializes the handler instance.
-     *
-     * @param string|null $message
      */
-    public function __construct($message = null)
+    public function __construct()
     {
-        $this->message = $message ?: $this->default;
+        $this->message = $this->default;
+    }
+
+    /**
+     * Sets the exception message format.
+     *
+     * @param string $message
+     *
+     * @return self
+     */
+    public function setMessage($message)
+    {
+        $this->message = $message;
+
+        return $this;
     }
 
     /**
      * Handles the request and returns a response.
      *
-     * @param \Zapheus\Http\Message\RequestInterface $request
+     * @param \Zapheus\Contract\Http\Message\Request $request
      *
-     * @return \Zapheus\Http\Message\ResponseInterface
+     * @return \Zapheus\Contract\Http\Message\Response
      */
-    public function handle(RequestInterface $request)
+    public function handle(Request $request)
     {
         $message = sprintf($this->message, $this->response);
 

@@ -1,22 +1,20 @@
 <?php
 
-namespace Zapheus\Provider;
+namespace Zapheus\Contract\Provider;
 
 /**
- * Configuration Interface
- *
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-interface ConfigurationInterface
+interface Configuration
 {
     /**
      * Returns all the stored configurations.
      *
      * @param boolean $dotify
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function all($dotify = false);
 

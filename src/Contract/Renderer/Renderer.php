@@ -1,21 +1,19 @@
 <?php
 
-namespace Zapheus\Renderer;
+namespace Zapheus\Contract\Renderer;
 
 /**
- * Renderer Interface
- *
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-interface RendererInterface
+interface Renderer
 {
     /**
      * Renders a file from a specified template.
      *
-     * @param string $template
-     * @param array  $data
+     * @param string               $template
+     * @param array<string, mixed> $data
      *
      * @return string
      * @throws \InvalidArgumentException

@@ -3,8 +3,6 @@
 namespace Zapheus\Http\Message;
 
 /**
- * File Factory
- *
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
@@ -29,9 +27,9 @@ class FileFactory
     /**
      * Sets the error associated with the uploaded file.
      *
-     * @param $error integer
+     * @param integer $error
      *
-     * @return void
+     * @return self
      */
     public function error($error)
     {
@@ -57,7 +55,7 @@ class FileFactory
     /**
      * Creates the uploaded file instance.
      *
-     * @return \Zapheus\Http\Message\FileInterface
+     * @return \Zapheus\Contract\Http\Message\File
      */
     public function make()
     {
@@ -81,10 +79,10 @@ class FileFactory
     /**
      * Parses the $_FILES into multiple \File instances.
      *
-     * @param array $uploaded
-     * @param array $files
+     * @param array<string, mixed> $uploaded
+     * @param array<string, mixed> $files
      *
-     * @return \Zapheus\Http\Message\FileInterface[]
+     * @return array<string, \Zapheus\Contract\Http\Message\File>
      */
     public function normalize(array $uploaded, $files = array())
     {
@@ -112,9 +110,9 @@ class FileFactory
     /**
      * Diverse the $_FILES into a consistent result.
      *
-     * @param array $uploaded
+     * @param array<string, mixed> $uploaded
      *
-     * @return array
+     * @return array<string, mixed[]>
      */
     protected function diverse(array $uploaded)
     {
@@ -124,7 +122,7 @@ class FileFactory
         {
             foreach ($item as $key => $value)
             {
-                $diversed = (array) $value;
+                $diversed = is_array($value) ? $value : array($value);
 
                 $result[$file][$key] = $diversed;
             }

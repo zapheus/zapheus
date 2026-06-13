@@ -7,7 +7,6 @@ use Zapheus\Contract\Container\Container;
 use Zapheus\Contract\Http\Message\Request;
 use Zapheus\Contract\Http\Server\Dispatcher as Contract;
 use Zapheus\Contract\Http\Server\Handler;
-use Zapheus\Contract\Http\Server\Middleware;
 
 /**
  * @package Zapheus
@@ -27,15 +26,13 @@ class Dispatcher implements Contract
     protected $stack = array();
 
     /**
-     * Initializes the dispatcher instance.
-     *
      * @param array<int, \Zapheus\Contract\Http\Server\Middleware> $stack
      */
     public function __construct(array $stack = array())
     {
         foreach ($stack as $key => $item)
         {
-            array_push($this->stack, $item);
+            $this->stack[] = $item;
         }
     }
 

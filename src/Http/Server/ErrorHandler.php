@@ -15,25 +15,12 @@ class ErrorHandler implements Handler
     /**
      * @var string
      */
-    protected $default = 'Last middleware did not return a "%s" instance';
+    protected $message = 'Last middleware did not return a "%s" instance';
 
     /**
      * @var string
      */
     protected $response = 'Zapheus\Contract\Http\Message\Response';
-
-    /**
-     * @var string
-     */
-    protected $message;
-
-    /**
-     * Initializes the handler instance.
-     */
-    public function __construct()
-    {
-        $this->message = $this->default;
-    }
 
     /**
      * Sets the exception message format.

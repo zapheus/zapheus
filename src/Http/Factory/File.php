@@ -58,7 +58,7 @@ class File
 
                 $this->error = $file['error'][$key];
 
-                array_push($items, $this->make());
+                $items[] = $this->make();
             }
 
             $files[$name] = $items;

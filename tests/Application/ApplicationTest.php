@@ -3,6 +3,7 @@
 namespace Zapheus\Application;
 
 use Zapheus\Application;
+use Zapheus\Container\Container;
 use Zapheus\Fixture\Http\Controllers\HailController;
 use Zapheus\Fixture\Http\Middlewares\JsonMiddleware;
 use Zapheus\Fixture\Providers\TestProvider;
@@ -81,6 +82,24 @@ class ApplicationTest extends AbstractTestCase
         $interface = 'Zapheus\Contract\Http\Message\Response';
 
         $this->assertTrue($this->self->has($interface));
+    }
+
+    /**
+     * @return void
+     */
+    public function test_passed_if_container_is_set()
+    {
+        $application = $this->application();
+
+        $container = new Container;
+
+        $application->setContainer($container);
+
+        $expect = $container;
+
+        $actual = $application->getContainer();
+
+        $this->assertEquals($expect, $actual);
     }
 
     /**

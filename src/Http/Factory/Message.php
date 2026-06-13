@@ -5,7 +5,6 @@ namespace Zapheus\Http\Factory;
 use Zapheus\Contract\Http\Message\Message as Contract;
 use Zapheus\Contract\Http\Message\Stream as StreamContract;
 use Zapheus\Http\Message\Message as Base;
-use Zapheus\Http\Message\Stream;
 
 /**
  * @package Zapheus
@@ -68,7 +67,7 @@ class Message
      * Return an instance with the provided header value.
      *
      * @param string                $name
-     * @param string|string[]|mixed $value
+     * @param mixed|string|string[] $value
      *
      * @return self
      * @throws \InvalidArgumentException
@@ -113,7 +112,7 @@ class Message
      * Return an instance with the provided value replacing the specified header.
      *
      * @param string                $name
-     * @param string|string[]|mixed $value
+     * @param mixed|string|string[] $value
      *
      * @return self
      * @throws \InvalidArgumentException

@@ -74,6 +74,37 @@ class RoutingProviderTest extends Testcase
     /**
      * @return void
      */
+    public function test_passed_if_router_is_set()
+    {
+        $route = new Route('GET', '/test', 'HailController@greet');
+
+        $router = new Router(array($route));
+
+        $config = new Configuration;
+
+        $container = new Container;
+
+        $container->set(RoutingProvider::CONFIG, $config);
+
+        $provider = new RoutingProvider;
+
+        $provider->setRouter($router);
+
+        $container = $provider->register($container);
+
+        $expect = $route;
+
+        /** @var \Zapheus\Contract\Routing\Dispatcher */
+        $dispatcher = $container->get(Application::DISPATCHER);
+
+        $actual = $dispatcher->dispatch('GET', '/test');
+
+        $this->assertEquals($expect, $actual);
+    }
+
+    /**
+     * @return void
+     */
     protected function doSetUp()
     {
         $config    = new Configuration;

@@ -2,6 +2,7 @@
 
 namespace Zapheus\Routing;
 
+use Zapheus\Container\Parameter;
 use Zapheus\Container\ReflectionContainer;
 use Zapheus\Contract\Container\Container;
 use Zapheus\Contract\Routing\Resolver as Contract;
@@ -50,67 +51,29 @@ class Resolver implements Contract
             $handler = explode('@', $handler);
         }
 
-        $parameters = $route->parameters();
+        $params = $route->parameters();
 
-        if (! is_array($handler))
-        {
-            $reflection = new \ReflectionFunction($handler);
-        }
-        else
+        if (is_array($handler))
         {
             $class = $handler[0];
+
             $method = $handler[1];
 
             $handler = array($this->instance($class), $method);
 
-            $reflection = new \ReflectionMethod($class, $method);
+            $reflect = new \ReflectionMethod($class, $method);
         }
 
-        $parameters = $this->arguments($reflection, $parameters);
-
-        return call_user_func_array($handler, array_values($parameters));
-    }
-
-    /**
-     * Resolves the specified parameters from a container.
-     *
-     * @param \ReflectionFunctionAbstract $reflection
-     * @param array<string, string>       $parameters
-     *
-     * @return array<string, mixed>
-     */
-    protected function arguments(\ReflectionFunctionAbstract $reflection, $parameters = array())
-    {
-        $args = array();
-
-        foreach ($reflection->getParameters() as $key => $parameter)
+        if (! is_array($handler))
         {
-            $name = $parameter->getName();
-
-            if ($class = $parameter->getClass())
-            {
-                $name = $class->getName();
-            }
-
-            if (isset($parameters[$name]))
-            {
-                if ($parameter->isDefaultValueAvailable())
-                {
-                    $args[$name] = $parameter->getDefaultValue();
-                }
-
-                if ($parameters[$name])
-                {
-                    $args[$name] = $parameters[$name];
-                }
-
-                continue;
-            }
-
-            $args[$name] = $this->instance($name);
+            $reflect = new \ReflectionFunction($handler);
         }
 
-        return $args;
+        $params = $this->parse($reflect, $params);
+
+        $params = array_values($params);
+
+        return call_user_func_array($handler, $params);
     }
 
     /**
@@ -128,5 +91,37 @@ class Resolver implements Contract
         }
 
         return $this->reflect->get($class);
+    }
+
+    /**
+     * Resolves the specified parameters from a container.
+     *
+     * @param \ReflectionFunctionAbstract $reflect
+     * @param array<string, string>       $params
+     *
+     * @return array<string, mixed>
+     */
+    protected function parse(\ReflectionFunctionAbstract $reflect, $params = array())
+    {
+        $args = array();
+
+        foreach ($reflect->getParameters() as $key => $param)
+        {
+            $temp = new Parameter($param);
+
+            $name = $temp->getName();
+
+            if ($param->isDefaultValueAvailable())
+            {
+                $args[$name] = $param->getDefaultValue();
+            }
+
+            if ($params[$name])
+            {
+                $args[$name] = $params[$name];
+            }
+        }
+
+        return $args;
     }
 }

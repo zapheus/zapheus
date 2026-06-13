@@ -67,6 +67,22 @@ class RequestTest extends Testcase
     /**
      * @return void
      */
+    public function test_passed_if_attribute_is_removed()
+    {
+        $this->self->withAttribute('key', 'value');
+
+        $this->self->withoutAttribute('key');
+
+        $request = $this->self->make();
+
+        $actual = $request->getAttribute('key');
+
+        $this->assertNull($actual);
+    }
+
+    /**
+     * @return void
+     */
     public function test_passed_if_attribute_is_retrieved()
     {
         $expect = 'Rougin Royce';
@@ -90,6 +106,34 @@ class RequestTest extends Testcase
         $this->self->withAttributes($expect);
 
         $actual = $this->self->make()->getAttributes();
+
+        $this->assertEquals($expect, $actual);
+    }
+
+    /**
+     * @return void
+     */
+    public function test_passed_if_http_headers_from_server()
+    {
+        $expect = array('application/json');
+
+        $server = array('REQUEST_METHOD' => 'GET');
+
+        $server['REQUEST_URI'] = '/';
+
+        $server['SERVER_NAME'] = 'roug.in';
+
+        $server['SERVER_PORT'] = 8000;
+
+        $server['HTTP_CONTENT_TYPE'] = 'application/json';
+
+        $factory = new RequestFactory;
+
+        $factory->withServerParams($server);
+
+        $request = $factory->make();
+
+        $actual = $request->getHeader('Content-Type');
 
         $this->assertEquals($expect, $actual);
     }
@@ -190,6 +234,34 @@ class RequestTest extends Testcase
     /**
      * @return void
      */
+    public function test_passed_if_server_with_https()
+    {
+        $server = array('REQUEST_METHOD' => 'GET');
+
+        $server['REQUEST_URI'] = '/';
+
+        $server['SERVER_NAME'] = 'roug.in';
+
+        $server['SERVER_PORT'] = 443;
+
+        $server['HTTPS'] = 'on';
+
+        $factory = new RequestFactory;
+
+        $factory->withServerParams($server);
+
+        $request = $factory->make();
+
+        $expect = 'https';
+
+        $actual = $request->getUri()->getScheme();
+
+        $this->assertEquals($expect, $actual);
+    }
+
+    /**
+     * @return void
+     */
     public function test_passed_if_uploaded_files_retrieved()
     {
         $fixtures = __DIR__ . '/../../Fixture';
@@ -212,6 +284,30 @@ class RequestTest extends Testcase
         $this->self->withUploadedFiles($files);
 
         $actual = $this->self->make()->getUploadedFiles();
+
+        $this->assertEquals($expect, $actual);
+    }
+
+    /**
+     * @return void
+     */
+    public function test_passed_if_uri_from_https()
+    {
+        $server = array('REQUEST_METHOD' => 'GET');
+
+        $server['REQUEST_URI'] = '/';
+
+        $server['SERVER_NAME'] = 'roug.in';
+
+        $server['SERVER_PORT'] = 443;
+
+        $server['HTTPS'] = 'on';
+
+        $request = new Request('GET', '/', $server);
+
+        $expect = 'https';
+
+        $actual = $request->getUri()->getScheme();
 
         $this->assertEquals($expect, $actual);
     }

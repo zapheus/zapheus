@@ -61,16 +61,16 @@ class Request extends Message implements Contract
     /**
      * Initializes the request instance.
      *
-     * @param string                                             $method
-     * @param string                                             $target
-     * @param array<string, string>                              $server
-     * @param array<string, string>                              $cookies
-     * @param array<string, mixed>|object|null                   $data
+     * @param string                                               $method
+     * @param string                                               $target
+     * @param array<string, string>                                $server
+     * @param array<string, string>                                $cookies
+     * @param array<string, mixed>|object|null                     $data
      * @param array<string, \Zapheus\Contract\Http\Message\File[]> $files
-     * @param array<string, mixed>                               $queries
-     * @param array<string, mixed>                               $attributes
-     * @param array<string, string[]>                            $headers
-     * @param string                                             $version
+     * @param array<string, mixed>                                 $queries
+     * @param array<string, mixed>                                 $attributes
+     * @param array<string, string[]>                              $headers
+     * @param string                                               $version
      */
     public function __construct($method, $target, array $server = array(), array $cookies = array(), $data = null, array $files = array(), array $queries = array(), array $attributes = array(), array $headers = array(), $version = '1.1')
     {

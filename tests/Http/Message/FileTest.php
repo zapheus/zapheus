@@ -54,6 +54,20 @@ class FileTest extends Testcase
     /**
      * @return void
      */
+    public function test_failed_if_move_with_upload_error()
+    {
+        $file = new File($this->filename, basename($this->filename), UPLOAD_ERR_CANT_WRITE);
+
+        $target = str_replace('HelloWorld', 'MovedFile', $this->filename);
+
+        $this->doExpectException('RuntimeException');
+
+        $file->moveTo($target);
+    }
+
+    /**
+     * @return void
+     */
     public function test_failed_if_moved_before_stream()
     {
         $target = str_replace('HelloWorld', 'MovedFile', $this->filename);

@@ -62,6 +62,80 @@ class MessageTest extends Testcase
     /**
      * @return void
      */
+    public function test_passed_if_header_existence_checked()
+    {
+        $this->self->withHeader('names', array('Rougin'));
+
+        $message = $this->self->make();
+
+        $this->assertTrue($message->hasHeader('names'));
+
+        $this->assertFalse($message->hasHeader('missing'));
+    }
+
+    /**
+     * @return void
+     */
+    public function test_passed_if_header_is_added()
+    {
+        $expect = array('Rougin', 'Royce');
+
+        $this->self->withHeader('names', array('Rougin'));
+
+        $this->self->withAddedHeader('names', 'Royce');
+
+        $actual = $this->self->make()->getHeader('names');
+
+        $this->assertEquals($expect, $actual);
+    }
+
+    /**
+     * @return void
+     */
+    public function test_passed_if_header_is_appended()
+    {
+        $expect = array('Rougin');
+
+        $this->self->withAddedHeader('names', 'Rougin');
+
+        $actual = $this->self->make()->getHeader('names');
+
+        $this->assertEquals($expect, $actual);
+    }
+
+    /**
+     * @return void
+     */
+    public function test_passed_if_header_is_removed()
+    {
+        $expect = array();
+
+        $this->self->withHeader('names', array('Rougin'));
+
+        $this->self->withoutHeader('names');
+
+        $actual = $this->self->make()->getHeader('names');
+
+        $this->assertEquals($expect, $actual);
+    }
+
+    /**
+     * @return void
+     */
+    public function test_passed_if_header_line_retrieved()
+    {
+        $expect = 'Rougin,Royce';
+
+        $this->self->withHeader('names', array('Rougin', 'Royce'));
+
+        $actual = $this->self->make()->getHeaderLine('names');
+
+        $this->assertEquals($expect, $actual);
+    }
+
+    /**
+     * @return void
+     */
     public function test_passed_if_header_value_retrieved()
     {
         $expect = array('Rougin', 'Royce');

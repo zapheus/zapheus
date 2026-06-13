@@ -24,7 +24,9 @@ class ReflectionContainer implements Contract
     {
         if (! $this->has($id))
         {
-            throw new NotFoundException('Class "' . $id . '" does not exist.');
+            $text = 'Class "' . $id . '" does not exist.';
+
+            throw new NotFoundException($text);
         }
 
         /** @var class-string $id */
@@ -67,7 +69,9 @@ class ReflectionContainer implements Contract
 
         foreach ($params as $key => $param)
         {
-            if ($class = $this->getParam($param))
+            $temp = new Parameter($param);
+
+            if ($class = $temp->getClass())
             {
                 $name = $class->getName();
 
@@ -78,53 +82,5 @@ class ReflectionContainer implements Contract
         return $items;
     }
 
-    /**
-     * @codeCoverageIgnore
-     *
-     * Returns the ReflectionClass for a parameter,
-     * compatible with PHP 5.3 through 8.x.
-     *
-     * @param \ReflectionParameter $param
-     *
-     * @return \ReflectionClass<object>|null
-     */
-    protected function getParam(\ReflectionParameter $param)
-    {
-        $php8 = version_compare(PHP_VERSION, '8.0.0', '>=');
 
-        if (! $php8)
-        {
-            $fn = array($param, 'getClass');
-
-            return call_user_func($fn);
-        }
-
-        $fn = array($param, 'getType');
-
-        $type = call_user_func($fn);
-
-        $builtIn = true;
-
-        if ($type)
-        {
-            /** @var callable */
-            $fn = array($type, 'isBuiltin');
-
-            /** @var boolean */
-            $builtIn = call_user_func($fn);
-        }
-
-        if ($builtIn)
-        {
-            return null;
-        }
-
-        /** @var callable */
-        $class = array($type, 'getName');
-
-        /** @var class-string */
-        $fn = call_user_func($class);
-
-        return new \ReflectionClass($fn);
-    }
 }

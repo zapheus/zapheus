@@ -149,7 +149,18 @@ class RequestTest extends Testcase
      */
     public function test_passed_if_server_params_retrieved()
     {
+        // [TODO] Check why it returns "/test" ---
+        /** @var array<string, mixed> */
         $expect = $_SERVER;
+
+        $expect['REQUEST_METHOD'] = 'GET';
+
+        $expect['REQUEST_URI'] = '/';
+
+        $expect['SERVER_NAME'] = 'roug.in';
+
+        $expect['SERVER_PORT'] = 8000;
+        // ---------------------------------------
 
         $request = $this->self->make();
 
@@ -229,8 +240,6 @@ class RequestTest extends Testcase
 
         $server['SERVER_PORT'] = 8000;
 
-        $server['HTTPS'] = 'off';
-
         $_FILES['file']['error'] = 0;
 
         $file = __DIR__ . '/../../Fixture/Views/LoremIpsum.php';
@@ -239,14 +248,12 @@ class RequestTest extends Testcase
 
         $_FILES['file']['tmp_name'] = $file;
 
-        $request = new Request('GET', '/', $_SERVER);
+        $request = new Request('GET', '/', $server);
 
         $factory = new RequestFactory;
 
         $factory = $factory->setRequest($request);
 
-        $factory->server($_SERVER);
-
-        $this->self = $factory;
+        $this->self = $factory->server($server);
     }
 }

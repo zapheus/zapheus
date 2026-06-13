@@ -6,6 +6,7 @@ All notable changes to `Zapheus` will be documented in this file.
 
 ### Added
 - `getContainer` in `Application`
+- HTTP factories in `Http\Factory`
 
 ### Changed
 - Moved interfaces to `Zapheus\Contract`

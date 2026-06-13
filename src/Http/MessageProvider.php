@@ -5,8 +5,8 @@ namespace Zapheus\Http;
 use Zapheus\Application;
 use Zapheus\Contract\Container\Writable;
 use Zapheus\Contract\Provider\Provider;
-use Zapheus\Http\Message\FileFactory;
-use Zapheus\Http\Message\RequestFactory;
+use Zapheus\Http\Factory\File;
+use Zapheus\Http\Factory\Request;
 use Zapheus\Http\Message\Response;
 
 /**
@@ -29,9 +29,9 @@ class MessageProvider implements Provider
      */
     public function register(Writable $container)
     {
-        $factory = new RequestFactory;
+        $factory = new Request;
 
-        $file = new FileFactory;
+        $file = new File;
 
         $response = new Response;
 

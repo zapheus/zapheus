@@ -2,6 +2,7 @@
 
 namespace Zapheus\Http\Message;
 
+use Zapheus\Http\Factory\Response as ResponseFactory;
 use Zapheus\Testcase;
 
 /**
@@ -12,7 +13,7 @@ use Zapheus\Testcase;
 class ResponseTest extends Testcase
 {
     /**
-     * @var \Zapheus\Http\Message\ResponseFactory
+     * @var \Zapheus\Http\Factory\Response
      */
     protected $self;
 
@@ -47,6 +48,8 @@ class ResponseTest extends Testcase
      */
     protected function doSetUp()
     {
-        $this->self = (new ResponseFactory)->setResponse(new Response);
+        $factory = new ResponseFactory;
+
+        $this->self = $factory->setResponse(new Response);
     }
 }

@@ -2,6 +2,8 @@
 
 namespace Zapheus\Http\Message;
 
+use Zapheus\Http\Factory\File as FileFactory;
+use Zapheus\Http\Factory\Request as RequestFactory;
 use Zapheus\Testcase;
 
 /**
@@ -12,7 +14,7 @@ use Zapheus\Testcase;
 class RequestTest extends Testcase
 {
     /**
-     * @var \Zapheus\Http\Message\RequestFactory
+     * @var \Zapheus\Http\Factory\Request
      */
     protected $self;
 
@@ -239,7 +241,9 @@ class RequestTest extends Testcase
 
         $request = new Request('GET', '/', $_SERVER);
 
-        $factory = (new RequestFactory)->setRequest($request);
+        $factory = new RequestFactory;
+
+        $factory = $factory->setRequest($request);
 
         $factory->server($_SERVER);
 

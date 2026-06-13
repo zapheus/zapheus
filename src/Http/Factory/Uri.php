@@ -1,15 +1,16 @@
 <?php
 
-namespace Zapheus\Http\Message;
+namespace Zapheus\Http\Factory;
 
 use Zapheus\Contract\Http\Message\Uri as Contract;
+use Zapheus\Http\Message\Uri as Base;
 
 /**
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class UriFactory
+class Uri
 {
     /**
      * @var string
@@ -147,7 +148,7 @@ class UriFactory
             $fragment = '#' . $fragment;
         }
 
-        return new Uri($this->scheme . '://' . $authority . $this->path . $query . $fragment);
+        return new Base($this->scheme . '://' . $authority . $this->path . $query . $fragment);
     }
 
     /**

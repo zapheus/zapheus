@@ -2,6 +2,7 @@
 
 namespace Zapheus\Http\Message;
 
+use Zapheus\Http\Factory\Uri as UriFactory;
 use Zapheus\Testcase;
 
 /**
@@ -12,7 +13,7 @@ use Zapheus\Testcase;
 class UriTest extends Testcase
 {
     /**
-     * @var \Zapheus\Http\Message\UriFactory
+     * @var \Zapheus\Http\Factory\Uri
      */
     protected $self;
 

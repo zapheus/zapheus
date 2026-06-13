@@ -1,13 +1,16 @@
 <?php
 
-namespace Zapheus\Http\Message;
+namespace Zapheus\Http\Factory;
+
+use Zapheus\Http\Message\Request as Base;
+use Zapheus\Http\Message\Uri;
 
 /**
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class RequestFactory extends MessageFactory
+class Request extends Message
 {
     /**
      * @var array<string, mixed>
@@ -61,7 +64,7 @@ class RequestFactory extends MessageFactory
      *
      * @return self
      */
-    public function setRequest(Request $request)
+    public function setRequest(Base $request)
     {
         parent::setMessage($request);
 
@@ -179,7 +182,7 @@ class RequestFactory extends MessageFactory
      */
     public function make()
     {
-        $request = new Request($this->method, $this->target, $this->server, $this->cookies, $this->data, $this->files, $this->queries, $this->attributes, $this->headers, $this->version);
+        $request = new Base($this->method, $this->target, $this->server, $this->cookies, $this->data, $this->files, $this->queries, $this->attributes, $this->headers, $this->version);
 
         if ($this->uri)
         {

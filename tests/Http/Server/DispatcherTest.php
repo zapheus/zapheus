@@ -4,8 +4,8 @@ namespace Zapheus\Http\Server;
 
 use Zapheus\Fixture\Http\Middlewares\LastMiddleware;
 use Zapheus\Fixture\Http\Middlewares\JsonMiddleware;
-use Zapheus\Http\Message\RequestFactory;
-use Zapheus\Http\Message\ResponseFactory;
+use Zapheus\Http\Factory\Request;
+use Zapheus\Http\Factory\Response;
 use Zapheus\Http\Message\Stream;
 use Zapheus\Testcase;
 
@@ -52,7 +52,7 @@ class DispatcherTest extends Testcase
 
             $stream->write($response->stream() . ' world');
 
-            $maker = new ResponseFactory;
+            $maker = new Response;
 
             $maker->setResponse($response);
 
@@ -133,7 +133,7 @@ class DispatcherTest extends Testcase
         $server['SERVER_NAME'] = 'roug.in';
         $server['SERVER_PORT'] = 8000;
 
-        $factory = new RequestFactory;
+        $factory = new Request;
 
         $factory->server($server);
 

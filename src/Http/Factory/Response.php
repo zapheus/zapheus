@@ -1,15 +1,16 @@
 <?php
 
-namespace Zapheus\Http\Message;
+namespace Zapheus\Http\Factory;
 
 use Zapheus\Contract\Http\Message\Response as Contract;
+use Zapheus\Http\Message\Response as Base;
 
 /**
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class ResponseFactory extends MessageFactory
+class Response extends Message
 {
     /**
      * @var integer
@@ -53,7 +54,7 @@ class ResponseFactory extends MessageFactory
      */
     public function make()
     {
-        $response = new Response($this->code, $this->headers, $this->version);
+        $response = new Base($this->code, $this->headers, $this->version);
 
         if ($this->stream)
         {

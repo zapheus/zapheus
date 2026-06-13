@@ -3,7 +3,7 @@
 namespace Zapheus\Application;
 
 use Zapheus\Application;
-use Zapheus\Http\Message\RequestFactory;
+use Zapheus\Http\Factory\Request;
 use Zapheus\Testcase;
 
 /**
@@ -72,7 +72,7 @@ abstract class AbstractTestCase extends Testcase
 
         $_SERVER['SERVER_PORT'] = 8000;
 
-        $factory = new RequestFactory;
+        $factory = new Request;
 
         $factory->server($_SERVER);
 

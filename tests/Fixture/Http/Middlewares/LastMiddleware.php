@@ -5,7 +5,7 @@ namespace Zapheus\Fixture\Http\Middlewares;
 use Zapheus\Contract\Http\Message\Request;
 use Zapheus\Contract\Http\Server\Handler;
 use Zapheus\Contract\Http\Server\Middleware;
-use Zapheus\Http\Message\ResponseFactory;
+use Zapheus\Http\Factory\Response;
 
 /**
  * @package Zapheus
@@ -22,7 +22,7 @@ class LastMiddleware implements Middleware
      */
     public function process(Request $request, Handler $handler)
     {
-        $factory = new ResponseFactory;
+        $factory = new Response;
 
         return $factory->make();
     }

@@ -1,13 +1,15 @@
 <?php
 
-namespace Zapheus\Http\Message;
+namespace Zapheus\Http\Factory;
+
+use Zapheus\Http\Message\File as Base;
 
 /**
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class FileFactory
+class File
 {
     /**
      * @var integer
@@ -59,7 +61,7 @@ class FileFactory
      */
     public function make()
     {
-        return new File($this->file, $this->name, $this->error);
+        return new Base($this->file, $this->name, $this->error);
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace Zapheus\Http\Message;
 
+use Zapheus\Http\Factory\Message as MessageFactory;
 use Zapheus\Testcase;
 
 /**
@@ -12,7 +13,7 @@ use Zapheus\Testcase;
 class MessageTest extends Testcase
 {
     /**
-     * @var \Zapheus\Http\Message\MessageFactory
+     * @var \Zapheus\Http\Factory\Message
      */
     protected $self;
 

@@ -41,25 +41,30 @@ class Dispatcher implements Contract
     {
         $uri = $uri[0] !== '/' ? '/' . $uri : $uri;
 
-        if (($result = $this->match($method, $uri)) !== null)
+        if (($result = $this->match($method, $uri)) === null)
         {
-            $matches = $result[0];
-            $route   = $result[1];
+            $text = 'Route "%s %s" not found';
 
-            $filtered = array_filter(array_keys($matches), 'is_string');
+            $error = sprintf($text, $method, $uri);
 
-            $flipped = array_flip($filtered);
-
-            $values = array_intersect_key($matches, $flipped);
-
-            $factory = (new RouteFactory)->setRoute($route);
-
-            return $factory->parameters($values)->make();
+            throw new \UnexpectedValueException($error);
         }
 
-        $error = sprintf('Route "%s %s" not found', $method, $uri);
+        $matches = $result[0];
 
-        throw new \UnexpectedValueException($error);
+        $route = $result[1];
+
+        $filtered = array_filter(array_keys($matches), 'is_string');
+
+        $flipped = array_flip($filtered);
+
+        $values = array_intersect_key($matches, $flipped);
+
+        $factory = new RouteFactory;
+
+        $factory = $factory->setRoute($route);
+
+        return $factory->parameters($values)->make();
     }
 
     /**

@@ -5,7 +5,7 @@ namespace Zapheus\Fixture\Http\Middlewares;
 use Zapheus\Contract\Http\Message\Request;
 use Zapheus\Contract\Http\Server\Handler;
 use Zapheus\Contract\Http\Server\Middleware;
-use Zapheus\Http\Message\ResponseFactory;
+use Zapheus\Http\Factory\Response;
 
 /**
  * @package Zapheus
@@ -28,7 +28,9 @@ class JsonMiddleware implements Middleware
 
         $value = array('application/json');
 
-        $factory = (new ResponseFactory)->setResponse($response);
+        $factory = new Response;
+
+        $factory = $factory->setResponse($response);
 
         $factory->header('Content-Type', $value);
 

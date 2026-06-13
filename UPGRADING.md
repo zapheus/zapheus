@@ -171,15 +171,15 @@ $dispatcher = (new Zapheus\Http\Server\Dispatcher($stack))
 +$factory->setRoute($route);
 
 -$factory = new RequestFactory($request);
-+$factory = new Zapheus\Http\Message\RequestFactory;
++$factory = new Zapheus\Http\Factory\Request;
 +$factory->setRequest($request);
 
 -$factory = new ResponseFactory($response);
-+$factory = new Zapheus\Http\Message\ResponseFactory;
++$factory = new Zapheus\Http\Factory\Response;
 +$factory->setResponse($response);
 
 -$factory = new UriFactory($uri);
-+$factory = new Zapheus\Http\Message\UriFactory;
++$factory = new Zapheus\Http\Factory\Uri;
 +$factory->setUri($uri);
 ```
 

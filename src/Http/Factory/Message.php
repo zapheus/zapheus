@@ -1,15 +1,17 @@
 <?php
 
-namespace Zapheus\Http\Message;
+namespace Zapheus\Http\Factory;
 
 use Zapheus\Contract\Http\Message\Message as Contract;
+use Zapheus\Http\Message\Message as Base;
+use Zapheus\Http\Message\Stream;
 
 /**
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class MessageFactory
+class Message
 {
     /**
      * @var array<string, mixed>
@@ -80,7 +82,7 @@ class MessageFactory
      */
     public function make()
     {
-        $message = new Message($this->headers, $this->version);
+        $message = new Base($this->headers, $this->version);
 
         if ($this->stream)
         {

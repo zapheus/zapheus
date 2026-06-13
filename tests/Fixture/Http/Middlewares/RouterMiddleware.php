@@ -7,7 +7,7 @@ use Zapheus\Contract\Http\Message\Request;
 use Zapheus\Contract\Http\Server\Handler;
 use Zapheus\Contract\Http\Server\Middleware;
 use Zapheus\Contract\Routing\Dispatcher;
-use Zapheus\Http\Message\RequestFactory;
+use Zapheus\Http\Factory\Request as RequestFactory;
 
 /**
  * @package Zapheus
@@ -45,7 +45,9 @@ class RouterMiddleware implements Middleware
 
         $route = $this->dispatcher->dispatch($method, $path);
 
-        $factory = (new RequestFactory)->setRequest($request);
+        $factory = new RequestFactory;
+
+        $factory = $factory->setRequest($request);
 
         $factory->attribute($attribute, $route);
 

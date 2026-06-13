@@ -5,8 +5,6 @@ namespace Zapheus\Http\Message;
 use Zapheus\Testcase;
 
 /**
- * Request Test
- *
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
@@ -16,96 +14,164 @@ class RequestTest extends Testcase
     /**
      * @var \Zapheus\Http\Message\RequestFactory
      */
-    protected $factory;
+    protected $self;
 
     /**
-     * Tests RequestInterface::attribute.
-     *
      * @return void
      */
-    public function testAttributeMethod()
+    public function test_passed_if_all_cookies_retrieved()
     {
-        $expected = (string) 'Rougin Royce';
+        $expect = array('name' => 'Rougin');
 
-        $this->factory->attribute('name', $expected);
+        $expect['address'] = 'Tomorrowland';
 
-        $request = $this->factory->make();
+        $this->self->cookies($expect);
 
-        $result = $request->attribute('name');
+        $actual = $this->self->make()->cookies();
 
-        $this->assertEquals($expected, $result);
+        $this->assertEquals($expect, $actual);
     }
 
     /**
-     * Tests RequestInterface::attributes.
-     *
      * @return void
      */
-    public function testAttributesMethod()
+    public function test_passed_if_attribute_is_retrieved()
     {
-        $expected = array('name' => 'Rougin Royce');
+        $expect = 'Rougin Royce';
 
-        $this->factory->attributes($expected);
+        $this->self->attribute('name', $expect);
 
-        $result = $this->factory->make()->attributes();
+        $request = $this->self->make();
 
-        $this->assertEquals($expected, $result);
+        $actual = $request->attribute('name');
+
+        $this->assertEquals($expect, $actual);
     }
 
     /**
-     * Tests RequestInterface::cookie.
-     *
      * @return void
      */
-    public function testCookieMethod()
+    public function test_passed_if_attributes_are_retrieved()
     {
-        $this->factory->cookie('address', $expected = 'ZS');
+        $expect = array('name' => 'Rougin Royce');
 
-        $result = $this->factory->make()->cookie('address');
+        $this->self->attributes($expect);
 
-        $this->assertEquals($expected, $result);
+        $actual = $this->self->make()->attributes();
+
+        $this->assertEquals($expect, $actual);
     }
 
     /**
-     * Tests RequestInterface::cookies.
-     *
      * @return void
      */
-    public function testCookiesMethod()
+    public function test_passed_if_cookie_value_retrieved()
     {
-        $expected = array('name' => 'Rougin');
+        $this->self->cookie('address', $expect = 'ZS');
 
-        $expected['address'] = 'Tomorrowland';
+        $actual = $this->self->make()->cookie('address');
 
-        $this->factory->cookies((array) $expected);
-
-        $result = $this->factory->make()->cookies();
-
-        $this->assertEquals($expected, $result);
+        $this->assertEquals($expect, $actual);
     }
 
     /**
-     * Tests RequestInterface::data.
-     *
      * @return void
      */
-    public function testDataMethod()
+    public function test_passed_if_http_method_retrieved()
     {
-        $expected = array('name' => 'Rougin R');
+        $this->self->method($expect = 'POST');
 
-        $this->factory->data((array) $expected);
+        $actual = $this->self->make()->method();
 
-        $result = $this->factory->make()->data();
-
-        $this->assertEquals($expected, $result);
+        $this->assertEquals($expect, $actual);
     }
 
     /**
-     * Tests RequestInterface::files.
-     *
      * @return void
      */
-    public function testFilesMethod()
+    public function test_passed_if_parsed_body_retrieved()
+    {
+        $expect = array('name' => 'Rougin R');
+
+        $this->self->data($expect);
+
+        $actual = $this->self->make()->data();
+
+        $this->assertEquals($expect, $actual);
+    }
+
+    /**
+     * @return void
+     */
+    public function test_passed_if_query_params_retrieved()
+    {
+        $expect = array('name' => 'Rougin');
+
+        $expect['address'] = 'Tomorrowland';
+
+        $this->self->queries($expect);
+
+        $actual = $this->self->make()->queries();
+
+        $this->assertEquals($expect, $actual);
+    }
+
+    /**
+     * @return void
+     */
+    public function test_passed_if_request_target_retrieved()
+    {
+        $this->self->target($expect = 'o');
+
+        $actual = $this->self->make()->target();
+
+        $this->assertEquals($expect, $actual);
+    }
+
+    /**
+     * @return void
+     */
+    public function test_passed_if_server_param_by_name()
+    {
+        $expect = 'roug.in';
+
+        $request = $this->self->make();
+
+        $actual = $request->server('SERVER_NAME');
+
+        $this->assertEquals($expect, $actual);
+    }
+
+    /**
+     * @return void
+     */
+    public function test_passed_if_server_params_retrieved()
+    {
+        $expect = $_SERVER;
+
+        $request = $this->self->make();
+
+        $actual = $request->server();
+
+        $this->assertEquals($expect, $actual);
+    }
+
+    /**
+     * @return void
+     */
+    public function test_passed_if_single_query_retrieved()
+    {
+        $this->self->query('name', $expect = 'ZS');
+
+        $actual = $this->self->make()->query('name');
+
+        $this->assertEquals($expect, $actual);
+    }
+
+    /**
+     * @return void
+     */
+    public function test_passed_if_uploaded_files_retrieved()
     {
         $fixtures = __DIR__ . '/../../Fixture';
 
@@ -117,128 +183,32 @@ class RequestTest extends Testcase
 
         $factory->name('LoremIpsum.php');
 
-        $expected = array('file' => array($factory->make()));
+        $expect = array('file' => array($factory->make()));
 
         $files = $factory->normalize($_FILES);
 
-        $this->factory->files((array) $files);
+        $this->self->files($files);
 
-        $result = $this->factory->make()->files();
+        $actual = $this->self->make()->files();
 
-        $this->assertEquals($expected, $result);
+        $this->assertEquals($expect, $actual);
     }
 
     /**
-     * Tests RequestInterface::method.
-     *
      * @return void
      */
-    public function testMethodMethod()
+    public function test_passed_if_uri_instance_retrieved()
     {
-        $this->factory->method($expected = 'POST');
+        $expect = new Uri('https://roug.in');
 
-        $result = $this->factory->make()->method();
+        $this->self->uri($expect);
 
-        $this->assertEquals($expected, $result);
+        $actual = $this->self->make()->uri();
+
+        $this->assertEquals($expect, $actual);
     }
 
     /**
-     * Tests RequestInterface::queries.
-     *
-     * @return void
-     */
-    public function testQueriesMethod()
-    {
-        $expected = array('name' => 'Rougin');
-
-        $expected['address'] = 'Tomorrowland';
-
-        $this->factory->queries((array) $expected);
-
-        $result = $this->factory->make()->queries();
-
-        $this->assertEquals($expected, $result);
-    }
-
-    /**
-     * Tests RequestInterface::query.
-     *
-     * @return void
-     */
-    public function testQueryMethod()
-    {
-        $this->factory->query('name', $expected = 'ZS');
-
-        $result = $this->factory->make()->query('name');
-
-        $this->assertEquals($expected, $result);
-    }
-
-    /**
-     * Tests RequestInterface::server.
-     *
-     * @return void
-     */
-    public function testServerMethod()
-    {
-        $expected = (array) $_SERVER;
-
-        $request = $this->factory->make();
-
-        $result = $request->server();
-
-        $this->assertEquals($expected, $result);
-    }
-
-    /**
-     * Tests RequestInterface::server with a specified name.
-     *
-     * @return void
-     */
-    public function testServerMethodWithSpecifiedName()
-    {
-        $expected = (string) 'roug.in';
-
-        $request = $this->factory->make();
-
-        $result = $request->server('SERVER_NAME');
-
-        $this->assertEquals($expected, $result);
-    }
-
-    /**
-     * Tests RequestInterface::target.
-     *
-     * @return void
-     */
-    public function testTargetMethod()
-    {
-        $this->factory->target($expected = 'o');
-
-        $result = $this->factory->make()->target();
-
-        $this->assertEquals($expected, $result);
-    }
-
-    /**
-     * Tests RequestInterface::uri.
-     *
-     * @return void
-     */
-    public function testUriMethod()
-    {
-        $expected = new Uri('https://roug.in');
-
-        $this->factory->uri($expected);
-
-        $result = $this->factory->make()->uri();
-
-        $this->assertEquals($expected, $result);
-    }
-
-    /**
-     * Sets up the request instance.
-     *
      * @return void
      */
     protected function doSetUp()
@@ -259,14 +229,14 @@ class RequestTest extends Testcase
 
         $_FILES['file']['name'] = basename($file);
 
-        $_FILES['file']['tmp_name'] = (string) $file;
+        $_FILES['file']['tmp_name'] = $file;
 
         $request = new Request('GET', '/', $_SERVER);
 
-        $factory = new RequestFactory($request);
+        $factory = (new RequestFactory)->setRequest($request);
 
         $factory->server($_SERVER);
 
-        $this->factory = $factory;
+        $this->self = $factory;
     }
 }

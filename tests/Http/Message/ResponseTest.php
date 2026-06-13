@@ -5,8 +5,6 @@ namespace Zapheus\Http\Message;
 use Zapheus\Testcase;
 
 /**
- * Response Test
- *
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
@@ -16,45 +14,39 @@ class ResponseTest extends Testcase
     /**
      * @var \Zapheus\Http\Message\ResponseFactory
      */
-    protected $factory;
+    protected $self;
 
     /**
-     * Tests ResponseInterface::code.
-     *
      * @return void
      */
-    public function testCodeMethod()
+    public function test_passed_if_reason_phrase_retrieved()
     {
-        $this->factory->code($expected = 404);
+        $expect = 'Internal Server Error';
 
-        $result = $this->factory->make()->code();
+        $this->self->code(500);
 
-        $this->assertEquals($expected, $result);
+        $actual = $this->self->make()->reason();
+
+        $this->assertEquals($expect, $actual);
     }
 
     /**
-     * Tests ResponseInterface::reason.
-     *
      * @return void
      */
-    public function testReasonMethod()
+    public function test_passed_if_status_code_retrieved()
     {
-        $expected = 'Internal Server Error';
+        $this->self->code($expect = 404);
 
-        $this->factory->code(500);
+        $actual = $this->self->make()->code();
 
-        $result = $this->factory->make()->reason();
-
-        $this->assertEquals($expected, $result);
+        $this->assertEquals($expect, $actual);
     }
 
     /**
-     * Sets up the factory instance.
-     *
      * @return void
      */
     protected function doSetUp()
     {
-        $this->factory = new ResponseFactory(new Response);
+        $this->self = (new ResponseFactory)->setResponse(new Response);
     }
 }

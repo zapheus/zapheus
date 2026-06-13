@@ -10,8 +10,6 @@ use Zapheus\Fixture\Http\Middlewares\LastMiddleware;
 use Zapheus\Testcase;
 
 /**
- * Resolver Test
- *
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
@@ -19,16 +17,14 @@ use Zapheus\Testcase;
 class ResolverTest extends Testcase
 {
     /**
-     * @var \Zapheus\Routing\ResolverInterface
+     * @var \Zapheus\Contract\Routing\Resolver
      */
-    protected $resolver;
+    protected $self;
 
     /**
-     * Tests ResolverInterface::resolve.
-     *
      * @return void
      */
-    public function testResolveMethod()
+    public function test_passed_if_route_handler_is_resolved()
     {
         $factory = new RouteFactory;
 
@@ -36,7 +32,7 @@ class ResolverTest extends Testcase
 
         $instance = 'Zapheus\Fixture\Http\Controllers\TestController';
 
-        $expected = 'Hello, world and people';
+        $expect = 'Hello, world and people';
 
         $factory->method('GET');
 
@@ -46,14 +42,12 @@ class ResolverTest extends Testcase
 
         $route = $factory->make();
 
-        $result = $this->resolver->resolve($route);
+        $actual = $this->self->resolve($route);
 
-        $this->assertEquals($expected, $result);
+        $this->assertEquals($expect, $actual);
     }
 
     /**
-     * Sets up the resolver instance.
-     *
      * @return void
      */
     protected function doSetUp()
@@ -66,6 +60,6 @@ class ResolverTest extends Testcase
 
         $container->set(get_class($test), $test);
 
-        $this->resolver = new Resolver($container);
+        $this->self = new Resolver($container);
     }
 }

@@ -8,8 +8,6 @@ use Zapheus\Provider\Configuration;
 use Zapheus\Testcase;
 
 /**
- * Routing Provider Test
- *
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
@@ -17,52 +15,48 @@ use Zapheus\Testcase;
 class RoutingProviderTest extends Testcase
 {
     /**
-     * @var \Zapheus\Container\WritableInterface
+     * @var \Zapheus\Contract\Container\Writable
      */
     protected $container;
 
     /**
-     * @var \Zapheus\Provider\ProviderInterface
-     */
-    protected $provider;
-
-    /**
-     * @var \Zapheus\Routing\RouterInterface
+     * @var \Zapheus\Contract\Routing\Router
      */
     protected $router;
 
     /**
-     * Tests ProviderInterface::register.
-     *
+     * @var \Zapheus\Contract\Provider\Provider
+     */
+    protected $self;
+
+    /**
      * @return void
      */
-    public function testRegisterMethod()
+    public function test_passed_if_dispatcher_is_registered()
     {
-        $expected = new Route('GET', '/', 'HailController@index');
+        $expect = new Route('GET', '/', 'HailController@index');
 
         $dispatcher = Application::DISPATCHER;
 
-        $container = $this->provider->register($this->container);
+        $container = $this->self->register($this->container);
 
         $dispatcher = $container->get($dispatcher);
 
-        $result = $dispatcher->dispatch('GET', '/');
+        $actual = $dispatcher->dispatch('GET', '/');
 
-        $this->assertEquals($expected, $result);
+        $this->assertEquals($expect, $actual);
     }
 
     /**
-     * Tests ProviderInterface::register with a router from container.
-     *
      * @return void
      */
-    public function testRegisterMethodWithRouterFromContainer()
+    public function test_passed_if_router_from_container_used()
     {
         $provider = new RoutingProvider;
 
         $this->container->set(Application::ROUTER, $this->router);
 
-        $expected = new Route('GET', '/', 'HailController@index');
+        $expect = new Route('GET', '/', 'HailController@index');
 
         $dispatcher = Application::DISPATCHER;
 
@@ -70,19 +64,18 @@ class RoutingProviderTest extends Testcase
 
         $dispatcher = $container->get($dispatcher);
 
-        $result = $dispatcher->dispatch('GET', '/');
+        $actual = $dispatcher->dispatch('GET', '/');
 
-        $this->assertEquals($expected, $result);
+        $this->assertEquals($expect, $actual);
     }
 
     /**
-     * Sets up the provider instance.
-     *
      * @return void
      */
     protected function doSetUp()
     {
-        list($config, $container) = array(new Configuration, new Container);
+        $config    = new Configuration;
+        $container = new Container;
 
         $route = new Route('GET', '/', 'HailController@index');
 
@@ -94,6 +87,6 @@ class RoutingProviderTest extends Testcase
 
         $this->container = $container->set(RoutingProvider::CONFIG, $config);
 
-        $this->provider = new RoutingProvider;
+        $this->self = new RoutingProvider;
     }
 }

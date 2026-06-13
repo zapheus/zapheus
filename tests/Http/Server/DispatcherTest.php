@@ -10,8 +10,6 @@ use Zapheus\Http\Message\Stream;
 use Zapheus\Testcase;
 
 /**
- * Dispatcher Test
- *
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
@@ -19,41 +17,31 @@ use Zapheus\Testcase;
 class DispatcherTest extends Testcase
 {
     /**
-     * @var \Zapheus\Http\Server\DispatcherInterface
-     */
-    protected $dispatcher;
-
-    /**
-     * @var \Zapheus\Http\Message\RequestInterface
+     * @var \Zapheus\Contract\Http\Message\Request
      */
     protected $request;
 
     /**
-     * Tests DispatcherInterface::dispatch.
-     *
+     * @var \Zapheus\Contract\Http\Server\Dispatcher
+     */
+    protected $self;
+
+    /**
      * @return void
      */
-    public function testDispatchMethod()
+    public function test_failed_if_no_response_returned()
     {
-        $this->dispatcher->pipe(new LastMiddleware);
+        $this->doExpectException('LogicException');
 
-        $expected = array('application/json');
-
-        $response = $this->dispatcher->dispatch($this->request);
-
-        $result = $response->header('Content-Type');
-
-        $this->assertEquals($expected, $result);
+        $this->self->dispatch($this->request);
     }
 
     /**
-     * Tests DispatcherInterface::dispatch with closures.
-     *
      * @return void
      */
-    public function testDispatchMethodWithClosures()
+    public function test_passed_if_closure_middleware_dispatches()
     {
-        $this->dispatcher->pipe(function ($request, $next)
+        $this->self->pipe(function ($request, $next)
         {
             $response = $next($request);
 
@@ -61,12 +49,12 @@ class DispatcherTest extends Testcase
 
             $stream->write($response->stream() . ' world');
 
-            $factory = new ResponseFactory($response);
+            $factory = (new ResponseFactory)->setResponse($response);
 
             return $factory->stream($stream)->make();
         });
 
-        $this->dispatcher->pipe(function ($request, $next)
+        $this->self->pipe(function ($request, $next)
         {
             $response = $next($request);
 
@@ -75,59 +63,60 @@ class DispatcherTest extends Testcase
             return $response;
         });
 
-        $this->dispatcher->pipe(new LastMiddleware);
+        $this->self->pipe(new LastMiddleware);
 
-        $expected = 'Hello world';
+        $expect = 'Hello world';
 
-        $response = $this->dispatcher->dispatch($this->request);
+        $response = $this->self->dispatch($this->request);
 
-        $result = (string) $response->stream();
+        $actual = (string) $response->stream();
 
-        $this->assertEquals($expected, $result);
+        $this->assertEquals($expect, $actual);
     }
 
     /**
-     * Tests DispatcherInterface::dispatch with \LogicException.
-     *
      * @return void
      */
-    public function testDispatchMethodWithLogicException()
+    public function test_passed_if_middleware_dispatches()
     {
-        $this->doExpectException('LogicException');
+        $this->self->pipe(new LastMiddleware);
 
-        $this->dispatcher->dispatch($this->request);
+        $expect = array('application/json');
+
+        $response = $this->self->dispatch($this->request);
+
+        $actual = $response->header('Content-Type');
+
+        $this->assertEquals($expect, $actual);
     }
 
     /**
-     * Tests DispatcherInterface::dispatch with string.
-     *
      * @return void
      */
-    public function testDispatchMethodWithString()
+    public function test_passed_if_string_middleware_dispatches()
     {
-        $this->dispatcher->pipe('Zapheus\Fixture\Http\Middlewares\LastMiddleware');
+        $this->self->pipe('Zapheus\Fixture\Http\Middlewares\LastMiddleware');
 
-        $expected = array('application/json');
+        $expect = array('application/json');
 
-        $response = $this->dispatcher->dispatch($this->request);
+        $response = $this->self->dispatch($this->request);
 
-        $result = $response->header('Content-Type');
+        $actual = $response->header('Content-Type');
 
-        $this->assertEquals($expected, $result);
+        $this->assertEquals($expect, $actual);
     }
 
     /**
-     * Sets up the dispatcher instance.
-     *
      * @return void
      */
     protected function doSetUp()
     {
-        list($items, $server) = array(array(), array());
+        $items  = array();
+        $server = array();
 
         $items[] = new JsonMiddleware;
 
-        $this->dispatcher = new Dispatcher($items);
+        $this->self = new Dispatcher($items);
 
         $server['REQUEST_METHOD'] = 'GET';
         $server['REQUEST_URI'] = '/';

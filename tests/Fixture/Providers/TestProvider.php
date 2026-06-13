@@ -2,26 +2,22 @@
 
 namespace Zapheus\Fixture\Providers;
 
-use Zapheus\Container\WritableInterface;
-use Zapheus\Provider\ProviderInterface;
+use Zapheus\Contract\Container\Writable;
+use Zapheus\Contract\Provider\Provider;
 
 /**
- * Test Provider
- *
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class TestProvider implements ProviderInterface
+class TestProvider implements Provider
 {
     /**
-     * Registers the bindings in the container.
+     * @param \Zapheus\Contract\Container\Writable $container
      *
-     * @param \Zapheus\Container\WritableInterface $container
-     *
-     * @return \Zapheus\Container\ContainerInterface
+     * @return \Zapheus\Contract\Container\Container
      */
-    public function register(WritableInterface $container)
+    public function register(Writable $container)
     {
         return $container;
     }

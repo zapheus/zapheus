@@ -10,8 +10,6 @@ use Zapheus\Provider\Configuration;
 use Zapheus\Testcase;
 
 /**
- * Server Provider Test
- *
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
@@ -19,49 +17,46 @@ use Zapheus\Testcase;
 class ServerProviderTest extends Testcase
 {
     /**
-     * @var \Zapheus\Container\WritableInterface
+     * @var \Zapheus\Contract\Container\Writable
      */
     protected $container;
 
     /**
-     * @var \Zapheus\Provider\ProviderInterface
+     * @var \Zapheus\Contract\Provider\Provider
      */
-    protected $provider;
+    protected $self;
 
     /**
-     * Tests ProviderInterface::register.
-     *
      * @return void
      */
-    public function testRegisterMethod()
+    public function test_passed_if_middleware_is_registered()
     {
         $message = new MessageProvider;
 
         $container = $message->register($this->container);
 
-        $container = $this->provider->register($container);
+        $container = $this->self->register($container);
 
         $dispatcher = $container->get(Application::MIDDLEWARE);
 
         $request = $container->get(Application::REQUEST);
 
-        $expected = array('application/json');
+        $expect = array('application/json');
 
         $response = $dispatcher->dispatch($request);
 
-        $result = $response->header('Content-Type');
+        $actual = $response->header('Content-Type');
 
-        $this->assertEquals($expected, $result);
+        $this->assertEquals($expect, $actual);
     }
 
     /**
-     * Sets up the provider instance.
-     *
      * @return void
      */
     protected function doSetUp()
     {
-        list($config, $container) = array(new Configuration, new Container);
+        $config    = new Configuration;
+        $container = new Container;
 
         $middlewares = array(new JsonMiddleware, new LastMiddleware);
 
@@ -81,6 +76,6 @@ class ServerProviderTest extends Testcase
 
         $this->container = $container;
 
-        $this->provider = new ServerProvider;
+        $this->self = new ServerProvider;
     }
 }

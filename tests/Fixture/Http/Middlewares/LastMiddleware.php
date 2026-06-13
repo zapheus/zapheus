@@ -2,29 +2,25 @@
 
 namespace Zapheus\Fixture\Http\Middlewares;
 
+use Zapheus\Contract\Http\Message\Request;
+use Zapheus\Contract\Http\Server\Handler;
+use Zapheus\Contract\Http\Server\Middleware;
 use Zapheus\Http\Message\ResponseFactory;
-use Zapheus\Http\Message\RequestInterface;
-use Zapheus\Http\Server\HandlerInterface;
-use Zapheus\Http\Server\MiddlewareInterface;
 
 /**
- * Last Middleware
- *
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class LastMiddleware implements MiddlewareInterface
+class LastMiddleware implements Middleware
 {
     /**
-     * Processes an incoming request and returns a response.
+     * @param \Zapheus\Contract\Http\Message\Request $request
+     * @param \Zapheus\Contract\Http\Server\Handler  $handler
      *
-     * @param \Zapheus\Http\Message\RequestInterface $request
-     * @param \Zapheus\Http\Server\HandlerInterface  $handler
-     *
-     * @return \Zapheus\Http\Message\ResponseInterface
+     * @return \Zapheus\Contract\Http\Message\Response
      */
-    public function process(RequestInterface $request, HandlerInterface $handler)
+    public function process(Request $request, Handler $handler)
     {
         $factory = new ResponseFactory;
 

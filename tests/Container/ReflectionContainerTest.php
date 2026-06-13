@@ -7,8 +7,6 @@ use Zapheus\Fixture\Http\Controllers\LaudController;
 use Zapheus\Testcase;
 
 /**
- * Reflection Container Test
- *
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
@@ -16,61 +14,53 @@ use Zapheus\Testcase;
 class ReflectionContainerTest extends Testcase
 {
     /**
-     * @var \Zapheus\Container\ContainerInterface
+     * @var \Zapheus\Contract\Container\Container
      */
-    protected $container;
+    protected $self;
 
     /**
-     * Tests ContainerInterface::get.
-     *
      * @return void
      */
-    public function testGetMethod()
-    {
-        $name = get_class(new HailController);
-
-        $instance = $this->container->get($name);
-
-        $this->assertInstanceOf($name, $instance);
-    }
-
-    /**
-     * Tests ContainerInterface::get with constructor classes.
-     *
-     * @return void
-     */
-    public function testGetMethodWithConstructorClasses()
-    {
-        $laud = new LaudController(new HailController);
-
-        $name = get_class($laud);
-
-        $instance = $this->container->get($name);
-
-        $this->assertInstanceOf($name, $instance);
-    }
-
-    /**
-     * Tests ContainerInterface::get methodh NotFoundException.
-     *
-     * @return void
-     */
-    public function testGetMethodWithNotFoundException()
+    public function test_failed_if_class_does_not_exist()
     {
         $exception = 'Zapheus\Container\NotFoundException';
 
         $this->doExpectException($exception);
 
-        $this->container->get('hail');
+        $this->self->get('hail');
     }
 
     /**
-     * Sets up the container instance.
-     *
+     * @return void
+     */
+    public function test_passed_if_class_created_from_container()
+    {
+        $name = get_class(new HailController);
+
+        $instance = $this->self->get($name);
+
+        $this->assertInstanceOf($name, $instance);
+    }
+
+    /**
+     * @return void
+     */
+    public function test_passed_if_dependencies_are_resolved()
+    {
+        $laud = new LaudController(new HailController);
+
+        $name = get_class($laud);
+
+        $instance = $this->self->get($name);
+
+        $this->assertInstanceOf($name, $instance);
+    }
+
+    /**
      * @return void
      */
     protected function doSetUp()
     {
-        $this->container = new ReflectionContainer;
+        $this->self = new ReflectionContainer;
     }
 }

@@ -5,8 +5,6 @@ namespace Zapheus\Http\Message;
 use Zapheus\Testcase;
 
 /**
- * File Test
- *
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
@@ -14,53 +12,35 @@ use Zapheus\Testcase;
 class FileTest extends Testcase
 {
     /**
-     * @var \Zapheus\Http\Message\FileInterface
-     */
-    protected $file;
-
-    /**
      * @var string
      */
     protected $filename;
 
     /**
-     * Tests FileInterface::error.
-     *
+     * @var \Zapheus\Http\Message\File
+     */
+    protected $self;
+
+    /**
      * @return void
      */
-    public function testErrorMethod()
+    public function test_passed_if_file_error_is_retrieved()
     {
-        $expected = UPLOAD_ERR_OK;
+        $expect = UPLOAD_ERR_OK;
 
-        $result = $this->file->error();
+        $actual = $this->self->error();
 
-        $this->assertEquals($expected, $result);
+        $this->assertEquals($expect, $actual);
     }
 
     /**
-     * Tests FileInterface::file.
-     *
      * @return void
      */
-    public function testFileMethod()
-    {
-        $expected = $this->filename;
-
-        $result = $this->file->file();
-
-        $this->assertEquals($expected, $result);
-    }
-
-    /**
-     * Tests FileInterface::move.
-     *
-     * @return void
-     */
-    public function testMoveMethod()
+    public function test_passed_if_file_is_moved()
     {
         $target = str_replace('HelloWorld', 'MovedFile', $this->filename);
 
-        $this->file->move($target);
+        $this->self->move($target);
 
         $this->assertFileExists($target);
 
@@ -68,64 +48,66 @@ class FileTest extends Testcase
     }
 
     /**
-     * Tests FileInterface::name.
-     *
      * @return void
      */
-    public function testNameMethod()
+    public function test_passed_if_file_name_is_retrieved()
     {
-        $expected = basename($this->filename);
+        $expect = basename($this->filename);
 
-        $result = $this->file->name();
+        $actual = $this->self->name();
 
-        $this->assertEquals($expected, $result);
+        $this->assertEquals($expect, $actual);
     }
 
     /**
-     * Tests FileInterface::size.
-     *
      * @return void
      */
-    public function testSizeMethod()
+    public function test_passed_if_file_path_is_retrieved()
     {
-        $expected = filesize($this->filename);
+        $expect = $this->filename;
 
-        $result = $this->file->size();
+        $actual = $this->self->file();
 
-        $this->assertEquals($expected, $result);
+        $this->assertEquals($expect, $actual);
     }
 
     /**
-     * Tests FileInterface::stream.
-     *
      * @return void
      */
-    public function testStreamMethod()
+    public function test_passed_if_file_size_is_retrieved()
     {
-        $expected = 'Zapheus\Http\Message\Stream';
+        $expect = filesize($this->filename);
 
-        $result = $this->file->stream();
+        $actual = $this->self->size();
 
-        $this->assertInstanceof($expected, $result);
+        $this->assertEquals($expect, $actual);
     }
 
     /**
-     * Tests FileInterface::type.
-     *
      * @return void
      */
-    public function testTypeMethod()
+    public function test_passed_if_file_stream_is_retrieved()
     {
-        $expected = mime_content_type($this->filename);
+        $expect = 'Zapheus\Http\Message\Stream';
 
-        $result = $this->file->type();
+        $actual = $this->self->stream();
 
-        $this->assertEquals($expected, $result);
+        $this->assertInstanceof($expect, $actual);
     }
 
     /**
-     * Sets up the uploaded file instance.
-     *
+     * @return void
+     */
+    public function test_passed_if_file_type_is_retrieved()
+    {
+        $expect = mime_content_type($this->filename);
+
+        $actual = $this->self->type();
+
+        $this->assertEquals($expect, $actual);
+    }
+
+    /**
      * @return void
      */
     protected function doSetUp()
@@ -134,12 +116,10 @@ class FileTest extends Testcase
 
         $this->filename = $name;
 
-        $this->file = $this->instance($name);
+        $this->self = $this->instance($name);
     }
 
     /**
-     * Creates a new \File instance.
-     *
      * @param string $filename
      *
      * @return \File

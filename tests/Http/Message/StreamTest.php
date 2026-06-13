@@ -5,8 +5,6 @@ namespace Zapheus\Http\Message;
 use Zapheus\Testcase;
 
 /**
- * Stream Test
- *
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
@@ -14,50 +12,44 @@ use Zapheus\Testcase;
 class StreamTest extends Testcase
 {
     /**
-     * @var resource
+     * @var false|resource
      */
     protected $resource;
 
     /**
-     * @var \Zapheus\Http\Message\StreamInterface
+     * @var \Zapheus\Contract\Http\Message\Stream
      */
-    protected $stream;
+    protected $self;
 
     /**
-     * Tests StreamInterface::read.
-     *
      * @return void
      */
-    public function testReadMethod()
+    public function test_passed_if_stream_contents_read()
     {
-        $expected = 'Lorem ipsum dolor sit amet';
+        $expect = 'Lorem ipsum dolor sit amet';
 
-        $result = $this->stream->read(26);
+        $actual = $this->self->read(26);
 
-        $this->stream->close();
+        $this->self->close();
 
-        $this->assertEquals($expected, $result);
+        $this->assertEquals($expect, $actual);
     }
 
     /**
-     * Tests StreamInterface::__toString.
-     *
      * @return void
      */
-    public function testToStringMagicMethod()
+    public function test_passed_if_stream_to_string_works()
     {
-        $expected = 'Lorem ipsum dolor sit amet';
+        $expect = 'Lorem ipsum dolor sit amet';
 
-        $result = (string) $this->stream;
+        $actual = (string) $this->self;
 
-        $this->stream->close();
+        $this->self->close();
 
-        $this->assertEquals($expected, $result);
+        $this->assertEquals($expect, $actual);
     }
 
     /**
-     * Sets up the stream instance.
-     *
      * @return void
      */
     protected function doSetUp()
@@ -66,10 +58,10 @@ class StreamTest extends Testcase
 
         $root = str_replace($search, 'Fixture', __DIR__);
 
-        $file = (string) $root . '/Views/LoremIpsum.php';
+        $file = $root . '/Views/LoremIpsum.php';
 
         $this->resource = $resource = fopen($file, 'r');
 
-        $this->stream = new Stream($this->resource);
+        $this->self = new Stream($this->resource);
     }
 }

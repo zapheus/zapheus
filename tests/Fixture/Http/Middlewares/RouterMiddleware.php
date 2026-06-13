@@ -3,55 +3,49 @@
 namespace Zapheus\Fixture\Http\Middlewares;
 
 use Zapheus\Application;
+use Zapheus\Contract\Http\Message\Request;
+use Zapheus\Contract\Http\Server\Handler;
+use Zapheus\Contract\Http\Server\Middleware;
+use Zapheus\Contract\Routing\Dispatcher;
 use Zapheus\Http\Message\RequestFactory;
-use Zapheus\Http\Message\RequestInterface;
-use Zapheus\Http\Server\HandlerInterface;
-use Zapheus\Http\Server\MiddlewareInterface;
-use Zapheus\Routing\DispatcherInterface;
 
 /**
- * Router Middleware
- *
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class RouterMiddleware implements MiddlewareInterface
+class RouterMiddleware implements Middleware
 {
     /**
-     * @var \Zapheus\Routing\DispatcherInterface
+     * @var \Zapheus\Contract\Routing\Dispatcher
      */
     protected $dispatcher;
 
     /**
-     * Initializes the dispatcher instance.
-     *
-     * @param \Zapheus\Routing\DispatcherInterface $dispatcher
+     * @param \Zapheus\Contract\Routing\Dispatcher $dispatcher
      */
-    public function __construct(DispatcherInterface $dispatcher)
+    public function __construct(Dispatcher $dispatcher)
     {
         $this->dispatcher = $dispatcher;
     }
 
     /**
-     * Processes an incoming request and returns a response.
+     * @param \Zapheus\Contract\Http\Message\Request $request
+     * @param \Zapheus\Contract\Http\Server\Handler  $handler
      *
-     * @param \Zapheus\Http\Message\RequestInterface $request
-     * @param \Zapheus\Http\Server\HandlerInterface  $handler
-     *
-     * @return \Zapheus\Http\Message\ResponseInterface
+     * @return \Zapheus\Contract\Http\Message\Response
      */
-    public function process(RequestInterface $request, HandlerInterface $handler)
+    public function process(Request $request, Handler $handler)
     {
         $attribute = Application::ROUTE_ATTRIBUTE;
 
-        $path = (string) $request->uri()->path();
+        $path = $request->uri()->path();
 
-        $method = (string) $request->method();
+        $method = $request->method();
 
         $route = $this->dispatcher->dispatch($method, $path);
 
-        $factory = new RequestFactory($request);
+        $factory = (new RequestFactory)->setRequest($request);
 
         $factory->attribute($attribute, $route);
 

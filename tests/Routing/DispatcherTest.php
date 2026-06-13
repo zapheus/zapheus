@@ -8,8 +8,6 @@ use Zapheus\Fixture\Http\Controllers\LaudController;
 use Zapheus\Testcase;
 
 /**
- * Dispatcher Test
- *
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
@@ -17,120 +15,107 @@ use Zapheus\Testcase;
 class DispatcherTest extends Testcase
 {
     /**
-     * @var \Zapheus\Routing\DispatcherInterface
+     * @var \Zapheus\Contract\Routing\Dispatcher
      */
-    protected $dispatcher;
+    protected $self;
 
     /**
-     * Tests DispatcherInterface::dispatch.
-     *
      * @return void
      */
-    public function testDispatchMethod()
-    {
-        $expected = (string) 'Hello, world';
-
-        $route = $this->dispatcher->dispatch('GET', '/greeeeet');
-
-        $resolver = new Resolver(new ReflectionContainer);
-
-        $result = $resolver->resolve($route);
-
-        $this->assertEquals($expected, $result);
-    }
-
-    /**
-     * Tests DispatcherInterface::dispatch with closure as handler.
-     *
-     * @return void
-     */
-    public function testDispatchMethodWithClosureAsHandler()
-    {
-        $expected = 'Hello everyone! I am Royce';
-
-        $route = $this->dispatcher->dispatch('GET', 'test/Royce');
-
-        $resolver = new Resolver(new ReflectionContainer);
-
-        $result = $resolver->resolve($route);
-
-        $this->assertEquals($expected, $result);
-    }
-
-    /**
-     * Tests DispatcherInterface::dispatch with closure as handler with a default value.
-     *
-     * @return void
-     */
-    public function testDispatchMethodWithClosureAsHandlerWithDefaultValue()
-    {
-        $expected = 'Hello, my name is Royce and this is a test.';
-
-        $route = $this->dispatcher->dispatch('GET', 'helloo/Royce');
-
-        $resolver = new Resolver(new ReflectionContainer);
-
-        $result = $resolver->resolve($route);
-
-        $this->assertEquals($expected, $result);
-    }
-
-    /**
-     * Tests DispatcherInterface::dispatch with handler as an array.
-     *
-     * @return void
-     */
-    public function testDispatchMethodWithHandlerAsArray()
-    {
-        $expected = (string) 'Hello, world';
-
-        $route = $this->dispatcher->dispatch('GET', 'test/wow');
-
-        $resolver = new Resolver(new ReflectionContainer);
-
-        $result = $resolver->resolve($route);
-
-        $this->assertEquals($expected, $result);
-    }
-
-    /**
-     * Tests DispatcherInterface::dispatch with similar routes.
-     *
-     * @return void
-     */
-    public function testDispatchMethodWithSimilarRoutes()
-    {
-        $expected = (string) 'Hello everyone! I am Royce';
-
-        $route = $this->dispatcher->dispatch('GET', 'test/Royce');
-
-        $resolver = new Resolver(new ReflectionContainer);
-
-        $result = $resolver->resolve($route);
-
-        $this->assertEquals($expected, $result);
-    }
-
-    /**
-     * Tests DispatcherInterface::dispatch with \UnexpectedValueException.
-     *
-     * @return void
-     */
-    public function testDispatchMethodWithUnexpectedValueException()
+    public function test_failed_if_route_is_not_found()
     {
         $this->doExpectException('UnexpectedValueException');
 
-        $resolver = $this->dispatcher->dispatch('GET', '/404');
+        $resolver = $this->self->dispatch('GET', '/404');
     }
 
     /**
-     * Sets up the dispatcher instance.
-     *
+     * @return void
+     */
+    public function test_passed_if_dispatched_with_array_handler()
+    {
+        $expect = 'Hello, world';
+
+        $route = $this->self->dispatch('GET', 'test/wow');
+
+        $resolver = new Resolver(new ReflectionContainer);
+
+        $actual = $resolver->resolve($route);
+
+        $this->assertEquals($expect, $actual);
+    }
+
+    /**
+     * @return void
+     */
+    public function test_passed_if_dispatched_with_closure()
+    {
+        $expect = 'Hello everyone! I am Royce';
+
+        $route = $this->self->dispatch('GET', 'test/Royce');
+
+        $resolver = new Resolver(new ReflectionContainer);
+
+        $actual = $resolver->resolve($route);
+
+        $this->assertEquals($expect, $actual);
+    }
+
+    /**
+     * @return void
+     */
+    public function test_passed_if_dispatched_with_default_value()
+    {
+        $expect = 'Hello, my name is Royce and this is a test.';
+
+        $route = $this->self->dispatch('GET', 'helloo/Royce');
+
+        $resolver = new Resolver(new ReflectionContainer);
+
+        $actual = $resolver->resolve($route);
+
+        $this->assertEquals($expect, $actual);
+    }
+
+    /**
+     * @return void
+     */
+    public function test_passed_if_route_is_dispatched()
+    {
+        $expect = 'Hello, world';
+
+        $route = $this->self->dispatch('GET', '/greeeeet');
+
+        $resolver = new Resolver(new ReflectionContainer);
+
+        $actual = $resolver->resolve($route);
+
+        $this->assertEquals($expect, $actual);
+    }
+
+    /**
+     * @return void
+     */
+    public function test_passed_if_similar_routes_are_matched()
+    {
+        $expect = 'Hello everyone! I am Royce';
+
+        $route = $this->self->dispatch('GET', 'test/Royce');
+
+        $resolver = new Resolver(new ReflectionContainer);
+
+        $actual = $resolver->resolve($route);
+
+        $this->assertEquals($expect, $actual);
+    }
+
+    /**
      * @return void
      */
     protected function doSetUp()
     {
-        list($hail, $laud) = array(new HailController, null);
+        $hail = new HailController;
+        $laud = null;
 
         $laud = new LaudController($hail);
 
@@ -142,7 +127,7 @@ class DispatcherTest extends Testcase
 
         $router->get('/helloo/{name}', function ($name = 'Doe')
         {
-            $message = (string) sprintf('my name is %s', $name);
+            $message = sprintf('my name is %s', $name);
 
             return 'Hello, ' . $message . ' and this is a test.';
         });
@@ -152,6 +137,6 @@ class DispatcherTest extends Testcase
             return 'Hello everyone! I am ' . $name;
         });
 
-        $this->dispatcher = new Dispatcher($router);
+        $this->self = new Dispatcher($router);
     }
 }

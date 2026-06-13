@@ -5,8 +5,6 @@ namespace Zapheus\Http\Message;
 use Zapheus\Testcase;
 
 /**
- * Message Test
- *
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
@@ -16,97 +14,85 @@ class MessageTest extends Testcase
     /**
      * @var \Zapheus\Http\Message\MessageFactory
      */
-    protected $factory;
+    protected $self;
 
     /**
-     * Tests MessageInterface::header.
-     *
      * @return void
      */
-    public function testHeaderMethod()
+    public function test_passed_if_all_headers_retrieved()
     {
-        $expected = array('Rougin', 'Royce');
+        $expect = array('names' => array('Rougin', 'Royce'));
 
-        $this->factory->header('names', $expected);
+        $this->self->headers($expect);
 
-        $message = $this->factory->make();
+        $actual = $this->self->make()->headers();
 
-        $result = $message->header('names');
-
-        $this->assertEquals($expected, $result);
+        $this->assertEquals($expect, $actual);
     }
 
     /**
-     * Tests MessageInterface::headers.
-     *
      * @return void
      */
-    public function testHeadersMethod()
-    {
-        $expected = array('names' => array('Rougin', 'Royce'));
-
-        $this->factory->headers($expected);
-
-        $result = $this->factory->make()->headers();
-
-        $this->assertEquals($expected, $result);
-    }
-
-    /**
-     * Tests MessageInterface::stream.
-     *
-     * @return void
-     */
-    public function testStreamMethod()
-    {
-        $expected = 'Zapheus\Http\Message\Stream';
-
-        $result = $this->factory->make()->stream();
-
-        $this->assertInstanceOf($expected, $result);
-    }
-
-    /**
-     * Tests MessageInterface::stream with another stream instance.
-     *
-     * @return void
-     */
-    public function testStreamMethodWithAnotherStreamInstance()
+    public function test_passed_if_custom_stream_is_set()
     {
         $stream = new Stream(fopen('php://temp', 'r+'));
 
         $stream->write('Hello, world');
 
-        $this->factory->stream($stream);
+        $this->self->stream($stream);
 
-        $expected = $stream;
+        $expect = $stream;
 
-        $result = $this->factory->make()->stream();
+        $actual = $this->self->make()->stream();
 
-        $this->assertEquals($expected, $result);
+        $this->assertEquals($expect, $actual);
     }
 
     /**
-     * Tests MessageInterface::version.
-     *
      * @return void
      */
-    public function testVersionMethod()
+    public function test_passed_if_header_value_retrieved()
     {
-        $this->factory->version($expected = '2.0');
+        $expect = array('Rougin', 'Royce');
 
-        $result = $this->factory->make()->version();
+        $this->self->header('names', $expect);
 
-        $this->assertEquals($expected, $result);
+        $message = $this->self->make();
+
+        $actual = $message->header('names');
+
+        $this->assertEquals($expect, $actual);
     }
 
     /**
-     * Sets up the factory instance.
-     *
+     * @return void
+     */
+    public function test_passed_if_stream_instance_returned()
+    {
+        $expect = 'Zapheus\Http\Message\Stream';
+
+        $actual = $this->self->make()->stream();
+
+        $this->assertInstanceOf($expect, $actual);
+    }
+
+    /**
+     * @return void
+     */
+    public function test_passed_if_version_is_retrieved()
+    {
+        $this->self->version($expect = '2.0');
+
+        $actual = $this->self->make()->version();
+
+        $this->assertEquals($expect, $actual);
+    }
+
+    /**
      * @return void
      */
     protected function doSetUp()
     {
-        $this->factory = new MessageFactory;
+        $this->self = new MessageFactory;
     }
 }

@@ -5,8 +5,6 @@ namespace Zapheus\Routing;
 use Zapheus\Testcase;
 
 /**
- * Router Test
- *
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
@@ -14,56 +12,50 @@ use Zapheus\Testcase;
 class RouterTest extends Testcase
 {
     /**
-     * @var \Zapheus\Routing\RouterInterface
+     * @var \Zapheus\Contract\Routing\Router
      */
-    protected $router;
+    protected $self;
 
     /**
-     * Tests RouterInterface::add.
-     *
      * @return void
      */
-    public function testAddMethod()
+    public function test_passed_if_route_is_added()
     {
-        $this->router->get('/greet/:id', 'HailController@greet');
+        $this->self->get('/greet/:id', 'HailController@greet');
 
         $route = new Route('GET', 'greet/:id', 'HailController@greet');
 
-        $this->assertTrue($this->router->has($route));
+        $this->assertTrue($this->self->has($route));
     }
 
     /**
-     * Tests RouterInterface::routes.
-     *
      * @return void
      */
-    public function testRoutesMethod()
+    public function test_passed_if_routes_are_returned()
     {
-        $expected = 10;
+        $expect = 10;
 
-        $this->router->connect('/', 'HailController@greet');
-        $this->router->delete('/', 'HailController@greet');
-        $this->router->get('/', 'HailController@greet');
-        $this->router->head('/', 'HailController@greet');
-        $this->router->options('/', 'HailController@greet');
-        $this->router->patch('/', 'HailController@greet');
-        $this->router->post('/', 'HailController@greet');
-        $this->router->purge('/', 'HailController@greet');
-        $this->router->put('/', 'HailController@greet');
-        $this->router->trace('/', 'HailController@greet');
+        $this->self->connect('/', 'HailController@greet');
+        $this->self->delete('/', 'HailController@greet');
+        $this->self->get('/', 'HailController@greet');
+        $this->self->head('/', 'HailController@greet');
+        $this->self->options('/', 'HailController@greet');
+        $this->self->patch('/', 'HailController@greet');
+        $this->self->post('/', 'HailController@greet');
+        $this->self->purge('/', 'HailController@greet');
+        $this->self->put('/', 'HailController@greet');
+        $this->self->trace('/', 'HailController@greet');
 
-        $result = $this->router->routes();
+        $actual = $this->self->routes();
 
-        $this->assertCount($expected, $result);
+        $this->assertCount($expect, $actual);
     }
 
     /**
-     * Sets up the router instance.
-     *
      * @return void
      */
     protected function doSetUp()
     {
-        $this->router = new Router;
+        $this->self = new Router;
     }
 }

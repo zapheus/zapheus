@@ -5,8 +5,6 @@ namespace Zapheus\Provider;
 use Zapheus\Testcase;
 
 /**
- * Configuration Test
- *
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
@@ -14,139 +12,121 @@ use Zapheus\Testcase;
 class ConfigurationTest extends Testcase
 {
     /**
-     * @var \Zapheus\Provider\ConfigurationInterface
+     * @var \Zapheus\Contract\Provider\Configuration
      */
-    protected $config;
+    protected $self;
 
     /**
-     * Tests ConfigurationInterface::all.
-     *
      * @return void
      */
-    public function testAllMethod()
+    public function test_passed_if_all_config_is_dotified()
     {
-        $expected = array('user' => array('name' => 'Rougin'));
+        $expect = array('user.name' => 'Rougin');
 
-        $result = $this->config->all();
+        $actual = $this->self->all(true);
 
-        $this->assertEquals($expected, $result);
+        $this->assertEquals($expect, $actual);
     }
 
     /**
-     * Tests ConfigurationInterface::all with "dotify" enabled.
-     *
      * @return void
      */
-    public function testAllMethodWithDotifyEnabled()
+    public function test_passed_if_all_config_is_returned()
     {
-        $expected = array('user.name' => 'Rougin');
+        $expect = array('user' => array('name' => 'Rougin'));
 
-        $result = $this->config->all(true);
+        $actual = $this->self->all();
 
-        $this->assertEquals($expected, $result);
+        $this->assertEquals($expect, $actual);
     }
 
     /**
-     * Tests ConfigurationInterface::get.
-     *
      * @return void
      */
-    public function testGetMethod()
+    public function test_passed_if_config_key_is_returned()
     {
-        $expected = 'Rougin';
+        $expect = 'Rougin';
 
-        $result = $this->config->get('user.name');
+        $actual = $this->self->get('user.name');
 
-        $this->assertEquals($expected, $result);
+        $this->assertEquals($expect, $actual);
     }
 
     /**
-     * Tests ConfigurationInterface::get with an empty array.
-     *
      * @return void
      */
-    public function testGetMethodWithEmptyArray()
+    public function test_passed_if_config_loads_from_path()
     {
-        $expected = array();
-
-        $this->config->set('app.views', array());
-
-        $result = $this->config->get('app.views');
-
-        $this->assertEquals($expected, $result);
-    }
-
-    /**
-     * Tests ConfigurationInterface::get with an empty array and dotified.
-     *
-     * @return void
-     */
-    public function testGetMethodWithEmptyArrayAndDotified()
-    {
-        $expected = array('user.paths' => array());
-
-        $this->config->set('app.user.paths', array());
-
-        $result = $this->config->get('app', array(), true);
-
-        $this->assertEquals($expected, $result);
-    }
-
-    /**
-     * Tests ConfigurationInterface::load.
-     *
-     * @return void
-     */
-    public function testLoadMethod()
-    {
-        $expected = 'Zapheus Framework';
+        $expect = 'Zapheus Framework';
 
         $path = str_replace('Provider', 'Fixture', __DIR__) . '/Config';
 
-        $this->config->load($path);
+        $this->self->load($path);
 
-        $result = $this->config->get('app.app_name');
+        $actual = $this->self->get('app.app_name');
 
-        $this->assertEquals($expected, $result);
+        $this->assertEquals($expect, $actual);
     }
 
     /**
-     * Tests ConfigurationInterface::load with recursive access.
-     *
      * @return void
      */
-    public function testLoadMethodWithRecursiveAccess()
+    public function test_passed_if_config_loads_recursively()
     {
-        $expected = 'An independent and framework-friendly framework.';
+        $expect = 'An independent and framework-friendly framework.';
 
         $path = str_replace('Provider', 'Fixture', __DIR__) . '/Config';
 
-        $this->config->load($path);
+        $this->self->load($path);
 
-        $result = $this->config->get('test.settings.description');
+        $actual = $this->self->get('test.settings.description');
 
-        $this->assertEquals($expected, $result);
+        $this->assertEquals($expect, $actual);
     }
 
     /**
-     * Tests ConfigurationInterface::set.
-     *
      * @return void
      */
-    public function testSetMethod()
+    public function test_passed_if_config_value_is_set()
     {
-        $expected = 'Zapheus';
+        $expect = 'Zapheus';
 
-        $this->config->set('user.name', $expected);
+        $this->self->set('user.name', $expect);
 
-        $result = $this->config->get('user.name');
+        $actual = $this->self->get('user.name');
 
-        $this->assertEquals($expected, $result);
+        $this->assertEquals($expect, $actual);
     }
 
     /**
-     * Sets up the configuration instance.
-     *
+     * @return void
+     */
+    public function test_passed_if_default_dotified_returned()
+    {
+        $expect = array('user.paths' => array());
+
+        $this->self->set('app.user.paths', array());
+
+        $actual = $this->self->get('app', array(), true);
+
+        $this->assertEquals($expect, $actual);
+    }
+
+    /**
+     * @return void
+     */
+    public function test_passed_if_default_returned_for_unknown()
+    {
+        $expect = array();
+
+        $this->self->set('app.views', array());
+
+        $actual = $this->self->get('app.views');
+
+        $this->assertEquals($expect, $actual);
+    }
+
+    /**
      * @return void
      */
     protected function doSetUp()
@@ -155,6 +135,6 @@ class ConfigurationTest extends Testcase
 
         $data['user']['name'] = 'Rougin';
 
-        $this->config = new Configuration($data);
+        $this->self = new Configuration($data);
     }
 }

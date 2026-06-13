@@ -15,8 +15,6 @@ use Zapheus\Routing\Route;
 use Zapheus\Routing\Router;
 
 /**
- * Application Test
- *
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
@@ -24,11 +22,25 @@ use Zapheus\Routing\Router;
 class ApplicationTest extends AbstractTestCase
 {
     /**
-     * Tests Application::config with array data.
+     * @runInSeparateProcess
      *
      * @return void
      */
-    public function testConfigMethodWithArrayData()
+    public function test_passed_if_application_runs_normally()
+    {
+        $app = $this->request('GET', '/');
+
+        $expect = 'Hello, world';
+
+        $actual = (string) $app->run();
+
+        $this->assertEquals($expect, $actual);
+    }
+
+    /**
+     * @return void
+     */
+    public function test_passed_if_config_set_with_array()
     {
         $application = $this->application();
 
@@ -36,19 +48,17 @@ class ApplicationTest extends AbstractTestCase
 
         $config = $application->get(ServerProvider::CONFIG);
 
-        $expected = (string) 'Zapheus';
+        $expect = 'Zapheus';
 
-        $result = (string) $config->get('framework');
+        $actual = (string) $config->get('framework');
 
-        $this->assertEquals($expected, $result);
+        $this->assertEquals($expect, $actual);
     }
 
     /**
-     * Tests Application::config with string data.
-     *
      * @return void
      */
-    public function testConfigMethodWithStringData()
+    public function test_passed_if_config_set_with_file_path()
     {
         $application = $this->application();
 
@@ -56,11 +66,35 @@ class ApplicationTest extends AbstractTestCase
 
         $config = $application->get(ServerProvider::CONFIG);
 
-        $expected = 'Zapheus Framework';
+        $expect = 'Zapheus Framework';
 
-        $result = $config->get('test.settings.app_name');
+        $actual = $config->get('test.settings.app_name');
 
-        $this->assertEquals($expected, $result);
+        $this->assertEquals($expect, $actual);
+    }
+
+    /**
+     * @return void
+     */
+    public function test_passed_if_container_has_entry()
+    {
+        $interface = 'Zapheus\Contract\Http\Message\Response';
+
+        $this->assertTrue($this->self->has($interface));
+    }
+
+    /**
+     * @return void
+     */
+    public function test_passed_if_providers_are_returned()
+    {
+        $this->self->add($test = new TestProvider);
+
+        $expect = array(get_class($test));
+
+        $actual = $this->self->providers();
+
+        $this->assertEquals($expect, $actual);
     }
 
     /**
@@ -68,67 +102,37 @@ class ApplicationTest extends AbstractTestCase
      *
      * @return void
      */
-    public function testHandleMethodWithMiddleware()
+    public function test_passed_if_request_has_middleware()
     {
-        $this->app->add(new ServerProvider);
+        $this->self->add(new ServerProvider);
 
         $app = $this->request('GET', '/');
 
-        $expected = (string) 'Hello, world';
+        $expect = 'Hello, world';
 
-        $result = (string) $app->run();
+        $actual = (string) $app->run();
 
-        $this->assertEquals($expected, $result);
+        $this->assertEquals($expect, $actual);
     }
 
     /**
-     * Tests Application::handle with middleware inside a route.
-     *
      * @return void
      */
-    public function testHandleMethodWithMiddlewareInsideRoute()
+    public function test_passed_if_route_has_middleware()
     {
-        $interface = 'Zapheus\Http\Message\RequestInterface';
+        $interface = 'Zapheus\Contract\Http\Message\Request';
 
-        $this->app->add(new ServerProvider);
+        $this->self->add(new ServerProvider);
 
         $app = $this->request('POST', '/json');
 
         $request = $app->get($interface);
 
-        $expected = array('application/json');
+        $expect = array('application/json');
 
-        $result = $app->handle($request)->header('Content-Type');
+        $actual = $app->handle($request)->header('Content-Type');
 
-        $this->assertEquals($expected, $result);
-    }
-
-    /**
-     * Tests Application::has.
-     *
-     * @return void
-     */
-    public function testHasMethod()
-    {
-        $interface = 'Zapheus\Http\Message\ResponseInterface';
-
-        $this->assertTrue($this->app->has($interface));
-    }
-
-    /**
-     * Tests Application::providers.
-     *
-     * @return void
-     */
-    public function testProvidersMethod()
-    {
-        $this->app->add($test = new TestProvider);
-
-        $expected = array(get_class($test));
-
-        $result = $this->app->providers();
-
-        $this->assertEquals($expected, $result);
+        $this->assertEquals($expect, $actual);
     }
 
     /**
@@ -136,23 +140,7 @@ class ApplicationTest extends AbstractTestCase
      *
      * @return void
      */
-    public function testRunMethod()
-    {
-        $app = $this->request('GET', '/');
-
-        $expected = 'Hello, world';
-
-        $result = (string) $app->run();
-
-        $this->assertEquals($expected, $result);
-    }
-
-    /**
-     * @runInSeparateProcess
-     *
-     * @return void
-     */
-    public function testRunMethodWithResolver()
+    public function test_passed_if_run_with_resolver()
     {
         $app = $this->request('GET', '/');
 
@@ -160,11 +148,11 @@ class ApplicationTest extends AbstractTestCase
 
         $app->set(Application::RESOLVER, $resolver);
 
-        $expected = 'Hello, world';
+        $expect = 'Hello, world';
 
-        $result = (string) $app->run();
+        $actual = (string) $app->run();
 
-        $this->assertEquals($expected, $result);
+        $this->assertEquals($expect, $actual);
     }
 
     /**
@@ -172,7 +160,7 @@ class ApplicationTest extends AbstractTestCase
      *
      * @return void
      */
-    public function testRunMethodWithResponse()
+    public function test_passed_if_run_with_response()
     {
         $app = $this->request('GET', '/test');
 
@@ -180,27 +168,25 @@ class ApplicationTest extends AbstractTestCase
 
         $app->set(Application::RESOLVER, $resolver);
 
-        $expected = 'Hello, Zapheus';
+        $expect = 'Hello, Zapheus';
 
-        $result = (string) $app->run();
+        $actual = (string) $app->run();
 
-        $this->assertEquals($expected, $result);
+        $this->assertEquals($expect, $actual);
     }
 
     /**
-     * Sets up the application instance.
-     *
      * @return void
      */
     protected function doSetUp()
     {
         parent::doSetUp();
 
-        $this->app = $this->application();
+        $this->self = $this->application();
 
         $controller = $this->define(new HailController);
 
-        $handler = (string) $controller . '@greet';
+        $handler = $controller . '@greet';
 
         $route = new Route('GET', '/', $handler);
 
@@ -219,12 +205,12 @@ class ApplicationTest extends AbstractTestCase
 
         $dispatcher = new Dispatcher($router);
 
-        $this->app->set(Application::DISPATCHER, $dispatcher);
+        $this->self->set(Application::DISPATCHER, $dispatcher);
 
         $headers = array('X-Framework' => array('Zapheus'));
 
-        $response = new Response(200, (array) $headers);
+        $response = new Response(200, $headers);
 
-        $this->app->set(Application::RESPONSE, $response);
+        $this->self->set(Application::RESPONSE, $response);
     }
 }

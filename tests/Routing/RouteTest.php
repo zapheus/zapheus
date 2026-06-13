@@ -5,8 +5,6 @@ namespace Zapheus\Routing;
 use Zapheus\Testcase;
 
 /**
- * Route Test
- *
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
@@ -16,29 +14,25 @@ class RouteTest extends Testcase
     /**
      * @var \Zapheus\Routing\Route
      */
-    protected $route;
+    protected $self;
 
     /**
-     * Tests Route::uri.
-     *
      * @return void
      */
-    public function testUriMethod()
+    public function test_passed_if_route_uri_is_returned()
     {
-        $expected = (string) '/test';
+        $expect = '/test';
 
-        $result = $this->route->uri();
+        $actual = $this->self->uri();
 
-        $this->assertEquals($expected, $result);
+        $this->assertEquals($expect, $actual);
     }
 
     /**
-     * Sets up the route instance.
-     *
      * @return void
      */
     protected function doSetUp()
     {
-        $this->route = new Route('GET', '/test', 'HailController@greet');
+        $this->self = new Route('GET', '/test', 'HailController@greet');
     }
 }

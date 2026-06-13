@@ -8,8 +8,6 @@ use Zapheus\Provider\Configuration;
 use Zapheus\Testcase;
 
 /**
- * Message Provider Test
- *
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
@@ -17,43 +15,40 @@ use Zapheus\Testcase;
 class MessageProviderTest extends Testcase
 {
     /**
-     * @var \Zapheus\Container\WritableInterface
+     * @var \Zapheus\Contract\Container\Writable
      */
     protected $container;
 
     /**
-     * @var \Zapheus\Provider\ProviderInterface
+     * @var \Zapheus\Contract\Provider\Provider
      */
-    protected $provider;
+    protected $self;
 
     /**
-     * Tests ProviderInterface::register.
-     *
      * @return void
      */
-    public function testRegisterMethod()
+    public function test_passed_if_request_is_registered()
     {
-        $container = $this->provider->register($this->container);
+        $container = $this->self->register($this->container);
 
         $request = $container->get(Application::REQUEST);
 
-        $expected = 'roug.in';
+        $expect = 'roug.in';
 
         $server = $request->server();
 
-        $result = $server['SERVER_NAME'];
+        $actual = $server['SERVER_NAME'];
 
-        $this->assertEquals($expected, $result);
+        $this->assertEquals($expect, $actual);
     }
 
     /**
-     * Sets up the provider instance.
-     *
      * @return void
      */
     protected function doSetUp()
     {
-        list($config, $container) = array(new Configuration, new Container);
+        $config    = new Configuration;
+        $container = new Container;
 
         $server = array();
 
@@ -68,6 +63,6 @@ class MessageProviderTest extends Testcase
 
         $this->container = $container;
 
-        $this->provider = new MessageProvider;
+        $this->self = new MessageProvider;
     }
 }

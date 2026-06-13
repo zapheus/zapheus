@@ -6,8 +6,6 @@ use Zapheus\Fixture\Http\Controllers\HailController;
 use Zapheus\Testcase;
 
 /**
- * Container Test
- *
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
@@ -15,61 +13,53 @@ use Zapheus\Testcase;
 class ContainerTest extends Testcase
 {
     /**
-     * @var \Zapheus\Container\ContainerInterface
+     * @var \Zapheus\Contract\Container\Container
      */
-    protected $container;
+    protected $self;
 
     /**
-     * Tests ContainerInterface::get method.
-     *
      * @return void
      */
-    public function testGetMethod()
-    {
-        $hail = new HailController;
-
-        $name = get_class($hail);
-
-        $this->container->set('hail', $hail);
-
-        $instance = $this->container->get('hail');
-
-        $this->assertInstanceOf($name, $instance);
-    }
-
-    /**
-     * Tests ContainerInterface::get method with NotFoundException.
-     *
-     * @return void
-     */
-    public function testGetMethodWithNotFoundException()
+    public function test_failed_if_id_not_found_in_container()
     {
         $exception = 'Zapheus\Container\NotFoundException';
 
         $this->doExpectException($exception);
 
-        $this->container->get('hail');
+        $this->self->get('hail');
     }
 
     /**
-     * Tests ContainerInterface::set method.
-     *
      * @return void
      */
-    public function testSetMethod()
+    public function test_passed_if_container_returns_entry()
     {
-        $this->container->set('hail', new HailController);
+        $hail = new HailController;
 
-        $this->assertTrue($this->container->has('hail'));
+        $name = get_class($hail);
+
+        $this->self->set('hail', $hail);
+
+        $instance = $this->self->get('hail');
+
+        $this->assertInstanceOf($name, $instance);
     }
 
     /**
-     * Sets up the container instance.
-     *
+     * @return void
+     */
+    public function test_passed_if_container_sets_entry()
+    {
+        $this->self->set('hail', new HailController);
+
+        $this->assertTrue($this->self->has('hail'));
+    }
+
+    /**
      * @return void
      */
     protected function doSetUp()
     {
-        $this->container = new Container;
+        $this->self = new Container;
     }
 }

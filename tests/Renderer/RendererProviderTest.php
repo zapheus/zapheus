@@ -7,8 +7,6 @@ use Zapheus\Provider\Configuration;
 use Zapheus\Testcase;
 
 /**
- * Renderer Provider Test
- *
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
@@ -16,46 +14,43 @@ use Zapheus\Testcase;
 class RendererProviderTest extends Testcase
 {
     /**
-     * @var \Zapheus\Container\WritableInterface
+     * @var \Zapheus\Contract\Container\Writable
      */
     protected $container;
 
     /**
-     * @var \Zapheus\Provider\ProviderInterface
+     * @var \Zapheus\Contract\Provider\Provider
      */
-    protected $provider;
+    protected $self;
 
     /**
-     * Tests ProviderInterface::register.
-     *
      * @return void
      */
-    public function testRegisterMethod()
+    public function test_passed_if_renderer_is_registered()
     {
-        $container = $this->provider->register($this->container);
+        $container = $this->self->register($this->container);
 
         $renderer = $container->get(RendererProvider::RENDERER);
 
-        $expected = 'Lorem ipsum dolor sit amet';
+        $expect = 'Lorem ipsum dolor sit amet';
 
-        $result = $renderer->render('loremipsum');
+        $actual = $renderer->render('loremipsum');
 
-        $this->assertEquals($expected, $result);
+        $this->assertEquals($expect, $actual);
     }
 
     /**
-     * Sets up the provider instance.
-     *
      * @return void
      */
     protected function doSetUp()
     {
-        list($config, $container) = array(new Configuration, new Container);
+        $config    = new Configuration;
+        $container = new Container;
 
         $config->set('app.views', __DIR__ . '/../Fixture/Views');
 
         $this->container = $container->set(RendererProvider::CONFIG, $config);
 
-        $this->provider = new RendererProvider;
+        $this->self = new RendererProvider;
     }
 }

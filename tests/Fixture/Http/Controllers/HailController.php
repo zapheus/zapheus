@@ -3,8 +3,6 @@
 namespace Zapheus\Fixture\Http\Controllers;
 
 /**
- * Hail Controller
- *
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
@@ -12,8 +10,6 @@ namespace Zapheus\Fixture\Http\Controllers;
 class HailController
 {
     /**
-     * Returns the text "Hello, world".
-     *
      * @return string
      */
     public function greet()

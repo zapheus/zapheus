@@ -5,8 +5,6 @@ namespace Zapheus\Http\Message;
 use Zapheus\Testcase;
 
 /**
- * URI Test
- *
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
@@ -16,171 +14,149 @@ class UriTest extends Testcase
     /**
      * @var \Zapheus\Http\Message\UriFactory
      */
-    protected $factory;
+    protected $self;
 
     /**
-     * Tests UriInterface::authority.
-     *
      * @return void
      */
-    public function testAuthorityMethod()
+    public function test_passed_if_authority_is_retrieved()
     {
-        $expected = 'me@roug.in:400';
+        $expect = 'me@roug.in:400';
 
-        $result = $this->factory->make()->authority();
+        $actual = $this->self->make()->authority();
 
-        $this->assertEquals($expected, $result);
+        $this->assertEquals($expect, $actual);
     }
 
     /**
-     * Tests UriInterface::fragment.
-     *
      * @return void
      */
-    public function testFragmentMethod()
+    public function test_passed_if_fragment_is_retrieved()
     {
-        $this->factory->fragment($expected = 'test');
+        $this->self->fragment($expect = 'test');
 
-        $result = $this->factory->make()->fragment();
+        $actual = $this->self->make()->fragment();
 
-        $this->assertEquals($expected, $result);
+        $this->assertEquals($expect, $actual);
     }
 
     /**
-     * Tests UriInterface::host.
-     *
      * @return void
      */
-    public function testHostMethod()
+    public function test_passed_if_host_is_retrieved()
     {
-        $expected = 'google.com';
+        $expect = 'google.com';
 
-        $this->factory->host((string) $expected);
+        $this->self->host($expect);
 
-        $result = $this->factory->make()->host();
+        $actual = $this->self->make()->host();
 
-        $this->assertEquals($expected, $result);
+        $this->assertEquals($expect, $actual);
     }
 
     /**
-     * Tests UriInterface::path.
-     *
      * @return void
      */
-    public function testPathMethod()
+    public function test_passed_if_path_is_retrieved()
     {
-        $expected = '/test';
+        $expect = '/test';
 
-        $this->factory->path((string) $expected);
+        $this->self->path($expect);
 
-        $result = $this->factory->make()->path();
+        $actual = $this->self->make()->path();
 
-        $this->assertEquals($expected, $result);
+        $this->assertEquals($expect, $actual);
     }
 
     /**
-     * Tests UriInterface::port.
-     *
      * @return void
      */
-    public function testPortMethod()
+    public function test_passed_if_port_is_retrieved()
     {
-        $expected = 500;
+        $expect = 500;
 
-        $this->factory->port($expected = 500);
+        $this->self->port($expect = 500);
 
-        $result = $this->factory->make()->port();
+        $actual = $this->self->make()->port();
 
-        $this->assertEquals($expected, $result);
+        $this->assertEquals($expect, $actual);
     }
 
     /**
-     * Tests UriInterface::query.
-     *
      * @return void
      */
-    public function testQueryMethod()
+    public function test_passed_if_query_string_retrieved()
     {
-        $expected = 'type=user';
+        $expect = 'type=user';
 
-        $this->factory->query((string) $expected);
+        $this->self->query($expect);
 
-        $result = $this->factory->make()->query();
+        $actual = $this->self->make()->query();
 
-        $this->assertEquals($expected, $result);
+        $this->assertEquals($expect, $actual);
     }
 
     /**
-     * Tests UriInterface::scheme.
-     *
      * @return void
      */
-    public function testSchemeMethod()
+    public function test_passed_if_scheme_is_retrieved()
     {
-        $this->factory->scheme($expected = 'http');
+        $this->self->scheme($expect = 'http');
 
-        $result = $this->factory->make()->scheme();
+        $actual = $this->self->make()->scheme();
 
-        $this->assertEquals('http', $result);
+        $this->assertEquals('http', $actual);
     }
 
     /**
-     * Tests UriInterface::__toString.
-     *
      * @return void
      */
-    public function testToStringMagicMethod()
+    public function test_passed_if_to_string_returns_uri()
     {
-        $expected = 'https://me@roug.in:400/about';
+        $expect = 'https://me@roug.in:400/about';
 
-        $result = (string) $this->factory->make();
+        $actual = (string) $this->self->make();
 
-        $this->assertEquals($expected, $result);
+        $this->assertEquals($expect, $actual);
     }
 
     /**
-     * Tests UriInterface::user.
-     *
      * @return void
      */
-    public function testUserMethod()
+    public function test_passed_if_user_info_retrieved()
     {
-        $expected = 'username';
+        $expect = 'username';
 
-        $this->factory->user($expected);
+        $this->self->user($expect);
 
-        $result = $this->factory->make()->user();
+        $actual = $this->self->make()->user();
 
-        $this->assertEquals($expected, $result);
+        $this->assertEquals($expect, $actual);
     }
 
     /**
-     * Tests UriInterface::user with a password.
-     *
      * @return void
      */
-    public function testUserMethodWithPassword()
+    public function test_passed_if_user_info_with_password()
     {
-        $expected = 'username:password';
+        $expect = 'username:password';
 
-        $this->factory->user('username', 'password');
+        $this->self->user('username', 'password');
 
-        $result = $this->factory->make()->user();
+        $actual = $this->self->make()->user();
 
-        $this->assertEquals($expected, $result);
+        $this->assertEquals($expect, $actual);
     }
 
     /**
-     * Sets up the URI instance.
-     *
      * @return void
      */
     protected function doSetUp()
     {
-        $this->factory = new UriFactory; // to pass null
+        $this->self = new UriFactory; // to pass null
 
         $url = 'https://me@roug.in:400/about';
 
-        $this->factory = new UriFactory(new Uri($url));
+        $this->self = (new UriFactory)->setUri(new Uri($url));
     }
 }

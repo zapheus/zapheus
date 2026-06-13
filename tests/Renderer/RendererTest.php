@@ -5,8 +5,6 @@ namespace Zapheus\Renderer;
 use Zapheus\Testcase;
 
 /**
- * Renderer Test
- *
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
@@ -14,45 +12,39 @@ use Zapheus\Testcase;
 class RendererTest extends Testcase
 {
     /**
-     * @var \Zapheus\Renderer\RendererInterface
+     * @var \Zapheus\Contract\Renderer\Renderer
      */
-    protected $renderer;
+    protected $self;
 
     /**
-     * Tests RendererInterface::render.
-     *
      * @return void
      */
-    public function testRenderMethod()
-    {
-        $expected = 'Lorem ipsum dolor sit amet';
-
-        $result = $this->renderer->render('loremipsum');
-
-        $this->assertEquals($expected, $result);
-    }
-
-    /**
-     * Tests RendererInterface::render with \InvalidArgumentException.
-     *
-     * @return void
-     */
-    public function testRenderMethodWithInvalidArgumentException()
+    public function test_failed_if_template_file_not_found()
     {
         $this->doExpectException('InvalidArgumentException');
 
-        $this->renderer->render('InvalidFile');
+        $this->self->render('InvalidFile');
     }
 
     /**
-     * Sets up the renderer instance.
-     *
+     * @return void
+     */
+    public function test_passed_if_template_is_rendered()
+    {
+        $expect = 'Lorem ipsum dolor sit amet';
+
+        $actual = $this->self->render('loremipsum');
+
+        $this->assertEquals($expect, $actual);
+    }
+
+    /**
      * @return void
      */
     protected function doSetUp()
     {
         $path = __DIR__ . '/../Fixture/Views';
 
-        $this->renderer = new Renderer($path);
+        $this->self = new Renderer($path);
     }
 }

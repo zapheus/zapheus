@@ -7,8 +7,6 @@ use Zapheus\Http\Message\RequestFactory;
 use Zapheus\Testcase;
 
 /**
- * Abstract Test Case
- *
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
@@ -18,11 +16,9 @@ abstract class AbstractTestCase extends Testcase
     /**
      * @var \Zapheus\Application
      */
-    protected $app;
+    protected $self;
 
     /**
-     * Returns an application instance.
-     *
      * @return \Zapheus\Application
      */
     protected function application()
@@ -31,24 +27,20 @@ abstract class AbstractTestCase extends Testcase
     }
 
     /**
-     * Defines the instance to the application.
-     *
      * @param mixed $instance
      *
-     * @return string
+     * @return false|string
      */
     protected function define($instance)
     {
         $class = get_class($instance);
 
-        $this->app->set($class, $instance);
+        $this->self->set($class, $instance);
 
-        return (string) $class;
+        return $class;
     }
 
     /**
-     * Sets up the application instance.
-     *
      * @return void
      */
     protected function doSetUp()
@@ -63,8 +55,6 @@ abstract class AbstractTestCase extends Testcase
     }
 
     /**
-     * Creates a dummy request instance.
-     *
      * @param string $method
      * @param string $uri
      *
@@ -72,7 +62,7 @@ abstract class AbstractTestCase extends Testcase
      */
     protected function request($method, $uri)
     {
-        $interface = 'Zapheus\Http\Message\RequestInterface';
+        $interface = Application::REQUEST;
 
         $_SERVER['REQUEST_METHOD'] = $method;
 
@@ -88,8 +78,8 @@ abstract class AbstractTestCase extends Testcase
 
         $request = $factory->make();
 
-        $this->app->set($interface, $request);
+        $this->self->set($interface, $request);
 
-        return $this->app;
+        return $this->self;
     }
 }

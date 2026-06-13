@@ -5,7 +5,7 @@ namespace Zapheus\Routing;
 use Zapheus\Container\ReflectionContainer;
 use Zapheus\Contract\Container\Container;
 use Zapheus\Contract\Routing\Resolver as Contract;
-use Zapheus\Contract\Routing\Route;
+use Zapheus\Contract\Routing\Route as RouteContract;
 
 /**
  * @package Zapheus
@@ -43,7 +43,7 @@ class Resolver implements Contract
      *
      * @return mixed
      */
-    public function resolve(Route $route)
+    public function resolve(RouteContract $route)
     {
         if (is_string($handler = $route->handler()))
         {

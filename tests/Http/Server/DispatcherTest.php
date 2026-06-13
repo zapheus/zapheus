@@ -2,7 +2,7 @@
 
 namespace Zapheus\Http\Server;
 
-use Zapheus\Fixture\Http\Middlewares\LastMiddleware;
+use Zapheus\Fixture\Http\Middlewares\LastMiddleware as FixtureLastMiddleware;
 use Zapheus\Fixture\Http\Middlewares\JsonMiddleware;
 use Zapheus\Http\Factory\Request;
 use Zapheus\Http\Factory\Response;
@@ -70,7 +70,7 @@ class DispatcherTest extends Testcase
             return $response;
         });
 
-        $this->self->pipe(new LastMiddleware);
+        $this->self->pipe(new FixtureLastMiddleware);
 
         $expect = 'Hello world';
 
@@ -86,7 +86,7 @@ class DispatcherTest extends Testcase
      */
     public function test_passed_if_middleware_dispatches()
     {
-        $this->self->pipe(new LastMiddleware);
+        $this->self->pipe(new FixtureLastMiddleware);
 
         $expect = array('application/json');
 

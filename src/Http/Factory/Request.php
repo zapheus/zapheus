@@ -3,7 +3,7 @@
 namespace Zapheus\Http\Factory;
 
 use Zapheus\Http\Message\Request as Base;
-use Zapheus\Http\Message\Uri;
+use Zapheus\Http\Message\Uri as MessageUri;
 
 /**
  * @package Zapheus
@@ -268,7 +268,7 @@ class Request extends Message
 
         $port = $server['SERVER_PORT'] . $this->target;
 
-        $this->uri = new Uri($link . ':' . $port);
+        $this->uri = new MessageUri($link . ':' . $port);
 
         return $this;
     }
@@ -294,7 +294,7 @@ class Request extends Message
      *
      * @return self
      */
-    public function uri(Uri $uri)
+    public function uri(MessageUri $uri)
     {
         $this->uri = $uri;
 

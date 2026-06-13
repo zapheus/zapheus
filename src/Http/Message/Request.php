@@ -3,8 +3,8 @@
 namespace Zapheus\Http\Message;
 
 use Zapheus\Contract\Http\Message\Request as Contract;
-use Zapheus\Contract\Http\Message\Stream;
-use Zapheus\Contract\Http\Message\Uri;
+use Zapheus\Contract\Http\Message\Stream as StreamContract;
+use Zapheus\Contract\Http\Message\Uri as UriContract;
 
 /**
  * @package Zapheus
@@ -100,7 +100,7 @@ class Request extends Message implements Contract
      *
      * @return self
      */
-    public function setUri(Uri $uri)
+    public function setUri(UriContract $uri)
     {
         $this->uri = $uri;
 
@@ -114,7 +114,7 @@ class Request extends Message implements Contract
      *
      * @return self
      */
-    public function setStream(Stream $stream)
+    public function setStream(StreamContract $stream)
     {
         $this->stream = $stream;
 

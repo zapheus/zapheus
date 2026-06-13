@@ -6,30 +6,29 @@ Below are the significant changes when upgrading from specified versions due to 
 
 ### Removal of `Coordinator` and `Middlelayer`
 
-The `Coordinator` and `Middlelayer` classes have been removed. Use `Application` with `RoutingProvider` or `ServerProvider` instead:
+The `Coordinator` and `Middlelayer` classes have been removed. Use `Application` instead with `RoutingProvider` or `ServerProvider`:
 
 ``` diff
--namespace Zapheus;
-+namespace Acme\App;
++use Zapheus\Routing\Router;
++use Zapheus\Routing\RoutingProvider;
 
 -$app = new Coordinator;
 +$app = new Application;
 
++$router = new Router;
++
 -$app->get('/', function ()
--{
--    return 'Hello world!';
--});
-+$router = new Zapheus\Routing\Router;
-+
 +$router->get('/', function ()
-+{
-+    return 'Hello world!';
-+});
+ {
+     return 'Hello world!';
+ });
 +
-+$app->add(new Zapheus\Routing\RoutingProvider($router));
++$app->add(new RoutingProvider($router));
 ```
 
 ``` diff
++use Zapheus\Http\ServerProvider;
+
 -$app = new Middlelayer;
 +$app = new Application;
 
@@ -38,12 +37,20 @@ The `Coordinator` and `Middlelayer` classes have been removed. Use `Application`
 -    // router middleware logic
 -    return $next->handle($request);
 -});
-+$app->add(new Zapheus\Http\ServerProvider($middlewares));
++$app->add(new ServerProvider($middlewares));
 ```
 
 ### Moved interfaces to `Contract`
 
 All interfaces have been moved to the `Zapheus\Contract\*` namespace and the `Interface` suffix has been dropped:
+
+``` diff
+-use Zapheus\Routing\RouteInterface;
++use Zapheus\Contract\Routing\Route;
+
+-class MyRoute implements RouteInterface
++class MyRoute implements Route
+```
 
 | v0.1.0 | v0.2.0 |
 |---|---|
@@ -66,17 +73,9 @@ All interfaces have been moved to the `Zapheus\Contract\*` namespace and the `In
 | `Zapheus\Http\Message\UriInterface` | `Zapheus\Contract\Http\Message\Uri` |
 | `Zapheus\Http\Message\FileInterface` | `Zapheus\Contract\Http\Message\File` |
 
-``` diff
--use Zapheus\Routing\RouteInterface;
-+use Zapheus\Contract\Routing\Route;
+### PSR-07/PSR-15 method renames
 
--class MyRoute implements RouteInterface
-+class MyRoute implements Route
-```
-
-### PSR-7/PSR-15 method renames
-
-Contract interfaces have been updated to follow PSR-7 (HTTP Message) and PSR-15 (HTTP Server) method naming conventions. All getter methods now use the `get` prefix.
+Contract interfaces have been updated to follow [PSR-07 (HTTP Message)](https://www.php-fig.org/psr/psr-7/) and [PSR-15 (HTTP Server)](https://www.php-fig.org/psr/psr-15/) method naming conventions. All getter methods now use the `get` prefix.
 
 #### `Message` methods
 
@@ -152,8 +151,6 @@ To ensure compatibility with PHP 5.3 and avoid [deprecation warnings](https://ph
 
 ``` diff
 -public function __construct(Writable $container = null)
-+public function __construct()
-
 +/**
 + * Sets the container instance.
 + *
@@ -213,7 +210,9 @@ To ensure compatibility with PHP 5.3 and avoid [deprecation warnings](https://ph
 Use the existing `container()` setter:
 
 ``` php
-$dispatcher = (new Zapheus\Http\Server\Dispatcher($stack))
+use Zapheus\Http\Server\Dispatcher;
+
+$dispatcher = (new Dispatcher($stack))
     ->container($container);
 ```
 
@@ -221,8 +220,6 @@ $dispatcher = (new Zapheus\Http\Server\Dispatcher($stack))
 
 ``` diff
 -public function __construct(Router $router = null)
-+public function __construct()
-
 +/**
 + * Sets the router instance.
 + *
@@ -237,8 +234,6 @@ $dispatcher = (new Zapheus\Http\Server\Dispatcher($stack))
 
 ``` diff
 -public function __construct($message = null)
-+public function __construct()
-
 +/**
 + * Sets the error message.
 + *
@@ -248,3 +243,205 @@ $dispatcher = (new Zapheus\Http\Server\Dispatcher($stack))
 + */
 +public function setMessage($message)
 ```
+
+#### Factories with `with*` methods
+
+Factory classes now use `with*` methods (PSR-07 convention) instead of short fluent setters. All factories support chaining via `set` method to load existing instances, followed by the `with` method to mutate state then use `make` method to build:
+
+``` diff
++use Zapheus\Http\Factory\Request as RequestFactory;
++use Zapheus\Http\Factory\Response as ResponseFactory;
++use Zapheus\Http\Factory\Uri as UriFactory;
++use Zapheus\Routing\RouteFactory;
+
+-$factory = new RouteFactory($route);
++$factory = new RouteFactory;
++$factory->setRoute($route);
+
+-$factory = new RequestFactory($request);
++$factory = new RequestFactory;
++$factory->setRequest($request);
+
+-$factory = new ResponseFactory($response);
++$factory = new ResponseFactory;
++$factory->setResponse($response);
+
+-$factory = new UriFactory($uri);
++$factory = new UriFactory;
++$factory->setUri($uri);
+```
+
+Building from scratch with `with` method chaining:
+
+``` diff
++use Zapheus\Http\Factory\Request as RequestFactory;
+
+-$factory = new Zapheus\Http\Factory\Request;
+-$factory->server($_SERVER);
+-$factory->method('POST');
+-$factory->target('/api');
+-$factory->data(array('name' => 'Zapheus'));
+-$request = $factory->make();
+
++$factory = new RequestFactory;
++$request = $factory
++    ->withServerParams($_SERVER)
++    ->withMethod('POST')
++    ->withRequestTarget('/api')
++    ->withParsedBody(array('name' => 'Zapheus'))
++    ->make();
+```
+
+``` diff
++use Zapheus\Http\Factory\Response as ResponseFactory;
++use Zapheus\Http\Message\Stream;
+
+-$factory = new Zapheus\Http\Factory\Response;
+-$factory->code(404);
+-$factory->write('Not Found');
+-$response = $factory->make();
+
++$factory = new ResponseFactory;
++$stream = new Stream(fopen('php://temp', 'r+'));
++$stream->write('Not Found');
++$response = $factory
++    ->withStatus(404)
++    ->withBody($stream)
++    ->make();
+```
+
+### Removal of `Ropebridge` and `Mutator`
+
+The `Ropebridge` and `Mutator` / `MutatorInterface` classes have been removed. Use `Application::set()` and `Http\Factory\*` instead:
+
+``` diff
++use Zapheus\Application;
++use Zapheus\Contract\Routing\Router as RouterContract;
+
+-$bridge = new Zapheus\Ropebridge;
+-$bridge->set('router', $router);
+-
+-$app = new Zapheus\Application;
+-$app->rope($bridge);
+
++$app = new Application;
++
++$app->set(Application::ROUTER, $router);
+```
+
+``` diff
++use Zapheus\Http\Factory\Message as MessageFactory;
+
+ $message = new Zapheus\Http\Message\Message;
+-$mutator = new Mutator;
+-
+-$mutator->set('headers', array());
+-$mutator->set('version', '1.1');
+-$mutated = $mutator->with('stream', $stream);
+
++$factory = new MessageFactory;
++$message = $factory
++    ->withHeader('Content-Type', 'application/json')
++    ->withProtocolVersion('1.1')
++    ->withBody($stream)
++    ->make();
+```
+
+### Route and Dispatcher constructor changes
+
+#### `Zapheus\Routing\Route`
+
+The static `Route::result()` method has been removed. Use `Dispatcher::dispatch()` directly:
+
+``` diff
+-$result = $dispatcher->dispatch('GET', '/test/Zapheus');
+-$route = Zapheus\Routing\Route::result($result, array('name' => 'Zapheus'));
++$route = $dispatcher->dispatch('GET', '/test/Zapheus');
+```
+
+Use `RouteFactory` for building routes:
+
+``` diff
++use Zapheus\Routing\RouteFactory;
+
+-$route = new Route('GET', '/test/{name}', $handler, $middlewares, array('name' => 'Zapheus'));
++$factory = new RouteFactory;
++$route = $factory
++    ->method('GET')
++    ->uri('/test/{name}')
++    ->handler($handler)
++    ->middlewares($middlewares)
++    ->make();
+```
+
+#### `Zapheus\Routing\Router`
+
+The second constructor parameter (`$base_namespace`) has been removed:
+
+``` diff
++use Zapheus\Routing\Router;
+
+-$router = new Zapheus\Routing\Router(array(), 'Acme\\Controllers');
++$router = new Router;
++$router->get('/', 'Acme\\Controllers\\HomeController@index');
+```
+
+#### `Zapheus\Routing\Dispatcher`
+
+The constructor now accepts a `Router` instance instead of an array of `Route` objects:
+
+``` diff
++use Zapheus\Routing\Router;
++use Zapheus\Routing\Dispatcher;
+
+-$routes = array(new Route('GET', '/', $handler));
+-$dispatcher = new Zapheus\Routing\Dispatcher($routes);
++$router = new Router;
++$router->get('/', $handler);
++$dispatcher = new Dispatcher($router);
+```
+
+### Application API changes
+
+`Application` now implements `Handler` and `Writable`. The `run()` method returns a `Stream` instead of a string, and `getContainer()` is now public.
+
+``` diff
++use Zapheus\Contract\Http\Message\Response;
+
+ public function emit(Response $response)
+ {
+-    $code = $response->code() . ' ' . $response->reason();
+-    $version = $response->version();
++    $code = $response->getStatusCode() . ' ' . $response->getReasonPhrase();
++    $version = $response->getProtocolVersion();
+
+     header(sprintf('HTTP/%s %s', $version, $code));
+ }
+```
+
+``` diff
+-// getContainer() was protected
++// getContainer() is now public
++$container = $app->getContainer();
+```
+
+``` diff
++// run() returns Stream, cast to string with __toString()
+ echo $app->run();
++echo $app->run()->__toString();
+```
+
+### Resolver changes
+
+`Resolver::resolve()` now reads parameters from `$route->parameters()` directly. The second `$parameters` argument has been removed:
+
+``` diff
++use Zapheus\Routing\Resolver;
+
+ $resolver = new Resolver($container);
+
+-$result = $resolver->resolve($route, array('name' => 'Zapheus'));
++$result = $resolver->resolve($route);
+```
+
+The `Resolver` now uses `Zapheus\Container\Parameter` internally for cross-version reflection compatibility across PHP 5.3–8.x.

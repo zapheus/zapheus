@@ -3,7 +3,7 @@
 namespace Zapheus\Routing;
 
 use Zapheus\Contract\Routing\Dispatcher as Contract;
-use Zapheus\Contract\Routing\Router;
+use Zapheus\Contract\Routing\Router as RouterContract;
 
 /**
  * @package Zapheus
@@ -22,7 +22,7 @@ class Dispatcher implements Contract
      *
      * @param \Zapheus\Contract\Routing\Router $router
      */
-    public function __construct(Router $router)
+    public function __construct(RouterContract $router)
     {
         $this->router = $router;
     }

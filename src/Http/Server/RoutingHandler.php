@@ -43,16 +43,18 @@ class RoutingHandler implements Handler
 
         $handler = new ResolverHandler($this->container, $route);
 
-        if (count($route->middlewares()) > 0)
+        if (count($route->middlewares()) === 0)
         {
-            $middlewares = $route->middlewares();
-
-            $dispatcher = (new Dispatcher($middlewares))->container($this->container);
-
-            return $dispatcher->process($request, $handler);
+            return $handler->handle($request);
         }
 
-        return $handler->handle($request);
+        $items = $route->middlewares();
+
+        $dispatch = new Dispatcher($items);
+
+        $dispatch = $dispatch->container($this->container);
+
+        return $dispatch->process($request, $handler);
     }
 
     /**
@@ -64,17 +66,24 @@ class RoutingHandler implements Handler
      */
     protected function dispatch(Request $request)
     {
-        $route = $request->attribute(Application::ROUTE_ATTRIBUTE);
+        $attr = Application::ROUTE_ATTRIBUTE;
+
+        $route = $request->attribute($attr);
 
         if ($route instanceof Route)
         {
             return $route;
         }
 
-        $dispatcher = $this->container->get(Application::DISPATCHER);
+        $class = Application::DISPATCHER;
 
-        $path = $request->uri()->path();
+        /** @var \Zapheus\Contract\Routing\Dispatcher */
+        $dispatch = $this->container->get($class);
 
-        return $dispatcher->dispatch($request->method(), $path);
+        $uri = $request->uri()->path();
+
+        $method = $request->method();
+
+        return $dispatch->dispatch($method, $uri);
     }
 }

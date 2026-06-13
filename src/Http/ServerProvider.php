@@ -4,7 +4,6 @@ namespace Zapheus\Http;
 
 use Zapheus\Application;
 use Zapheus\Contract\Container\Writable;
-use Zapheus\Contract\Http\Server\Middleware;
 use Zapheus\Contract\Provider\Provider;
 use Zapheus\Http\Server\Dispatcher;
 
@@ -47,8 +46,10 @@ class ServerProvider implements Provider
 
         $middlewares = $config->get('app.middlewares', $items);
 
-        $dispatcher = (new Dispatcher($middlewares))->container($container);
+        $dispatch = new Dispatcher($middlewares);
 
-        return $container->set($interface, $dispatcher);
+        $dispatch = $dispatch->container($container);
+
+        return $container->set($interface, $dispatch);
     }
 }

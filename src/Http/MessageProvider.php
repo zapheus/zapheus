@@ -25,31 +25,48 @@ class MessageProvider implements Provider
      *
      * @param \Zapheus\Contract\Container\Writable $container
      *
-     * @return \Zapheus\Contract\Container\Container
+     * @return \Zapheus\Contract\Container\Writable
      */
     public function register(Writable $container)
     {
         $factory = new RequestFactory;
 
-        $file     = new FileFactory;
+        $file = new FileFactory;
+
         $response = new Response;
 
+        /** @var \Zapheus\Contract\Provider\Configuration */
         $config = $container->get(Application::CONFIG);
 
+        /** @var array<string, array<string, string[]>> */
         $files = $config->get('app.http.uploaded', $_FILES);
-
-        $factory->cookies($config->get('app.http.cookies', $_COOKIE));
-
-        $factory->data($config->get('app.http.post', $_POST));
 
         $factory->files($file->normalize($files));
 
-        $factory->queries($config->get('app.http.get', $_GET));
+        /** @var array<string, string> */
+        $cookies = $config->get('app.http.cookies', $_COOKIE);
 
-        $factory->server($config->get('app.http.server', $_SERVER));
+        $factory->cookies($cookies);
+
+        /** @var array<string, mixed>|object|null */
+        $parsed = $config->get('app.http.post', $_POST);
+
+        $factory->data($parsed);
+
+        /** @var array<string, string> */
+        $params = $config->get('app.http.get', $_GET);
+
+        $factory->queries($params);
+
+        /** @var array<string, string> */
+        $server = $config->get('app.http.server', $_SERVER);
+
+        $factory->server($server);
 
         $container->set(self::REQUEST, $factory->make());
 
-        return $container->set(Application::RESPONSE, $response);
+        $class = Application::RESPONSE;
+
+        return $container->set($class, $response);
     }
 }

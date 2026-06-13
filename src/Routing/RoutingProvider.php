@@ -42,7 +42,7 @@ class RoutingProvider implements Provider
      *
      * @param \Zapheus\Contract\Container\Writable $container
      *
-     * @return \Zapheus\Contract\Container\Container
+     * @return \Zapheus\Contract\Container\Writable
      */
     public function register(Writable $container)
     {

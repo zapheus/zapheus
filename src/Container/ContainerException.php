@@ -7,6 +7,6 @@ namespace Zapheus\Container;
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class NotFoundException extends ContainerException
+class ContainerException extends \InvalidArgumentException
 {
 }

@@ -12,7 +12,7 @@ use Zapheus\Testcase;
 class RouterTest extends Testcase
 {
     /**
-     * @var \Zapheus\Contract\Routing\Router
+     * @var \Zapheus\Routing\Router
      */
     protected $self;
 

@@ -25,7 +25,7 @@ class RoutingProviderTest extends Testcase
     protected $router;
 
     /**
-     * @var \Zapheus\Contract\Provider\Provider
+     * @var \Zapheus\Routing\RoutingProvider
      */
     protected $self;
 
@@ -40,6 +40,7 @@ class RoutingProviderTest extends Testcase
 
         $container = $this->self->register($this->container);
 
+        /** @var \Zapheus\Contract\Routing\Dispatcher */
         $dispatcher = $container->get($dispatcher);
 
         $actual = $dispatcher->dispatch('GET', '/');
@@ -62,6 +63,7 @@ class RoutingProviderTest extends Testcase
 
         $container = $provider->register($this->container);
 
+        /** @var \Zapheus\Contract\Routing\Dispatcher */
         $dispatcher = $container->get($dispatcher);
 
         $actual = $dispatcher->dispatch('GET', '/');

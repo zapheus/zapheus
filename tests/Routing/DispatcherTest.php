@@ -4,7 +4,6 @@ namespace Zapheus\Routing;
 
 use Zapheus\Container\ReflectionContainer;
 use Zapheus\Fixture\Http\Controllers\HailController;
-use Zapheus\Fixture\Http\Controllers\LaudController;
 use Zapheus\Testcase;
 
 /**
@@ -26,7 +25,7 @@ class DispatcherTest extends Testcase
     {
         $this->doExpectException('UnexpectedValueException');
 
-        $resolver = $this->self->dispatch('GET', '/404');
+        $this->self->dispatch('GET', '/404');
     }
 
     /**
@@ -115,27 +114,43 @@ class DispatcherTest extends Testcase
     protected function doSetUp()
     {
         $hail = new HailController;
-        $laud = null;
-
-        $laud = new LaudController($hail);
 
         $router = new Router;
 
-        $router->get('/greeeeet', get_class($hail) . '@greet');
+        // Add route as a string ------------
+        $route = get_class($hail) . '@greet';
 
-        $router->get('/test/wow', array(get_class($hail), 'greet'));
+        $router->get('/greeeeet', $route);
+        // ----------------------------------
 
-        $router->get('/helloo/{name}', function ($name = 'Doe')
+        // Add route as a callable ------------
+        /** @var callable */
+        $cb = array(get_class($hail), 'greet');
+
+        $router->get('/test/wow', $cb);
+        // ------------------------------------
+
+        // Add route as an anonymous function ------
+        $fn = function ($name = 'Doe')
         {
-            $message = sprintf('my name is %s', $name);
+            $name = sprintf('my name is %s', $name);
 
-            return 'Hello, ' . $message . ' and this is a test.';
-        });
+            $text = 'Hello, $1 and this is a test.';
 
-        $router->get('/test/{name}', function ($name)
+            return str_replace('$1', $name, $text);
+        };
+
+        $router->get('/helloo/{name}', $fn);
+        // -----------------------------------------
+
+        // Add route as a simple callable ---------
+        $fn = function ($name)
         {
             return 'Hello everyone! I am ' . $name;
-        });
+        };
+
+        $router->get('/test/{name}', $fn);
+        // ----------------------------------------
 
         $this->self = new Dispatcher($router);
     }

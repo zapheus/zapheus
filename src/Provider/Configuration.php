@@ -87,7 +87,7 @@ class Configuration implements Contract
         $data  = array();
         $items = array($path);
 
-        if (substr((string) $path, -4) !== '.php')
+        if (substr($path, -4) !== '.php')
         {
             $directory = new \RecursiveDirectoryIterator($path);
 
@@ -104,7 +104,7 @@ class Configuration implements Contract
 
             $data = require $item;
 
-            $this->set((string) $name, $data);
+            $this->set($name, $data);
         }
     }
 

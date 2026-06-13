@@ -19,7 +19,7 @@ class ServerProviderTest extends Testcase
     /**
      * @var \Zapheus\Contract\Container\Writable
      */
-    protected $container;
+    protected $app;
 
     /**
      * @var \Zapheus\Contract\Provider\Provider
@@ -31,19 +31,21 @@ class ServerProviderTest extends Testcase
      */
     public function test_passed_if_middleware_is_registered()
     {
-        $message = new MessageProvider;
+        $self = new MessageProvider;
 
-        $container = $message->register($this->container);
+        $app = $self->register($this->app);
 
-        $container = $this->self->register($container);
+        $app = $this->self->register($app);
 
-        $dispatcher = $container->get(Application::MIDDLEWARE);
+        /** @var \Zapheus\Contract\Http\Server\Dispatcher */
+        $dispatch = $app->get(Application::MIDDLEWARE);
 
-        $request = $container->get(Application::REQUEST);
+        /** @var \Zapheus\Contract\Http\Message\Request */
+        $request = $app->get(Application::REQUEST);
 
         $expect = array('application/json');
 
-        $response = $dispatcher->dispatch($request);
+        $response = $dispatch->dispatch($request);
 
         $actual = $response->header('Content-Type');
 
@@ -55,12 +57,13 @@ class ServerProviderTest extends Testcase
      */
     protected function doSetUp()
     {
-        $config    = new Configuration;
-        $container = new Container;
+        $config = new Configuration;
 
-        $middlewares = array(new JsonMiddleware, new LastMiddleware);
+        $app = new Container;
 
-        $config->set('app.middlewares', $middlewares);
+        $items = array(new JsonMiddleware, new LastMiddleware);
+
+        $config->set('app.middlewares', $items);
 
         $server = array('SERVER_PORT' => 8000);
 
@@ -72,9 +75,9 @@ class ServerProviderTest extends Testcase
 
         $config->set('app.http.server', $server);
 
-        $container->set(ServerProvider::CONFIG, $config);
+        $app->set(ServerProvider::CONFIG, $config);
 
-        $this->container = $container;
+        $this->app = $app;
 
         $this->self = new ServerProvider;
     }

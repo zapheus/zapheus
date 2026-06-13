@@ -41,18 +41,25 @@ class DispatcherTest extends Testcase
      */
     public function test_passed_if_closure_middleware_dispatches()
     {
-        $this->self->pipe(function ($request, $next)
+        $cb = function ($request, $next)
         {
             $response = $next($request);
 
-            $stream = new Stream(fopen('php://temp', 'r+'));
+            /** @var resource */
+            $file = fopen('php://temp', 'r+');
+
+            $stream = new Stream($file);
 
             $stream->write($response->stream() . ' world');
 
-            $factory = (new ResponseFactory)->setResponse($response);
+            $maker = new ResponseFactory;
 
-            return $factory->stream($stream)->make();
-        });
+            $maker->setResponse($response);
+
+            return $maker->stream($stream)->make();
+        };
+
+        $this->self->pipe($cb);
 
         $this->self->pipe(function ($request, $next)
         {
@@ -69,7 +76,7 @@ class DispatcherTest extends Testcase
 
         $response = $this->self->dispatch($this->request);
 
-        $actual = (string) $response->stream();
+        $actual = $response->stream();
 
         $this->assertEquals($expect, $actual);
     }
@@ -95,7 +102,9 @@ class DispatcherTest extends Testcase
      */
     public function test_passed_if_string_middleware_dispatches()
     {
-        $this->self->pipe('Zapheus\Fixture\Http\Middlewares\LastMiddleware');
+        $last = 'Zapheus\Fixture\Http\Middlewares\LastMiddleware';
+
+        $this->self->pipe($last);
 
         $expect = array('application/json');
 
@@ -111,7 +120,8 @@ class DispatcherTest extends Testcase
      */
     protected function doSetUp()
     {
-        $items  = array();
+        $items = array();
+
         $server = array();
 
         $items[] = new JsonMiddleware;

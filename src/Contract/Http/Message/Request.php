@@ -51,7 +51,7 @@ interface Request extends Message
     /**
      * Returns normalized file upload data.
      *
-     * @return \Zapheus\Contract\Http\Message\UploadedFileInterface[]
+     * @return \Zapheus\Contract\Http\Message\File[]
      */
     public function files();
 

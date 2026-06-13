@@ -185,7 +185,10 @@ class RequestTest extends Testcase
 
         $expect = array('file' => array($factory->make()));
 
-        $files = $factory->normalize($_FILES);
+        /** @var array<string, mixed> */
+        $items = $_FILES;
+
+        $files = $factory->normalize($items);
 
         $this->self->files($files);
 
@@ -213,15 +216,18 @@ class RequestTest extends Testcase
      */
     protected function doSetUp()
     {
-        $_SERVER['REQUEST_METHOD'] = 'GET';
+        /** @var array<string, mixed> */
+        $server = $_SERVER;
 
-        $_SERVER['REQUEST_URI'] = '/';
+        $server['REQUEST_METHOD'] = 'GET';
 
-        $_SERVER['SERVER_NAME'] = 'roug.in';
+        $server['REQUEST_URI'] = '/';
 
-        $_SERVER['SERVER_PORT'] = 8000;
+        $server['SERVER_NAME'] = 'roug.in';
 
-        $_SERVER['HTTPS'] = 'off';
+        $server['SERVER_PORT'] = 8000;
+
+        $server['HTTPS'] = 'off';
 
         $_FILES['file']['error'] = 0;
 

@@ -16,10 +16,10 @@ class RendererProviderTest extends Testcase
     /**
      * @var \Zapheus\Contract\Container\Writable
      */
-    protected $container;
+    protected $app;
 
     /**
-     * @var \Zapheus\Contract\Provider\Provider
+     * @var \Zapheus\Renderer\RendererProvider
      */
     protected $self;
 
@@ -28,13 +28,16 @@ class RendererProviderTest extends Testcase
      */
     public function test_passed_if_renderer_is_registered()
     {
-        $container = $this->self->register($this->container);
+        $app = $this->self->register($this->app);
 
-        $renderer = $container->get(RendererProvider::RENDERER);
+        $contract = RendererProvider::RENDERER;
+
+        /** @var \Zapheus\Contract\Renderer\Renderer */
+        $self = $app->get($contract);
 
         $expect = 'Lorem ipsum dolor sit amet';
 
-        $actual = $renderer->render('loremipsum');
+        $actual = $self->render('loremipsum');
 
         $this->assertEquals($expect, $actual);
     }
@@ -44,12 +47,17 @@ class RendererProviderTest extends Testcase
      */
     protected function doSetUp()
     {
-        $config    = new Configuration;
-        $container = new Container;
+        $config = new Configuration;
 
-        $config->set('app.views', __DIR__ . '/../Fixture/Views');
+        $app = new Container;
 
-        $this->container = $container->set(RendererProvider::CONFIG, $config);
+        $path = __DIR__ . '/../Fixture/Views';
+
+        $config->set('app.views', $path);
+
+        $class = RendererProvider::CONFIG;
+
+        $this->app = $app->set($class, $config);
 
         $this->self = new RendererProvider;
     }

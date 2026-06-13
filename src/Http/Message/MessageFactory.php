@@ -157,7 +157,7 @@ class MessageFactory
 
         $stream = new Stream($resource);
 
-        $stream->write((string) $output);
+        $stream->write($output);
 
         $this->stream = $stream;
 

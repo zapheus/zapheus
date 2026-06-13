@@ -32,7 +32,7 @@ class ApplicationTest extends AbstractTestCase
 
         $expect = 'Hello, world';
 
-        $actual = (string) $app->run();
+        $actual = $app->run();
 
         $this->assertEquals($expect, $actual);
     }
@@ -50,7 +50,7 @@ class ApplicationTest extends AbstractTestCase
 
         $expect = 'Zapheus';
 
-        $actual = (string) $config->get('framework');
+        $actual = $config->get('framework');
 
         $this->assertEquals($expect, $actual);
     }
@@ -110,7 +110,7 @@ class ApplicationTest extends AbstractTestCase
 
         $expect = 'Hello, world';
 
-        $actual = (string) $app->run();
+        $actual = $app->run();
 
         $this->assertEquals($expect, $actual);
     }
@@ -150,7 +150,7 @@ class ApplicationTest extends AbstractTestCase
 
         $expect = 'Hello, world';
 
-        $actual = (string) $app->run();
+        $actual = $app->run();
 
         $this->assertEquals($expect, $actual);
     }
@@ -170,7 +170,7 @@ class ApplicationTest extends AbstractTestCase
 
         $expect = 'Hello, Zapheus';
 
-        $actual = (string) $app->run();
+        $actual = $app->run();
 
         $this->assertEquals($expect, $actual);
     }

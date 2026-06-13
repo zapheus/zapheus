@@ -67,7 +67,7 @@ class Uri implements Contract
 
         foreach ($parts as $key => $value)
         {
-            $this->$key = (string) $value;
+            $this->$key = $value;
         }
 
         $this->uri = $uri;

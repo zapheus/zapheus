@@ -36,7 +36,10 @@ class ResolverTest extends Testcase
 
         $factory->method('GET');
 
-        $factory->handler(array($instance, 'greet'));
+        /** @var callable */
+        $cb = array($instance, 'greet');
+
+        $factory->handler($cb);
 
         $factory->middlewares(array(new LastMiddleware));
 

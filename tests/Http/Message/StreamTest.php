@@ -12,12 +12,7 @@ use Zapheus\Testcase;
 class StreamTest extends Testcase
 {
     /**
-     * @var false|resource
-     */
-    protected $resource;
-
-    /**
-     * @var \Zapheus\Contract\Http\Message\Stream
+     * @var \Zapheus\Http\Message\Stream
      */
     protected $self;
 
@@ -42,7 +37,7 @@ class StreamTest extends Testcase
     {
         $expect = 'Lorem ipsum dolor sit amet';
 
-        $actual = (string) $this->self;
+        $actual = $this->self->__toString();
 
         $this->self->close();
 
@@ -54,14 +49,17 @@ class StreamTest extends Testcase
      */
     protected function doSetUp()
     {
-        $search = 'Http' . DIRECTORY_SEPARATOR . 'Message';
+        $slash = DIRECTORY_SEPARATOR;
+
+        $search = 'Http' . $slash . 'Message';
 
         $root = str_replace($search, 'Fixture', __DIR__);
 
         $file = $root . '/Views/LoremIpsum.php';
 
-        $this->resource = $resource = fopen($file, 'r');
+        /** @var resource */
+        $resource = fopen($file, 'r');
 
-        $this->self = new Stream($this->resource);
+        $this->self = new Stream($resource);
     }
 }

@@ -35,50 +35,14 @@ class Application implements Handler, Writable
     const ROUTER = 'Zapheus\Contract\Routing\Router';
 
     /**
-     * @var \Zapheus\Contract\Container\Container
+     * @var \Zapheus\Contract\Container\Writable
      */
-    protected $container;
+    protected $self;
 
     /**
      * @var string[]
      */
     protected $providers = array();
-
-    /**
-     * Sets the container instance.
-     *
-     * @param \Zapheus\Contract\Container\Writable $container
-     *
-     * @return self
-     */
-    public function setContainer(Writable $container)
-    {
-        $this->container = $container;
-
-        return $this;
-    }
-
-    /**
-     * Returns the container instance, creating a default one if not set.
-     *
-     * @return \Zapheus\Contract\Container\Writable
-     */
-    protected function container()
-    {
-        if ($this->container === null)
-        {
-            $container = new Container;
-
-            if (! $container->has(Provider::CONFIG))
-            {
-                $container->set(Provider::CONFIG, new Configuration);
-            }
-
-            $this->container = $container;
-        }
-
-        return $this->container;
-    }
 
     /**
      * Adds a new provider to be registered.
@@ -89,9 +53,9 @@ class Application implements Handler, Writable
      */
     public function add(Provider $provider)
     {
-        $container = $this->container();
+        $self = $this->getContainer();
 
-        $this->container = $provider->register($container);
+        $this->self = $provider->register($self);
 
         $this->providers[] = get_class($provider);
 
@@ -116,9 +80,9 @@ class Application implements Handler, Writable
             $config->load($data);
         }
 
-        $interface = Provider::CONFIG;
+        $class = Provider::CONFIG;
 
-        return $this->set($interface, $config);
+        return $this->set($class, $config);
     }
 
     /**
@@ -156,7 +120,33 @@ class Application implements Handler, Writable
      */
     public function get($id)
     {
-        return $this->container()->get($id);
+        return $this->getContainer()->get($id);
+    }
+
+    /**
+     * Returns the container instance, creating a default one if not set.
+     *
+     * @return \Zapheus\Contract\Container\Writable
+     */
+    public function getContainer()
+    {
+        if ($this->self !== null)
+        {
+            return $this->self;
+        }
+
+        $container = new Container;
+
+        if (! $container->has(Provider::CONFIG))
+        {
+            $config = new Configuration;
+
+            $container->set(Provider::CONFIG, $config);
+        }
+
+        $this->self = $container;
+
+        return $this->self;
     }
 
     /**
@@ -168,16 +158,17 @@ class Application implements Handler, Writable
      */
     public function handle(Request $request)
     {
-        $handler = new RoutingHandler($this->container());
+        $handler = new RoutingHandler($this->getContainer());
 
         if (! $this->has(Application::MIDDLEWARE))
         {
             return $handler->handle($request);
         }
 
-        $dispatcher = $this->get(Application::MIDDLEWARE);
+        /** @var \Zapheus\Contract\Http\Server\Dispatcher */
+        $dispatch = $this->get(Application::MIDDLEWARE);
 
-        return $dispatcher->process($request, $handler);
+        return $dispatch->process($request, $handler);
     }
 
     /**
@@ -189,7 +180,7 @@ class Application implements Handler, Writable
      */
     public function has($id)
     {
-        return $this->container()->has($id);
+        return $this->getContainer()->has($id);
     }
 
     /**
@@ -209,7 +200,10 @@ class Application implements Handler, Writable
      */
     public function run()
     {
-        $request = $this->container()->get(self::REQUEST);
+        $app = $this->getContainer();
+
+        /** @var \Zapheus\Contract\Http\Message\Request */
+        $request = $app->get(self::REQUEST);
 
         $response = $this->handle($request);
 
@@ -227,7 +221,21 @@ class Application implements Handler, Writable
      */
     public function set($id, $concrete)
     {
-        $this->container()->set($id, $concrete);
+        $this->getContainer()->set($id, $concrete);
+
+        return $this;
+    }
+
+    /**
+     * Sets the container instance.
+     *
+     * @param \Zapheus\Contract\Container\Writable $container
+     *
+     * @return self
+     */
+    public function setContainer(Writable $container)
+    {
+        $this->self = $container;
 
         return $this;
     }

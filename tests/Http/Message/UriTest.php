@@ -115,7 +115,7 @@ class UriTest extends Testcase
     {
         $expect = 'https://me@roug.in:400/about';
 
-        $actual = (string) $this->self->make();
+        $actual = $this->self->make();
 
         $this->assertEquals($expect, $actual);
     }
@@ -157,6 +157,6 @@ class UriTest extends Testcase
 
         $url = 'https://me@roug.in:400/about';
 
-        $this->self = (new UriFactory)->setUri(new Uri($url));
+        $this->self->setUri(new Uri($url));
     }
 }

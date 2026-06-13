@@ -35,7 +35,7 @@ class Stream implements Contract
     {
         $this->rewind();
 
-        return $this->contents();
+        return $this->getContents();
     }
 
     /**
@@ -53,7 +53,7 @@ class Stream implements Contract
      *
      * @return string
      */
-    public function contents()
+    public function getContents()
     {
         return stream_get_contents($this->stream);
     }

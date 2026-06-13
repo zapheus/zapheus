@@ -10,6 +10,13 @@ namespace Zapheus\Contract\Http\Message;
 interface Stream
 {
     /**
+     * Reads all data from the stream into a string.
+     *
+     * @return string
+     */
+    public function __toString();
+
+    /**
      * Closes the stream and any underlying resources.
      *
      * @return void
@@ -21,7 +28,7 @@ interface Stream
      *
      * @return string
      */
-    public function contents();
+    public function getContents();
 
     /**
      * Reads data from the stream.

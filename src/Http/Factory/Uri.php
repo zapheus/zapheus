@@ -50,11 +50,6 @@ class Uri
     /**
      * @var string
      */
-    protected $uri = '';
-
-    /**
-     * @var string
-     */
     protected $user = '';
 
     /**
@@ -66,47 +61,19 @@ class Uri
      */
     public function setUri(Contract $uri)
     {
-        $this->fragment = $uri->fragment();
+        $this->fragment = $uri->getFragment();
 
-        $this->host = $uri->host();
+        $this->host = $uri->getHost();
 
-        $this->path = $uri->path();
+        $this->path = $uri->getPath();
 
-        $this->port = $uri->port();
+        $this->port = $uri->getPort();
 
-        $this->query = $uri->query();
+        $this->query = $uri->getQuery();
 
-        $this->scheme = $uri->scheme();
+        $this->scheme = $uri->getScheme();
 
-        $this->user = $uri->user();
-
-        return $this;
-    }
-
-    /**
-     * Sets the fragment component.
-     *
-     * @param string $fragment
-     *
-     * @return self
-     */
-    public function fragment($fragment)
-    {
-        $this->fragment = $fragment;
-
-        return $this;
-    }
-
-    /**
-     * Sets the host component.
-     *
-     * @param string $host
-     *
-     * @return self
-     */
-    public function host($host)
-    {
-        $this->host = $host;
+        $this->user = $uri->getUserInfo();
 
         return $this;
     }
@@ -152,13 +119,41 @@ class Uri
     }
 
     /**
-     * Sets the path component.
+     * Return an instance with the specified fragment.
+     *
+     * @param string $fragment
+     *
+     * @return self
+     */
+    public function withFragment($fragment)
+    {
+        $this->fragment = $fragment;
+
+        return $this;
+    }
+
+    /**
+     * Return an instance with the specified host.
+     *
+     * @param string $host
+     *
+     * @return self
+     */
+    public function withHost($host)
+    {
+        $this->host = $host;
+
+        return $this;
+    }
+
+    /**
+     * Return an instance with the specified path.
      *
      * @param string $path
      *
      * @return self
      */
-    public function path($path)
+    public function withPath($path)
     {
         $this->path = $path;
 
@@ -166,13 +161,13 @@ class Uri
     }
 
     /**
-     * Sets the port component.
+     * Return an instance with the specified port.
      *
      * @param integer $port
      *
      * @return self
      */
-    public function port($port)
+    public function withPort($port)
     {
         $this->port = $port;
 
@@ -180,13 +175,13 @@ class Uri
     }
 
     /**
-     * Sets the query component.
+     * Return an instance with the specified query string.
      *
      * @param string $query
      *
      * @return self
      */
-    public function query($query)
+    public function withQuery($query)
     {
         $this->query = $query;
 
@@ -194,13 +189,13 @@ class Uri
     }
 
     /**
-     * Sets the scheme component.
+     * Return an instance with the specified scheme.
      *
      * @param string $scheme
      *
      * @return self
      */
-    public function scheme($scheme)
+    public function withScheme($scheme)
     {
         $this->scheme = $scheme;
 
@@ -208,21 +203,18 @@ class Uri
     }
 
     /**
-     * Sets the user component.
+     * Return an instance with the specified user information.
      *
      * @param string      $user
-     * @param string|null $pass
+     * @param string|null $password
      *
      * @return self
      */
-    public function user($user, $pass = null)
+    public function withUserInfo($user, $password = null)
     {
-        if ($pass)
-        {
-            $this->pass = $pass;
-        }
-
         $this->user = $user;
+
+        $this->pass = $password;
 
         return $this;
     }

@@ -74,6 +74,76 @@ All interfaces have been moved to the `Zapheus\Contract\*` namespace and the `In
 +class MyRoute implements Route
 ```
 
+### PSR-7/PSR-15 method renames
+
+Contract interfaces have been updated to follow PSR-7 (HTTP Message) and PSR-15 (HTTP Server) method naming conventions. All getter methods now use the `get` prefix.
+
+#### `Message` methods
+
+| v0.1.0 | v0.2.0 |
+|---|---|
+| `$message->version()` | `$message->getProtocolVersion()` |
+| `$message->headers()` | `$message->getHeaders()` |
+| `$message->header($name)` | `$message->getHeader($name)` |
+| — | `$message->hasHeader($name)` |
+| — | `$message->getHeaderLine($name)` |
+| `$message->stream()` | `$message->getBody()` |
+
+#### `Request` methods
+
+| v0.1.0 | v0.2.0 |
+|---|---|
+| `$request->method()` | `$request->getMethod()` |
+| `$request->target()` | `$request->getRequestTarget()` |
+| `$request->uri()` | `$request->getUri()` |
+| `$request->server()` | `$request->getServerParams()` |
+| `$request->cookies()` | `$request->getCookieParams()` |
+| `$request->queries()` | `$request->getQueryParams()` |
+| `$request->files()` | `$request->getUploadedFiles()` |
+| `$request->data()` | `$request->getParsedBody()` |
+| `$request->attributes()` | `$request->getAttributes()` |
+| `$request->attribute($name)` | `$request->getAttribute($name, $default = null)` |
+| `$request->cookie($name)` | REMOVED (use `getCookieParams()`) |
+| `$request->query($name)` | REMOVED (use `getQueryParams()`) |
+| `$request->server($name)` | REMOVED (use `getServerParams()` + array access) |
+
+#### `Response` methods
+
+| v0.1.0 | v0.2.0 |
+|---|---|
+| `$response->code()` | `$response->getStatusCode()` |
+| `$response->reason()` | `$response->getReasonPhrase()` |
+
+#### `Uri` methods
+
+| v0.1.0 | v0.2.0 |
+|---|---|
+| `$uri->scheme()` | `$uri->getScheme()` |
+| `$uri->authority()` | `$uri->getAuthority()` |
+| `$uri->user()` | `$uri->getUserInfo()` |
+| `$uri->host()` | `$uri->getHost()` |
+| `$uri->port()` | `$uri->getPort()` |
+| `$uri->path()` | `$uri->getPath()` |
+| `$uri->query()` | `$uri->getQuery()` |
+| `$uri->fragment()` | `$uri->getFragment()` |
+
+#### `Stream` methods
+
+| v0.1.0 | v0.2.0 |
+|---|---|
+| `$stream->contents()` | `$stream->getContents()` |
+
+#### `File` methods
+
+| v0.1.0 | v0.2.0 |
+|---|---|
+| `$file->error()` | `$file->getError()` |
+| `$file->move($target)` | `$file->moveTo($targetPath)` |
+| `$file->name()` | `$file->getClientFilename()` |
+| `$file->size()` | `$file->getSize()` |
+| `$file->stream()` | `$file->getStream()` |
+| `$file->type()` | `$file->getClientMediaType()` |
+
 ### Removal of Implicitly Nullable Type Hints
 
 To ensure compatibility with PHP 5.3 and avoid [deprecation warnings](https://php.watch/versions/8.4/implicitly-marking-parameter-type-nullable-deprecated) in PHP 8.4, all implicitly nullable type hints (`TypeHint $param = null`) have been removed. Constructor parameters are now provided via setter methods.
@@ -161,26 +231,6 @@ $dispatcher = (new Zapheus\Http\Server\Dispatcher($stack))
 + * @return self
 + */
 +public function setRouter(Router $router)
-```
-
-#### Factories
-
-``` diff
--$factory = new RouteFactory($route);
-+$factory = new Zapheus\Routing\RouteFactory;
-+$factory->setRoute($route);
-
--$factory = new RequestFactory($request);
-+$factory = new Zapheus\Http\Factory\Request;
-+$factory->setRequest($request);
-
--$factory = new ResponseFactory($response);
-+$factory = new Zapheus\Http\Factory\Response;
-+$factory->setResponse($response);
-
--$factory = new UriFactory($uri);
-+$factory = new Zapheus\Http\Factory\Uri;
-+$factory->setUri($uri);
 ```
 
 #### `Zapheus\Http\Server\ErrorHandler`

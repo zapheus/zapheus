@@ -10,49 +10,49 @@ namespace Zapheus\Contract\Http\Message;
 interface File
 {
     /**
-     * Returns the error associated with the uploaded file.
+     * Retrieve a stream representing the uploaded file.
      *
-     * @return integer
+     * @return \Zapheus\Contract\Http\Message\Stream
+     * @throws \RuntimeException
      */
-    public function error();
+    public function getStream();
 
     /**
      * Move the uploaded file to a new location.
      *
-     * @param string $target
+     * @param string $targetPath
      *
      * @return void
      * @throws \InvalidArgumentException
      * @throws \RuntimeException
      */
-    public function move($target);
+    public function moveTo($targetPath);
 
     /**
-     * Returns the filename sent by the client.
-     *
-     * @return string|null
-     */
-    public function name();
-
-    /**
-     * Returns the file size.
+     * Retrieve the file size.
      *
      * @return integer|null
      */
-    public function size();
+    public function getSize();
 
     /**
-     * Returns a stream representing the uploaded file.
+     * Retrieve the error associated with the uploaded file.
      *
-     * @return \Zapheus\Contract\Http\Message\Stream
-     * @throws \RuntimeException
+     * @return integer
      */
-    public function stream();
+    public function getError();
 
     /**
-     * Returns the media type sent by the client.
+     * Retrieve the filename sent by the client.
      *
      * @return string|null
      */
-    public function type();
+    public function getClientFilename();
+
+    /**
+     * Retrieve the media type sent by the client.
+     *
+     * @return string|null
+     */
+    public function getClientMediaType();
 }

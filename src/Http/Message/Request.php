@@ -29,7 +29,7 @@ class Request extends Message implements Contract
     protected $data = array();
 
     /**
-     * @var array<string, \Zapheus\Contract\Http\Message\File>
+     * @var array<string, \Zapheus\Contract\Http\Message\File[]>
      */
     protected $files = array();
 
@@ -66,7 +66,7 @@ class Request extends Message implements Contract
      * @param array<string, string>                              $server
      * @param array<string, string>                              $cookies
      * @param array<string, mixed>|object|null                   $data
-     * @param array<string, \Zapheus\Contract\Http\Message\File> $files
+     * @param array<string, \Zapheus\Contract\Http\Message\File[]> $files
      * @param array<string, mixed>                               $queries
      * @param array<string, mixed>                               $attributes
      * @param array<string, string[]>                            $headers
@@ -122,182 +122,109 @@ class Request extends Message implements Contract
     }
 
     /**
-     * Returns an instance with the specified derived request attribute.
+     * Retrieve a single derived request attribute.
      *
      * @param string $name
+     * @param mixed  $default
      *
      * @return mixed
      */
-    public function attribute($name)
+    public function getAttribute($name, $default = null)
     {
         if (! isset($this->attributes[$name]))
         {
-            return null;
+            return $default;
         }
 
         return $this->attributes[$name];
     }
 
     /**
-     * Returns an array of attributes derived from the request.
+     * Retrieve attributes derived from the request.
      *
      * @return array<string, mixed>
      */
-    public function attributes()
+    public function getAttributes()
     {
         return $this->attributes;
-
-        // getAttributes
-        // withAttribute
-        // withoutAttribute
     }
 
     /**
-     * Returns the specified cookie from request.
-     *
-     * @param string $name
-     *
-     * @return array<string, string>|string|null
-     */
-    public function cookie($name)
-    {
-        if (! isset($this->cookies[$name]))
-        {
-            return null;
-        }
-
-        return $this->cookies[$name];
-    }
-
-    /**
-     * Returns the cookies from the request.
+     * Retrieve cookies.
      *
      * @return array<string, string>
      */
-    public function cookies()
+    public function getCookieParams()
     {
         return $this->cookies;
-
-        // getCookieParams
-        // withCookieParams
     }
 
     /**
-     * Returns any parameters provided in the request body.
+     * Retrieves the HTTP method of the request.
+     *
+     * @return string
+     */
+    public function getMethod()
+    {
+        return $this->method;
+    }
+
+    /**
+     * Retrieve any parameters provided in the request body.
      *
      * @return array<string, mixed>|object|null
      */
-    public function data()
+    public function getParsedBody()
     {
         return $this->data;
-
-        // getParsedBody
-        // withParsedBody
     }
 
     /**
-     * Returns normalized file upload data.
-     *
-     * @return array<string, \Zapheus\Contract\Http\Message\File>
-     */
-    public function files()
-    {
-        return $this->files;
-
-        // getUploadedFiles
-        // withUploadedFiles
-    }
-
-    /**
-     * Returns the HTTP method of the request.
-     *
-     * @return string
-     */
-    public function method()
-    {
-        return $this->method;
-
-        // getMethod
-        // withMethod
-    }
-
-    /**
-     * Returns the query string arguments.
+     * Retrieve query string arguments.
      *
      * @return array<string, mixed>
      */
-    public function queries()
+    public function getQueryParams()
     {
         return $this->queries;
-
-        // getQueryParams
-        // withQueryParams
     }
 
     /**
-     * Returns the specified query string argument.
-     *
-     * @param string $name
-     *
-     * @return mixed
-     */
-    public function query($name)
-    {
-        if (! isset($this->queries[$name]))
-        {
-            return null;
-        }
-
-        return $this->queries[$name];
-    }
-
-    /**
-     * Returns the server parameter/s.
-     *
-     * @param string|null $name
-     *
-     * @return array<string, string>|string|null
-     */
-    public function server($name = null)
-    {
-        $value = null;
-
-        if ($name === null)
-        {
-            $value = $this->server;
-        }
-
-        $server = $this->server;
-
-        if (isset($server[$name]))
-        {
-            $value = $server[$name];
-        }
-
-        return $value;
-
-        // getServerParams
-    }
-
-    /**
-     * Returns the message's request target.
+     * Retrieves the message's request target.
      *
      * @return string
      */
-    public function target()
+    public function getRequestTarget()
     {
         return $this->target;
-
-        // getRequestTarget
-        // withRequestTarget
     }
 
     /**
-     * Returns the URI instance.
+     * Retrieve server parameters.
+     *
+     * @return array<string, string>
+     */
+    public function getServerParams()
+    {
+        return $this->server;
+    }
+
+    /**
+     * Retrieve normalized file upload data.
+     *
+     * @return array<string, \Zapheus\Contract\Http\Message\File[]>
+     */
+    public function getUploadedFiles()
+    {
+        return $this->files;
+    }
+
+    /**
+     * Retrieves the URI instance.
      *
      * @return \Zapheus\Contract\Http\Message\Uri
      */
-    public function uri()
+    public function getUri()
     {
         if ($this->uri === null)
         {
@@ -322,12 +249,9 @@ class Request extends Message implements Contract
                 $port = $this->server['SERVER_PORT'];
             }
 
-            $this->uri = new \Zapheus\Http\Message\Uri($scheme . '://' . $host . ':' . $port . $this->target);
+            $this->uri = new Uri($scheme . '://' . $host . ':' . $port . $this->target);
         }
 
         return $this->uri;
-
-        // getUri
-        // withUri
     }
 }

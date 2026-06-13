@@ -22,6 +22,11 @@ class File implements Contract
     protected $file;
 
     /**
+     * @var boolean
+     */
+    protected $moved = false;
+
+    /**
      * @var string
      */
     protected $name;
@@ -57,16 +62,6 @@ class File implements Contract
     }
 
     /**
-     * Returns the error associated with the uploaded file.
-     *
-     * @return integer
-     */
-    public function error()
-    {
-        return $this->error;
-    }
-
-    /**
      * Returns the filepath of the uploaded file.
      *
      * @return string
@@ -77,61 +72,101 @@ class File implements Contract
     }
 
     /**
-     * Move the uploaded file to a new location.
-     *
-     * @param string $target
-     *
-     * @return void
-     * @throws \InvalidArgumentException
-     * @throws \RuntimeException
-     */
-    public function move($target)
-    {
-        rename($this->file, $target);
-    }
-
-    /**
-     * Returns the filename sent by the client.
+     * Retrieve the filename sent by the client.
      *
      * @return string|null
      */
-    public function name()
+    public function getClientFilename()
     {
         return $this->name;
     }
 
     /**
-     * Returns the file size.
+     * Retrieve the media type sent by the client.
+     *
+     * @return string|null
+     */
+    public function getClientMediaType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * Retrieve the error associated with the uploaded file.
+     *
+     * @return integer
+     */
+    public function getError()
+    {
+        return $this->error;
+    }
+
+    /**
+     * Retrieve the file size.
      *
      * @return integer|null
      */
-    public function size()
+    public function getSize()
     {
         return $this->size;
     }
 
     /**
-     * Returns a stream representing the uploaded file.
+     * Retrieve a stream representing the uploaded file.
      *
      * @return \Zapheus\Contract\Http\Message\Stream
      * @throws \RuntimeException
      */
-    public function stream()
+    public function getStream()
     {
-        $stream = fopen($this->file, 'r');
+        if ($this->moved)
+        {
+            $text = 'Cannot retrieve stream after the file has been moved.';
 
-        $stream || $stream = null;
+            throw new \RuntimeException($text);
+        }
+
+        $stream = fopen($this->file, 'r+');
+
+        $stream = $stream === false ? null : $stream;
 
         return new Stream($stream);
     }
 
     /**
-     * Returns the media type sent by the client.
+     * Move the uploaded file to a new location.
      *
-     * @return string|null
+     * @param string $targetPath
+     *
+     * @return void
+     * @throws \InvalidArgumentException
+     * @throws \RuntimeException
      */
-    public function type()
+    public function moveTo($targetPath)
     {
-        return $this->type;
+        if (empty($targetPath))
+        {
+            $text = 'Target path must be a non-empty string.';
+
+            throw new \InvalidArgumentException($text);
+        }
+
+        if ($this->moved)
+        {
+            $text = 'Cannot move the file; it has already been moved.';
+
+            throw new \RuntimeException($text);
+        }
+
+        if ($this->error !== UPLOAD_ERR_OK)
+        {
+            $text = 'Cannot move the file; upload error code ' . $this->error . '.';
+
+            throw new \RuntimeException($text);
+        }
+
+        $this->moved = true;
+
+        rename($this->file, $targetPath);
     }
 }

@@ -27,34 +27,6 @@ class File
     protected $name = '';
 
     /**
-     * Sets the error associated with the uploaded file.
-     *
-     * @param integer $error
-     *
-     * @return self
-     */
-    public function error($error)
-    {
-        $this->error = $error;
-
-        return $this;
-    }
-
-    /**
-     * Sets the filename of the uploaded file.
-     *
-     * @param string $file
-     *
-     * @return self
-     */
-    public function file($file)
-    {
-        $this->file = $file;
-
-        return $this;
-    }
-
-    /**
      * Creates the uploaded file instance.
      *
      * @return \Zapheus\Contract\Http\Message\File
@@ -65,26 +37,12 @@ class File
     }
 
     /**
-     * Sets the name of the uploaded file.
-     *
-     * @param string $name
-     *
-     * @return self
-     */
-    public function name($name)
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    /**
      * Parses the $_FILES into multiple \File instances.
      *
      * @param array<string, mixed> $uploaded
      * @param array<string, mixed> $files
      *
-     * @return array<string, \Zapheus\Contract\Http\Message\File>
+     * @return array<string, \Zapheus\Contract\Http\Message\File[]>
      */
     public function normalize(array $uploaded, $files = array())
     {
@@ -107,6 +65,48 @@ class File
         }
 
         return $files;
+    }
+
+    /**
+     * Return an instance with the specified client filename.
+     *
+     * @param string $name
+     *
+     * @return self
+     */
+    public function withClientFilename($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Return an instance with the specified upload error.
+     *
+     * @param integer $error
+     *
+     * @return self
+     */
+    public function withError($error)
+    {
+        $this->error = $error;
+
+        return $this;
+    }
+
+    /**
+     * Return an instance with the specified file path.
+     *
+     * @param string $file
+     *
+     * @return self
+     */
+    public function withFile($file)
+    {
+        $this->file = $file;
+
+        return $this;
     }
 
     /**

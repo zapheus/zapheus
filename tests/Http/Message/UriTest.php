@@ -24,7 +24,7 @@ class UriTest extends Testcase
     {
         $expect = 'me@roug.in:400';
 
-        $actual = $this->self->make()->authority();
+        $actual = $this->self->make()->getAuthority();
 
         $this->assertEquals($expect, $actual);
     }
@@ -34,9 +34,9 @@ class UriTest extends Testcase
      */
     public function test_passed_if_fragment_is_retrieved()
     {
-        $this->self->fragment($expect = 'test');
+        $this->self->withFragment($expect = 'test');
 
-        $actual = $this->self->make()->fragment();
+        $actual = $this->self->make()->getFragment();
 
         $this->assertEquals($expect, $actual);
     }
@@ -48,9 +48,9 @@ class UriTest extends Testcase
     {
         $expect = 'google.com';
 
-        $this->self->host($expect);
+        $this->self->withHost($expect);
 
-        $actual = $this->self->make()->host();
+        $actual = $this->self->make()->getHost();
 
         $this->assertEquals($expect, $actual);
     }
@@ -62,9 +62,9 @@ class UriTest extends Testcase
     {
         $expect = '/test';
 
-        $this->self->path($expect);
+        $this->self->withPath($expect);
 
-        $actual = $this->self->make()->path();
+        $actual = $this->self->make()->getPath();
 
         $this->assertEquals($expect, $actual);
     }
@@ -74,11 +74,9 @@ class UriTest extends Testcase
      */
     public function test_passed_if_port_is_retrieved()
     {
-        $expect = 500;
+        $this->self->withPort($expect = 500);
 
-        $this->self->port($expect = 500);
-
-        $actual = $this->self->make()->port();
+        $actual = $this->self->make()->getPort();
 
         $this->assertEquals($expect, $actual);
     }
@@ -90,9 +88,9 @@ class UriTest extends Testcase
     {
         $expect = 'type=user';
 
-        $this->self->query($expect);
+        $this->self->withQuery($expect);
 
-        $actual = $this->self->make()->query();
+        $actual = $this->self->make()->getQuery();
 
         $this->assertEquals($expect, $actual);
     }
@@ -102,9 +100,9 @@ class UriTest extends Testcase
      */
     public function test_passed_if_scheme_is_retrieved()
     {
-        $this->self->scheme($expect = 'http');
+        $this->self->withScheme($expect = 'http');
 
-        $actual = $this->self->make()->scheme();
+        $actual = $this->self->make()->getScheme();
 
         $this->assertEquals('http', $actual);
     }
@@ -128,9 +126,9 @@ class UriTest extends Testcase
     {
         $expect = 'username';
 
-        $this->self->user($expect);
+        $this->self->withUserInfo($expect);
 
-        $actual = $this->self->make()->user();
+        $actual = $this->self->make()->getUserInfo();
 
         $this->assertEquals($expect, $actual);
     }
@@ -142,9 +140,9 @@ class UriTest extends Testcase
     {
         $expect = 'username:password';
 
-        $this->self->user('username', 'password');
+        $this->self->withUserInfo('username', 'password');
 
-        $actual = $this->self->make()->user();
+        $actual = $this->self->make()->getUserInfo();
 
         $this->assertEquals($expect, $actual);
     }
@@ -154,7 +152,7 @@ class UriTest extends Testcase
      */
     protected function doSetUp()
     {
-        $this->self = new UriFactory; // to pass null
+        $this->self = new UriFactory;
 
         $url = 'https://me@roug.in:400/about';
 

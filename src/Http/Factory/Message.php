@@ -3,6 +3,7 @@
 namespace Zapheus\Http\Factory;
 
 use Zapheus\Contract\Http\Message\Message as Contract;
+use Zapheus\Contract\Http\Message\Stream as StreamContract;
 use Zapheus\Http\Message\Message as Base;
 use Zapheus\Http\Message\Stream;
 
@@ -14,7 +15,7 @@ use Zapheus\Http\Message\Stream;
 class Message
 {
     /**
-     * @var array<string, mixed>
+     * @var array<string, string[]>
      */
     protected $headers = array();
 
@@ -27,53 +28,6 @@ class Message
      * @var string
      */
     protected $version = '1.1';
-
-    /**
-     * Sets the message instance and copies its properties.
-     *
-     * @param \Zapheus\Contract\Http\Message\Message $message
-     *
-     * @return self
-     */
-    public function setMessage(Contract $message)
-    {
-        $this->headers = $message->headers();
-
-        $this->stream = $message->stream();
-
-        $this->version = $message->version();
-
-        return $this;
-    }
-
-    /**
-     * Sets a message header value.
-     *
-     * @param string $name
-     * @param mixed  $value
-     *
-     * @return self
-     */
-    public function header($name, $value)
-    {
-        $this->headers[$name] = is_array($value) ? $value : array($value);
-
-        return $this;
-    }
-
-    /**
-     * Sets the message header values.
-     *
-     * @param array<string, string[]> $headers
-     *
-     * @return self
-     */
-    public function headers(array $headers)
-    {
-        $this->headers = $headers;
-
-        return $this;
-    }
 
     /**
      * Creates the message instance.
@@ -93,51 +47,97 @@ class Message
     }
 
     /**
-     * Sets the server parameters ($_SERVER).
+     * Sets the message instance and copies its properties.
      *
-     * @param array<string, string> $server
+     * @param \Zapheus\Contract\Http\Message\Message $message
      *
      * @return self
      */
-    public function server(array $server)
+    public function setMessage(Contract $message)
     {
-        foreach ($server as $key => $value)
+        $this->headers = $message->getHeaders();
+
+        $this->stream = $message->getBody();
+
+        $this->version = $message->getProtocolVersion();
+
+        return $this;
+    }
+
+    /**
+     * Return an instance with the provided header value.
+     *
+     * @param string                $name
+     * @param string|string[]|mixed $value
+     *
+     * @return self
+     * @throws \InvalidArgumentException
+     */
+    public function withAddedHeader($name, $value)
+    {
+        $this->checkIfValidName($name);
+
+        /** @var string[] */
+        $items = is_array($value) ? $value : array($value);
+
+        if (isset($this->headers[$name]))
         {
-            $string = strtolower(substr($key, 5));
+            /** @var string[] */
+            $existing = $this->headers[$name];
 
-            $key = str_replace('_', '-', $string);
-
-            if (strpos($key, 'HTTP_') === 0)
-            {
-                $this->headers[$key] = $value;
-            }
+            $this->headers[$name] = array_merge($existing, $items);
+        }
+        else
+        {
+            $this->headers[$name] = $items;
         }
 
         return $this;
     }
 
     /**
-     * Sets the stream instance.
+     * Return an instance with the specified body.
      *
-     * @param \Zapheus\Http\Message\Stream $stream
+     * @param \Zapheus\Contract\Http\Message\Stream $body
      *
      * @return self
      */
-    public function stream(Stream $stream)
+    public function withBody(StreamContract $body)
     {
-        $this->stream = $stream;
+        $this->stream = $body;
 
         return $this;
     }
 
     /**
-     * Sets the protocol version.
+     * Return an instance with the provided value replacing the specified header.
+     *
+     * @param string                $name
+     * @param string|string[]|mixed $value
+     *
+     * @return self
+     * @throws \InvalidArgumentException
+     */
+    public function withHeader($name, $value)
+    {
+        $this->checkIfValidName($name);
+
+        /** @var string[] */
+        $items = is_array($value) ? $value : array($value);
+
+        $this->headers[$name] = $items;
+
+        return $this;
+    }
+
+    /**
+     * Return an instance with the specified HTTP protocol version.
      *
      * @param string $version
      *
      * @return self
      */
-    public function version($version)
+    public function withProtocolVersion($version)
     {
         $this->version = $version;
 
@@ -145,24 +145,38 @@ class Message
     }
 
     /**
-     * Writes data directly to the stream.
+     * Return an instance without the specified header.
      *
-     * @param string $output
+     * @param string $name
      *
      * @return self
      */
-    public function write($output)
+    public function withoutHeader($name)
     {
-        $resource = fopen('php://temp', 'r+');
-
-        ! $resource && $resource = null;
-
-        $stream = new Stream($resource);
-
-        $stream->write($output);
-
-        $this->stream = $stream;
+        unset($this->headers[$name]);
 
         return $this;
+    }
+
+    /**
+     * Validates the specified header name.
+     *
+     * @param string $name
+     *
+     * @return void
+     * @throws \InvalidArgumentException
+     */
+    protected function checkIfValidName($name)
+    {
+        $pattern = '/^[a-zA-Z0-9!#$%&\'*+.^_`|~-]+$/';
+
+        if (preg_match($pattern, $name))
+        {
+            return;
+        }
+
+        $text = 'Header name is not a valid RFC 7230 name.';
+
+        throw new \InvalidArgumentException($text);
     }
 }

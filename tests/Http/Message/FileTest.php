@@ -24,11 +24,61 @@ class FileTest extends Testcase
     /**
      * @return void
      */
+    public function test_failed_if_move_after_already_moved()
+    {
+        $target = str_replace('HelloWorld', 'MovedFile', $this->filename);
+
+        $file = $this->instance($this->filename);
+
+        $file->moveTo($target);
+
+        copy($target, $this->filename);
+
+        $this->doExpectException('RuntimeException');
+
+        $file->moveTo($target);
+
+        unlink($target);
+    }
+
+    /**
+     * @return void
+     */
+    public function test_failed_if_move_with_empty_target()
+    {
+        $this->doExpectException('InvalidArgumentException');
+
+        $this->self->moveTo('');
+    }
+
+    /**
+     * @return void
+     */
+    public function test_failed_if_moved_before_stream()
+    {
+        $target = str_replace('HelloWorld', 'MovedFile', $this->filename);
+
+        $file = $this->instance($this->filename);
+
+        $file->moveTo($target);
+
+        copy($target, $this->filename);
+
+        $this->doExpectException('RuntimeException');
+
+        $file->getStream();
+
+        unlink($target);
+    }
+
+    /**
+     * @return void
+     */
     public function test_passed_if_file_error_is_retrieved()
     {
         $expect = UPLOAD_ERR_OK;
 
-        $actual = $this->self->error();
+        $actual = $this->self->getError();
 
         $this->assertEquals($expect, $actual);
     }
@@ -40,7 +90,9 @@ class FileTest extends Testcase
     {
         $target = str_replace('HelloWorld', 'MovedFile', $this->filename);
 
-        $this->self->move($target);
+        $file = $this->instance($this->filename);
+
+        $file->moveTo($target);
 
         $this->assertFileExists($target);
 
@@ -54,7 +106,7 @@ class FileTest extends Testcase
     {
         $expect = basename($this->filename);
 
-        $actual = $this->self->name();
+        $actual = $this->self->getClientFilename();
 
         $this->assertEquals($expect, $actual);
     }
@@ -78,7 +130,7 @@ class FileTest extends Testcase
     {
         $expect = filesize($this->filename);
 
-        $actual = $this->self->size();
+        $actual = $this->self->getSize();
 
         $this->assertEquals($expect, $actual);
     }
@@ -90,7 +142,7 @@ class FileTest extends Testcase
     {
         $expect = 'Zapheus\Http\Message\Stream';
 
-        $actual = $this->self->stream();
+        $actual = $this->self->getStream();
 
         $this->assertInstanceof($expect, $actual);
     }
@@ -102,7 +154,7 @@ class FileTest extends Testcase
     {
         $expect = mime_content_type($this->filename);
 
-        $actual = $this->self->type();
+        $actual = $this->self->getClientMediaType();
 
         $this->assertEquals($expect, $actual);
     }
@@ -122,7 +174,7 @@ class FileTest extends Testcase
     /**
      * @param string $filename
      *
-     * @return \File
+     * @return \Zapheus\Http\Message\File
      */
     protected function instance($filename)
     {

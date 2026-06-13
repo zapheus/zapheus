@@ -10,94 +10,75 @@ namespace Zapheus\Contract\Http\Message;
 interface Request extends Message
 {
     /**
-     * Returns an instance with the specified derived request attribute.
-     *
-     * @param string $name
-     *
-     * @return mixed
-     */
-    public function attribute($name);
-
-    /**
-     * Returns an array of attributes derived from the request.
-     *
-     * @return array<string, mixed>
-     */
-    public function attributes();
-
-    /**
-     * Returns the specified cookie from request.
-     *
-     * @param string $name
-     *
-     * @return array<string, string>
-     */
-    public function cookie($name);
-
-    /**
-     * Returns the cookies from the request.
-     *
-     * @return array<string, string>
-     */
-    public function cookies();
-
-    /**
-     * Returns any parameters provided in the request body.
-     *
-     * @return array<string, mixed>|object|null
-     */
-    public function data();
-
-    /**
-     * Returns normalized file upload data.
-     *
-     * @return \Zapheus\Contract\Http\Message\File[]
-     */
-    public function files();
-
-    /**
-     * Returns the HTTP method of the request.
+     * Retrieves the message's request target.
      *
      * @return string
      */
-    public function method();
+    public function getRequestTarget();
 
     /**
-     * Returns the query string arguments.
-     *
-     * @return array<string, mixed>
-     */
-    public function queries();
-
-    /**
-     * Returns the specified query string argument.
-     *
-     * @param string $name
-     *
-     * @return mixed
-     */
-    public function query($name);
-
-    /**
-     * Returns the server parameter/s.
-     *
-     * @param string|null $name
-     *
-     * @return array<string, mixed>
-     */
-    public function server($name = null);
-
-    /**
-     * Returns the message's request target.
+     * Retrieves the HTTP method of the request.
      *
      * @return string
      */
-    public function target();
+    public function getMethod();
 
     /**
-     * Returns the URI instance.
+     * Retrieves the URI instance.
      *
      * @return \Zapheus\Contract\Http\Message\Uri
      */
-    public function uri();
+    public function getUri();
+
+    /**
+     * Retrieve server parameters.
+     *
+     * @return array<string, string>
+     */
+    public function getServerParams();
+
+    /**
+     * Retrieve cookies.
+     *
+     * @return array<string, string>
+     */
+    public function getCookieParams();
+
+    /**
+     * Retrieve query string arguments.
+     *
+     * @return array<string, mixed>
+     */
+    public function getQueryParams();
+
+    /**
+     * Retrieve normalized file upload data.
+     *
+     * @return array<string, \Zapheus\Contract\Http\Message\File[]>
+     */
+    public function getUploadedFiles();
+
+    /**
+     * Retrieve any parameters provided in the request body.
+     *
+     * @return array<string, mixed>|object|null
+     */
+    public function getParsedBody();
+
+    /**
+     * Retrieve attributes derived from the request.
+     *
+     * @return array<string, mixed>
+     */
+    public function getAttributes();
+
+    /**
+     * Retrieve a single derived request attribute.
+     *
+     * @param string $name
+     * @param mixed  $default
+     *
+     * @return mixed
+     */
+    public function getAttribute($name, $default = null);
 }

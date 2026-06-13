@@ -20,13 +20,23 @@ class ResponseTest extends Testcase
     /**
      * @return void
      */
+    public function test_failed_if_status_code_is_invalid()
+    {
+        $this->doExpectException('InvalidArgumentException');
+
+        $this->self->withStatus(99);
+    }
+
+    /**
+     * @return void
+     */
     public function test_passed_if_reason_phrase_retrieved()
     {
         $expect = 'Internal Server Error';
 
-        $this->self->code(500);
+        $this->self->withStatus(500);
 
-        $actual = $this->self->make()->reason();
+        $actual = $this->self->make()->getReasonPhrase();
 
         $this->assertEquals($expect, $actual);
     }
@@ -36,9 +46,9 @@ class ResponseTest extends Testcase
      */
     public function test_passed_if_status_code_retrieved()
     {
-        $this->self->code($expect = 404);
+        $this->self->withStatus($expect = 404);
 
-        $actual = $this->self->make()->code();
+        $actual = $this->self->make()->getStatusCode();
 
         $this->assertEquals($expect, $actual);
     }

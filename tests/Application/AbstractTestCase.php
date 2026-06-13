@@ -74,7 +74,7 @@ abstract class AbstractTestCase extends Testcase
 
         $factory = new Request;
 
-        $factory->server($_SERVER);
+        $factory->withServerParams($_SERVER);
 
         $request = $factory->make();
 

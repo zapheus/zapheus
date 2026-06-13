@@ -79,7 +79,7 @@ class ResolverHandler implements Handler
             return $result;
         }
 
-        $response->stream()->write($result);
+        $response->getBody()->write($result);
 
         return $response;
     }

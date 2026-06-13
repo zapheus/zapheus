@@ -98,28 +98,22 @@ class Response extends Message implements Contract
     }
 
     /**
-     * Returns the response status code.
-     *
-     * @return integer
-     */
-    public function code()
-    {
-        return $this->code;
-
-        // getStatusCode
-        // withStatus
-    }
-
-    /**
-     * Returns the response reason phrase associated with the status code.
+     * Gets the response reason phrase associated with the status code.
      *
      * @return string
      */
-    public function reason()
+    public function getReasonPhrase()
     {
         return $this->reasons[$this->code];
+    }
 
-        // getReasonPhrase
-        // // withStatus
+    /**
+     * Gets the response status code.
+     *
+     * @return integer
+     */
+    public function getStatusCode()
+    {
+        return $this->code;
     }
 }

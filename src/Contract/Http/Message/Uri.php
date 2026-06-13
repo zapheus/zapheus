@@ -10,58 +10,65 @@ namespace Zapheus\Contract\Http\Message;
 interface Uri
 {
     /**
-     * Returns the authority component of the URI.
+     * Retrieve the scheme component of the URI.
      *
      * @return string
      */
-    public function authority();
+    public function getScheme();
 
     /**
-     * Returns the fragment component of the URI.
+     * Retrieve the authority component of the URI.
      *
      * @return string
      */
-    public function fragment();
+    public function getAuthority();
 
     /**
-     * Returns the host component of the URI.
+     * Retrieve the user information component of the URI.
      *
      * @return string
      */
-    public function host();
+    public function getUserInfo();
 
     /**
-     * Returns the path component of the URI.
+     * Retrieve the host component of the URI.
      *
      * @return string
      */
-    public function path();
+    public function getHost();
 
     /**
-     * Returns the port component of the URI.
+     * Retrieve the port component of the URI.
      *
      * @return integer|null
      */
-    public function port();
+    public function getPort();
 
     /**
-     * Returns the query string of the URI.
+     * Retrieve the path component of the URI.
      *
      * @return string
      */
-    public function query();
+    public function getPath();
 
     /**
-     * Returns the scheme component of the URI.
+     * Retrieve the query string of the URI.
      *
      * @return string
      */
-    public function scheme();
+    public function getQuery();
 
     /**
-     * Returns the user information component of the URI.
+     * Retrieve the fragment component of the URI.
      *
      * @return string
      */
-    public function user();
+    public function getFragment();
+
+    /**
+     * Return the string representation as a URI reference.
+     *
+     * @return string
+     */
+    public function __toString();
 }

@@ -58,7 +58,7 @@ class Dispatcher implements Contract
      *
      * @param \Zapheus\Contract\Http\Message\Request $request
      *
-     * @return \Zapheus\Contract\Http\Message\ResponseInterface
+     * @return \Zapheus\Contract\Http\Message\Response
      */
     public function dispatch(Request $request)
     {
@@ -73,7 +73,7 @@ class Dispatcher implements Contract
      * @param \Zapheus\Contract\Http\Message\Request $request
      * @param \Zapheus\Contract\Http\Server\Handler  $handler
      *
-     * @return \Zapheus\Contract\Http\Message\ResponseInterface
+     * @return \Zapheus\Contract\Http\Message\Response
      */
     public function process(Request $request, Handler $handler)
     {

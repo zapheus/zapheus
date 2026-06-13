@@ -130,7 +130,7 @@ class ApplicationTest extends AbstractTestCase
 
         $expect = array('application/json');
 
-        $actual = $app->handle($request)->header('Content-Type');
+        $actual = $app->handle($request)->getHeader('Content-Type');
 
         $this->assertEquals($expect, $actual);
     }
@@ -196,7 +196,17 @@ class ApplicationTest extends AbstractTestCase
         {
             $factory = new ResponseFactory;
 
-            $factory->write('Hello, Zapheus');
+            $stream = fopen('php://temp', 'r+');
+
+            ! $stream && $stream = null;
+
+            $body = new \Zapheus\Http\Message\Stream($stream);
+
+            $body->write('Hello, Zapheus');
+
+            $factory->withBody($body);
+
+            $factory->withStatus(200);
 
             return $factory->make();
         });

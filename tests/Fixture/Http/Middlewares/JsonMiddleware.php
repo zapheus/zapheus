@@ -24,7 +24,7 @@ class JsonMiddleware implements Middleware
     {
         $response = $handler->handle($request);
 
-        $content = $response->header('Content-Type');
+        $content = $response->getHeader('Content-Type');
 
         $value = array('application/json');
 
@@ -32,7 +32,7 @@ class JsonMiddleware implements Middleware
 
         $factory = $factory->setResponse($response);
 
-        $factory->header('Content-Type', $value);
+        $factory->withHeader('Content-Type', $value);
 
         return count($content) >= 1 ? $response : $factory->make();
     }

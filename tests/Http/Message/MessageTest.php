@@ -20,13 +20,23 @@ class MessageTest extends Testcase
     /**
      * @return void
      */
+    public function test_failed_if_header_name_is_invalid()
+    {
+        $this->doExpectException('InvalidArgumentException');
+
+        $this->self->withHeader('inv@lid', array('test'));
+    }
+
+    /**
+     * @return void
+     */
     public function test_passed_if_all_headers_retrieved()
     {
         $expect = array('names' => array('Rougin', 'Royce'));
 
-        $this->self->headers($expect);
+        $this->self->withHeader('names', array('Rougin', 'Royce'));
 
-        $actual = $this->self->make()->headers();
+        $actual = $this->self->make()->getHeaders();
 
         $this->assertEquals($expect, $actual);
     }
@@ -40,11 +50,11 @@ class MessageTest extends Testcase
 
         $stream->write('Hello, world');
 
-        $this->self->stream($stream);
+        $this->self->withBody($stream);
 
         $expect = $stream;
 
-        $actual = $this->self->make()->stream();
+        $actual = $this->self->make()->getBody();
 
         $this->assertEquals($expect, $actual);
     }
@@ -56,11 +66,27 @@ class MessageTest extends Testcase
     {
         $expect = array('Rougin', 'Royce');
 
-        $this->self->header('names', $expect);
+        $this->self->withHeader('names', $expect);
 
         $message = $this->self->make();
 
-        $actual = $message->header('names');
+        $actual = $message->getHeader('names');
+
+        $this->assertEquals($expect, $actual);
+    }
+
+    /**
+     * @return void
+     */
+    public function test_passed_if_headers_are_case_insensitive()
+    {
+        $expect = array('Rougin');
+
+        $this->self->withHeader('Content-Type', array('Rougin'));
+
+        $message = $this->self->make();
+
+        $actual = $message->getHeader('content-type');
 
         $this->assertEquals($expect, $actual);
     }
@@ -72,7 +98,7 @@ class MessageTest extends Testcase
     {
         $expect = 'Zapheus\Http\Message\Stream';
 
-        $actual = $this->self->make()->stream();
+        $actual = $this->self->make()->getBody();
 
         $this->assertInstanceOf($expect, $actual);
     }
@@ -82,9 +108,9 @@ class MessageTest extends Testcase
      */
     public function test_passed_if_version_is_retrieved()
     {
-        $this->self->version($expect = '2.0');
+        $this->self->withProtocolVersion($expect = '2.0');
 
-        $actual = $this->self->make()->version();
+        $actual = $this->self->make()->getProtocolVersion();
 
         $this->assertEquals($expect, $actual);
     }

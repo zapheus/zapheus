@@ -84,11 +84,11 @@ class Uri implements Contract
     }
 
     /**
-     * Returns the authority component of the URI.
+     * Retrieve the authority component of the URI.
      *
      * @return string
      */
-    public function authority()
+    public function getAuthority()
     {
         $authority = $this->host;
 
@@ -100,94 +100,74 @@ class Uri implements Contract
         }
 
         return $authority;
-
-        // getAuthority
     }
 
     /**
-     * Returns the fragment component of the URI.
+     * Retrieve the fragment component of the URI.
      *
      * @return string
      */
-    public function fragment()
+    public function getFragment()
     {
         return $this->fragment;
-
-        // getFragment
-        // withFragment
     }
 
     /**
-     * Returns the host component of the URI.
+     * Retrieve the host component of the URI.
      *
      * @return string
      */
-    public function host()
+    public function getHost()
     {
         return $this->host;
-
-        // getHost
-        // withHost
     }
 
     /**
-     * Returns the path component of the URI.
+     * Retrieve the path component of the URI.
      *
      * @return string
      */
-    public function path()
+    public function getPath()
     {
         return $this->path;
-
-        // getPath
-        // withPath
     }
 
     /**
-     * Returns the port component of the URI.
+     * Retrieve the port component of the URI.
      *
      * @return integer|null
      */
-    public function port()
+    public function getPort()
     {
         return (int) $this->port;
-
-        // getPort
-        // withPort
     }
 
     /**
-     * Returns the query string of the URI.
+     * Retrieve the query string of the URI.
      *
      * @return string
      */
-    public function query()
+    public function getQuery()
     {
         return $this->query;
-
-        // getQuery
-        // withQuery
     }
 
     /**
-     * Returns the scheme component of the URI.
+     * Retrieve the scheme component of the URI.
      *
      * @return string
      */
-    public function scheme()
+    public function getScheme()
     {
         return $this->scheme;
-
-        // getScheme
-        // withScheme
     }
 
     /**
-     * Returns the user information component of the URI.
+     * Retrieve the user information component of the URI.
      *
      * @return string
      */
-    public function user()
+    public function getUserInfo()
     {
         if ($this->pass)
         {
@@ -195,8 +175,5 @@ class Uri implements Contract
         }
 
         return $this->user;
-
-        // getUserInfo
-        // withUserInfo
     }
 }

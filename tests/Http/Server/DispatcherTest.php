@@ -50,13 +50,13 @@ class DispatcherTest extends Testcase
 
             $stream = new Stream($file);
 
-            $stream->write($response->stream() . ' world');
+            $stream->write($response->getBody() . ' world');
 
             $maker = new Response;
 
             $maker->setResponse($response);
 
-            return $maker->stream($stream)->make();
+            return $maker->withBody($stream)->make();
         };
 
         $this->self->pipe($cb);
@@ -65,7 +65,7 @@ class DispatcherTest extends Testcase
         {
             $response = $next($request);
 
-            $response->stream()->write('Hello');
+            $response->getBody()->write('Hello');
 
             return $response;
         });
@@ -76,7 +76,7 @@ class DispatcherTest extends Testcase
 
         $response = $this->self->dispatch($this->request);
 
-        $actual = $response->stream();
+        $actual = $response->getBody();
 
         $this->assertEquals($expect, $actual);
     }
@@ -92,7 +92,7 @@ class DispatcherTest extends Testcase
 
         $response = $this->self->dispatch($this->request);
 
-        $actual = $response->header('Content-Type');
+        $actual = $response->getHeader('Content-Type');
 
         $this->assertEquals($expect, $actual);
     }
@@ -110,7 +110,7 @@ class DispatcherTest extends Testcase
 
         $response = $this->self->dispatch($this->request);
 
-        $actual = $response->header('Content-Type');
+        $actual = $response->getHeader('Content-Type');
 
         $this->assertEquals($expect, $actual);
     }
@@ -122,11 +122,11 @@ class DispatcherTest extends Testcase
     {
         $items = array();
 
-        $server = array();
-
         $items[] = new JsonMiddleware;
 
         $this->self = new Dispatcher($items);
+
+        $server = array();
 
         $server['REQUEST_METHOD'] = 'GET';
         $server['REQUEST_URI'] = '/';
@@ -135,7 +135,7 @@ class DispatcherTest extends Testcase
 
         $factory = new Request;
 
-        $factory->server($server);
+        $factory->withServerParams($server);
 
         $this->request = $factory->make();
     }

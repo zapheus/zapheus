@@ -35,7 +35,7 @@ class MessageProviderTest extends Testcase
 
         $expect = 'roug.in';
 
-        $server = $request->server();
+        $server = $request->getServerParams();
 
         $actual = $server['SERVER_NAME'];
 

@@ -94,11 +94,11 @@ class Application implements Handler, Writable
      */
     public function emit(Response $response)
     {
-        $code = $response->code() . ' ' . $response->reason();
+        $code = $response->getStatusCode() . ' ' . $response->getReasonPhrase();
 
-        $headers = $response->headers();
+        $headers = $response->getHeaders();
 
-        $version = $response->version();
+        $version = $response->getProtocolVersion();
 
         foreach ($headers as $name => $values)
         {
@@ -207,7 +207,7 @@ class Application implements Handler, Writable
 
         $response = $this->handle($request);
 
-        return $this->emit($response)->stream();
+        return $this->emit($response)->getBody();
     }
 
     /**

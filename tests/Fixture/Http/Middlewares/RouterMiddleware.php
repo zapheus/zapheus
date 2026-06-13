@@ -39,9 +39,9 @@ class RouterMiddleware implements Middleware
     {
         $attribute = Application::ROUTE_ATTRIBUTE;
 
-        $path = $request->uri()->path();
+        $path = $request->getUri()->getPath();
 
-        $method = $request->method();
+        $method = $request->getMethod();
 
         $route = $this->dispatcher->dispatch($method, $path);
 
@@ -49,7 +49,7 @@ class RouterMiddleware implements Middleware
 
         $factory = $factory->setRequest($request);
 
-        $factory->attribute($attribute, $route);
+        $factory->withAttribute($attribute, $route);
 
         return $handler->handle($factory->make());
     }

@@ -47,7 +47,7 @@ class ServerProviderTest extends Testcase
 
         $response = $dispatch->dispatch($request);
 
-        $actual = $response->header('Content-Type');
+        $actual = $response->getHeader('Content-Type');
 
         $this->assertEquals($expect, $actual);
     }

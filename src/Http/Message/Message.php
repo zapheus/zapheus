@@ -41,6 +41,99 @@ class Message implements Contract
     }
 
     /**
+     * Gets the body of the message.
+     *
+     * @return \Zapheus\Contract\Http\Message\Stream
+     */
+    public function getBody()
+    {
+        if ($this->stream === null)
+        {
+            $stream = fopen('php://temp', 'r+');
+
+            ! $stream && $stream = null;
+
+            $this->stream = new Stream($stream);
+        }
+
+        return $this->stream;
+    }
+
+    /**
+     * Retrieves a message header value by the given case-insensitive name.
+     *
+     * @param string $name
+     *
+     * @return string[]
+     */
+    public function getHeader($name)
+    {
+        $key = $this->getHeaderKey($name);
+
+        $value = array();
+
+        if ($key !== null)
+        {
+            $value = $this->headers[$key];
+        }
+
+        return $value;
+    }
+
+    /**
+     * Retrieves a comma-separated string of the values for a single header.
+     *
+     * @param string $name
+     *
+     * @return string
+     */
+    public function getHeaderLine($name)
+    {
+        $key = $this->getHeaderKey($name);
+
+        $value = '';
+
+        if ($key !== null)
+        {
+            $value = implode(',', $this->headers[$key]);
+        }
+
+        return $value;
+    }
+
+    /**
+     * Retrieves all message header values.
+     *
+     * @return array<string, string[]>
+     */
+    public function getHeaders()
+    {
+        return $this->headers;
+    }
+
+    /**
+     * Retrieves the HTTP protocol version as a string.
+     *
+     * @return string
+     */
+    public function getProtocolVersion()
+    {
+        return $this->version;
+    }
+
+    /**
+     * Checks if a header exists by the given case-insensitive name.
+     *
+     * @param string $name
+     *
+     * @return boolean
+     */
+    public function hasHeader($name)
+    {
+        return $this->getHeaderKey($name) !== null;
+    }
+
+    /**
      * Sets the stream of the message.
      *
      * @param \Zapheus\Contract\Http\Message\Stream $stream
@@ -55,73 +148,24 @@ class Message implements Contract
     }
 
     /**
-     * Returns a message header value by the given case-insensitive name.
+     * Returns the actual header key matching the given case-insensitive name.
      *
      * @param string $name
      *
-     * @return string[]
+     * @return string|null
      */
-    public function header($name)
+    protected function getHeaderKey($name)
     {
-        if (! isset($this->headers[$name]))
+        $name = strtolower($name);
+
+        foreach (array_keys($this->headers) as $key)
         {
-            return array();
+            if (strtolower($key) === $name)
+            {
+                return $key;
+            }
         }
 
-        return $this->headers[$name];
-
-        // getHeader
-    }
-
-    /**
-     * Returns all message header values.
-     *
-     * @return array<string, string[]>
-     */
-    public function headers()
-    {
-        return $this->headers;
-
-        // getHeaders
-        // hasHeader
-        // getHeaderLine
-        // withHeader
-        // withAddedHeader
-        // withoutHeader
-    }
-
-    /**
-     * Returns the stream of the message.
-     *
-     * @return \Zapheus\Contract\Http\Message\Stream
-     */
-    public function stream()
-    {
-        if ($this->stream === null)
-        {
-            $stream = fopen('php://temp', 'r+');
-
-            ! $stream && $stream = null;
-
-            $this->stream = new Stream($stream);
-        }
-
-        return $this->stream;
-
-        // getBody
-        // withBody
-    }
-
-    /**
-     * Returns the HTTP protocol version as a string.
-     *
-     * @return string
-     */
-    public function version()
-    {
-        return $this->version;
-
-        // getProtocolVersion
-        // withProtocolVersion
+        return null;
     }
 }

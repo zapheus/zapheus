@@ -18,34 +18,9 @@ class Response extends Message
     protected $code = 200;
 
     /**
-     * Sets the response instance and copies its properties.
-     *
-     * @param \Zapheus\Contract\Http\Message\Response $response
-     *
-     * @return self
+     * @var string
      */
-    public function setResponse(Contract $response)
-    {
-        parent::setMessage($response);
-
-        $this->code = $response->code();
-
-        return $this;
-    }
-
-    /**
-     * Sets the HTTP code.
-     *
-     * @param integer $code
-     *
-     * @return self
-     */
-    public function code($code)
-    {
-        $this->code = $code;
-
-        return $this;
-    }
+    protected $reason = '';
 
     /**
      * Creates the response instance.
@@ -62,5 +37,46 @@ class Response extends Message
         }
 
         return $response;
+    }
+
+    /**
+     * Sets the response instance and copies its properties.
+     *
+     * @param \Zapheus\Contract\Http\Message\Response $response
+     *
+     * @return self
+     */
+    public function setResponse(Contract $response)
+    {
+        parent::setMessage($response);
+
+        $this->code = $response->getStatusCode();
+
+        return $this;
+    }
+
+    /**
+     * Return an instance with the specified HTTP status code and reason phrase.
+     *
+     * @param integer $code
+     * @param string  $reasonPhrase
+     *
+     * @return self
+     * @throws \InvalidArgumentException
+     */
+    public function withStatus($code, $reasonPhrase = '')
+    {
+        if ($code < 100 || $code > 599)
+        {
+            $text = 'Status code must be an integer between 100 and 599.';
+
+            throw new \InvalidArgumentException($text);
+        }
+
+        $this->code = $code;
+
+        $this->reason = $reasonPhrase;
+
+        return $this;
     }
 }

@@ -21,15 +21,45 @@ class RequestTest extends Testcase
     /**
      * @return void
      */
+    public function test_failed_if_body_is_invalid_type()
+    {
+        $this->doExpectException('InvalidArgumentException');
+
+        $this->self->withParsedBody('string');
+    }
+
+    /**
+     * @return void
+     */
+    public function test_failed_if_method_is_empty()
+    {
+        $this->doExpectException('InvalidArgumentException');
+
+        $this->self->withMethod('');
+    }
+
+    /**
+     * @return void
+     */
+    public function test_failed_if_uploaded_file_is_invalid()
+    {
+        $this->doExpectException('InvalidArgumentException');
+
+        $this->self->withUploadedFiles(array('test' => array('not_a_file')));
+    }
+
+    /**
+     * @return void
+     */
     public function test_passed_if_all_cookies_retrieved()
     {
         $expect = array('name' => 'Rougin');
 
         $expect['address'] = 'Tomorrowland';
 
-        $this->self->cookies($expect);
+        $this->self->withCookieParams($expect);
 
-        $actual = $this->self->make()->cookies();
+        $actual = $this->self->make()->getCookieParams();
 
         $this->assertEquals($expect, $actual);
     }
@@ -41,11 +71,11 @@ class RequestTest extends Testcase
     {
         $expect = 'Rougin Royce';
 
-        $this->self->attribute('name', $expect);
+        $this->self->withAttribute('name', $expect);
 
         $request = $this->self->make();
 
-        $actual = $request->attribute('name');
+        $actual = $request->getAttribute('name');
 
         $this->assertEquals($expect, $actual);
     }
@@ -57,21 +87,9 @@ class RequestTest extends Testcase
     {
         $expect = array('name' => 'Rougin Royce');
 
-        $this->self->attributes($expect);
+        $this->self->withAttributes($expect);
 
-        $actual = $this->self->make()->attributes();
-
-        $this->assertEquals($expect, $actual);
-    }
-
-    /**
-     * @return void
-     */
-    public function test_passed_if_cookie_value_retrieved()
-    {
-        $this->self->cookie('address', $expect = 'ZS');
-
-        $actual = $this->self->make()->cookie('address');
+        $actual = $this->self->make()->getAttributes();
 
         $this->assertEquals($expect, $actual);
     }
@@ -81,9 +99,9 @@ class RequestTest extends Testcase
      */
     public function test_passed_if_http_method_retrieved()
     {
-        $this->self->method($expect = 'POST');
+        $this->self->withMethod($expect = 'POST');
 
-        $actual = $this->self->make()->method();
+        $actual = $this->self->make()->getMethod();
 
         $this->assertEquals($expect, $actual);
     }
@@ -95,9 +113,9 @@ class RequestTest extends Testcase
     {
         $expect = array('name' => 'Rougin R');
 
-        $this->self->data($expect);
+        $this->self->withParsedBody($expect);
 
-        $actual = $this->self->make()->data();
+        $actual = $this->self->make()->getParsedBody();
 
         $this->assertEquals($expect, $actual);
     }
@@ -111,9 +129,9 @@ class RequestTest extends Testcase
 
         $expect['address'] = 'Tomorrowland';
 
-        $this->self->queries($expect);
+        $this->self->withQueryParams($expect);
 
-        $actual = $this->self->make()->queries();
+        $actual = $this->self->make()->getQueryParams();
 
         $this->assertEquals($expect, $actual);
     }
@@ -123,9 +141,9 @@ class RequestTest extends Testcase
      */
     public function test_passed_if_request_target_retrieved()
     {
-        $this->self->target($expect = 'o');
+        $this->self->withRequestTarget($expect = 'o');
 
-        $actual = $this->self->make()->target();
+        $actual = $this->self->make()->getRequestTarget();
 
         $this->assertEquals($expect, $actual);
     }
@@ -135,11 +153,13 @@ class RequestTest extends Testcase
      */
     public function test_passed_if_server_param_by_name()
     {
-        $expect = 'roug.in';
-
         $request = $this->self->make();
 
-        $actual = $request->server('SERVER_NAME');
+        $server = $request->getServerParams();
+
+        $actual = $server['SERVER_NAME'];
+
+        $expect = 'roug.in';
 
         $this->assertEquals($expect, $actual);
     }
@@ -149,7 +169,6 @@ class RequestTest extends Testcase
      */
     public function test_passed_if_server_params_retrieved()
     {
-        // [TODO] Check why it returns "/test" ---
         /** @var array<string, mixed> */
         $expect = $_SERVER;
 
@@ -160,23 +179,10 @@ class RequestTest extends Testcase
         $expect['SERVER_NAME'] = 'roug.in';
 
         $expect['SERVER_PORT'] = 8000;
-        // ---------------------------------------
 
         $request = $this->self->make();
 
-        $actual = $request->server();
-
-        $this->assertEquals($expect, $actual);
-    }
-
-    /**
-     * @return void
-     */
-    public function test_passed_if_single_query_retrieved()
-    {
-        $this->self->query('name', $expect = 'ZS');
-
-        $actual = $this->self->make()->query('name');
+        $actual = $request->getServerParams();
 
         $this->assertEquals($expect, $actual);
     }
@@ -190,11 +196,11 @@ class RequestTest extends Testcase
 
         $factory = new FileFactory;
 
-        $factory->error(0);
+        $factory->withError(0);
 
-        $factory->file($fixtures . '/Views/LoremIpsum.php');
+        $factory->withFile($fixtures . '/Views/LoremIpsum.php');
 
-        $factory->name('LoremIpsum.php');
+        $factory->withClientFilename('LoremIpsum.php');
 
         $expect = array('file' => array($factory->make()));
 
@@ -203,9 +209,9 @@ class RequestTest extends Testcase
 
         $files = $factory->normalize($items);
 
-        $this->self->files($files);
+        $this->self->withUploadedFiles($files);
 
-        $actual = $this->self->make()->files();
+        $actual = $this->self->make()->getUploadedFiles();
 
         $this->assertEquals($expect, $actual);
     }
@@ -217,9 +223,9 @@ class RequestTest extends Testcase
     {
         $expect = new Uri('https://roug.in');
 
-        $this->self->uri($expect);
+        $this->self->withUri($expect);
 
-        $actual = $this->self->make()->uri();
+        $actual = $this->self->make()->getUri();
 
         $this->assertEquals($expect, $actual);
     }
@@ -254,6 +260,6 @@ class RequestTest extends Testcase
 
         $factory = $factory->setRequest($request);
 
-        $this->self = $factory->server($server);
+        $this->self = $factory->withServerParams($server);
     }
 }

@@ -10,16 +10,16 @@ namespace Zapheus\Contract\Http\Message;
 interface Response extends Message
 {
     /**
-     * Returns the response status code.
+     * Gets the response status code.
      *
      * @return integer
      */
-    public function code();
+    public function getStatusCode();
 
     /**
-     * Returns the response reason phrase associated with the status code.
+     * Gets the response reason phrase associated with the status code.
      *
      * @return string
      */
-    public function reason();
+    public function getReasonPhrase();
 }

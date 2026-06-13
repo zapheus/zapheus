@@ -68,7 +68,7 @@ class RoutingHandler implements Handler
     {
         $attr = Application::ROUTE_ATTRIBUTE;
 
-        $route = $request->attribute($attr);
+        $route = $request->getAttribute($attr);
 
         if ($route instanceof Route)
         {
@@ -80,9 +80,9 @@ class RoutingHandler implements Handler
         /** @var \Zapheus\Contract\Routing\Dispatcher */
         $dispatch = $this->container->get($class);
 
-        $uri = $request->uri()->path();
+        $uri = $request->getUri()->getPath();
 
-        $method = $request->method();
+        $method = $request->getMethod();
 
         return $dispatch->dispatch($method, $uri);
     }

@@ -39,32 +39,29 @@ class File
     /**
      * Parses the $_FILES into multiple \File instances.
      *
-     * @param array<string, mixed> $uploaded
-     * @param array<string, mixed> $files
+     * @param array<string, array<string, string[]>> $files
      *
      * @return array<string, \Zapheus\Contract\Http\Message\File[]>
      */
-    public function normalize(array $uploaded, $files = array())
+    public function normalize(array $files)
     {
-        foreach ($this->diverse($uploaded) as $name => $file)
+        $temp = $this->diverse($files);
+
+        $items = array();
+
+        foreach ($temp as $name => $file)
         {
-            $items = array();
+            $rows = array();
 
             foreach ($file['name'] as $key => $value)
             {
-                $this->file = $file['tmp_name'][$key];
-
-                $this->name = $file['name'][$key];
-
-                $this->error = $file['error'][$key];
-
-                $items[] = $this->make();
+                $rows[] = $this->create($file, $key);
             }
 
-            $files[$name] = $items;
+            $items[$name] = $rows;
         }
 
-        return $files;
+        return $items;
     }
 
     /**
@@ -110,26 +107,54 @@ class File
     }
 
     /**
+     * Creates the uploaded file instance from $_FILES.
+     *
+     * @param array<string, array<integer|string>> $file
+     * @param integer                              $key
+     *
+     * @return \Zapheus\Contract\Http\Message\File
+     */
+    protected function create(array $file, $key)
+    {
+        /** @var string */
+        $tmp = $file['tmp_name'][$key];
+        $this->withFile($tmp);
+
+        /** @var integer */
+        $error = $file['error'][$key];
+        $this->withError($error);
+
+        /** @var string */
+        $name = $file['name'][$key];
+        $this->withClientFilename($name);
+
+        return $this->make();
+    }
+
+    /**
      * Diverse the $_FILES into a consistent result.
      *
-     * @param array<string, mixed> $uploaded
+     * @param array<string, array<string, integer|string|string[]>> $files
      *
-     * @return array<string, mixed[]>
+     * @return array<string, array<string, array<integer|string>>>
      */
-    protected function diverse(array $uploaded)
+    protected function diverse(array $files)
     {
-        $result = array();
+        $rows = array();
 
-        foreach ($uploaded as $file => $item)
+        foreach ($files as $file => $items)
         {
-            foreach ($item as $key => $value)
+            foreach ($items as $key => $item)
             {
-                $diversed = is_array($value) ? $value : array($value);
+                if (! is_array($item))
+                {
+                    $item = array($item);
+                }
 
-                $result[$file][$key] = $diversed;
+                $rows[$file][$key] = $item;
             }
         }
 
-        return $result;
+        return $rows;
     }
 }

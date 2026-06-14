@@ -276,7 +276,7 @@ class RequestTest extends Testcase
 
         $expect = array('file' => array($factory->make()));
 
-        /** @var array<string, mixed> */
+        /** @var array<string, array<string, string[]>> */
         $items = $_FILES;
 
         $files = $factory->normalize($items);

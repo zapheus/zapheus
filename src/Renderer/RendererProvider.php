@@ -15,7 +15,7 @@ class RendererProvider implements Provider
     const RENDERER = 'Zapheus\Contract\Renderer\Renderer';
 
     /**
-     * @var string[]
+     * @var string|string[]
      */
     protected $paths = array();
 
@@ -24,11 +24,6 @@ class RendererProvider implements Provider
      */
     public function __construct($paths = array())
     {
-        if (is_string($paths))
-        {
-            $paths = array($paths);
-        }
-
         $this->paths = $paths;
     }
 

@@ -42,13 +42,13 @@ class Renderer implements Contract
     {
         $name = str_replace('.', '/', $plate);
 
-        foreach ($this->paths as $key => $path)
+        foreach ($this->paths as $path)
         {
             $files = $this->files($path);
 
             $temp = $name . '.php';
 
-            $item = $this->check($files, $path, $key, $temp);
+            $item = $this->check($files, $path, $temp);
 
             if ($item !== null)
             {
@@ -64,27 +64,21 @@ class Renderer implements Contract
     /**
      * Checks if the specified file exists.
      *
-     * @param string[]       $files
-     * @param string         $path
-     * @param integer|string $source
-     * @param string         $plate
+     * @param string[] $files
+     * @param string   $path
+     * @param string   $plate
      *
      * @return string|null
      */
-    protected function check($files, $path, $source, $plate)
+    protected function check($files, $path, $plate)
     {
-        $regex = '/^\d\//i';
-
-        $file = null;
-
         foreach ($files as $value)
         {
-            $temp = str_replace($path, $source, $value);
+            $temp = str_replace($path, '', $value);
 
             $temp = str_replace('\\', '/', $temp);
 
-            /** @var string */
-            $temp = preg_replace($regex, '', $temp);
+            $temp = ltrim($temp, '/');
 
             $lower = strtolower($temp) === $plate;
 
@@ -94,7 +88,7 @@ class Renderer implements Contract
             }
         }
 
-        return $file;
+        return null;
     }
 
     /**

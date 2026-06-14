@@ -218,7 +218,7 @@ class Router implements Contract
      */
     protected function route($method, $uri, $handler, $middlewares)
     {
-        if (is_string($handler) === true)
+        if (is_string($handler))
         {
             $namespace = $this->namespace;
 

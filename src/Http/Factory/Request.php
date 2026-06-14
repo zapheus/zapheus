@@ -280,10 +280,7 @@ class Request extends Message
 
             $name = str_replace('_', '-', $string);
 
-            /** @var array<string, string> */
-            $headerValue = is_array($value) ? $value : array($value);
-
-            $this->headers[$name] = $headerValue;
+            $this->headers[$name] = array($value);
         }
 
         return $this;

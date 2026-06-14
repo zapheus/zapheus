@@ -17,14 +17,14 @@ class ServerProvider implements Provider
     /**
      * @var \Zapheus\Contract\Http\Server\Middleware[]
      */
-    protected $middlewares = array();
+    protected $items = array();
 
     /**
-     * @param \Zapheus\Contract\Http\Server\Middleware[] $middlewares
+     * @param \Zapheus\Contract\Http\Server\Middleware[] $items
      */
-    public function __construct(array $middlewares = array())
+    public function __construct(array $items = array())
     {
-        $this->middlewares = $middlewares;
+        $this->items = $items;
     }
 
     /**
@@ -36,18 +36,20 @@ class ServerProvider implements Provider
      */
     public function register(Writable $container)
     {
-        $interface = Application::MIDDLEWARE;
+        $class = Application::MIDDLEWARE;
 
+        /** @var \Zapheus\Contract\Provider\Configuration */
         $config = $container->get(Provider::CONFIG);
 
-        $items = $this->middlewares;
+        $items = $this->items;
 
-        $middlewares = $config->get('app.middlewares', $items);
+        /** @var \Zapheus\Contract\Http\Server\Middleware[] */
+        $items = $config->get('app.middlewares', $items);
 
-        $dispatch = new Dispatcher($middlewares);
+        $dispatch = new Dispatcher($items);
 
         $dispatch = $dispatch->setContainer($container);
 
-        return $container->set($interface, $dispatch);
+        return $container->set($class, $dispatch);
     }
 }

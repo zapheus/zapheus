@@ -47,18 +47,29 @@ class ResolverHandler implements Handler
      */
     public function handle(Request $request)
     {
-        if ($this->container->has(Application::RESOLVER) === true)
-        {
-            $resolver = $this->container->get(Application::RESOLVER);
+        $class = Application::RESOLVER;
 
-            return $this->response($resolver->resolve($this->route));
+        if ($this->container->has($class))
+        {
+            /** @var \Zapheus\Contract\Routing\Resolver */
+            $resolver = $this->container->get($class);
+
+            $result = $resolver->resolve($this->route);
+
+            return $this->response($result);
         }
 
-        $this->container->set(Application::REQUEST, $request);
+        // Set the HTTP request to the container ---
+        $class = Application::REQUEST;
+
+        $this->container->set($class, $request);
+        // -----------------------------------------
 
         $resolver = new Resolver($this->container);
 
-        return $this->response($resolver->resolve($this->route));
+        $result = $resolver->resolve($this->route);
+
+        return $this->response($result);
     }
 
     /**
@@ -70,14 +81,20 @@ class ResolverHandler implements Handler
      */
     protected function response($result)
     {
-        $response = $this->container->get(Application::RESPONSE);
+        $class = Application::RESPONSE;
+
+        /** @var \Zapheus\Contract\Http\Message\Response */
+        $response = $this->container->get($class);
 
         if ($result instanceof Response)
         {
             return $result;
         }
 
-        $response->getBody()->write($result);
+        if (is_string($result))
+        {
+            $response->getBody()->write($result);
+        }
 
         return $response;
     }

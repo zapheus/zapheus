@@ -602,7 +602,7 @@ Also use `RouteFactory` for building routes:
 +    ->make();
 ```
 
-### Updated method in `Route`
+### Updated methods in `Route`
 
 `Route` getter methods have been updated to use the `get` prefix:
 

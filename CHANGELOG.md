@@ -9,13 +9,21 @@ All notable changes to `Zapheus` will be documented in this file.
 - HTTP factories in `Http\Factory`
 
 ### Changed
-- Conformed `Http` to [PSR standards](https://www.php-fig.org/psr/psr-7)
+- `Application` implements `Handler`, `Writable`
+- `Application::run` returns `Stream` not `string`
+- Message - Conformed to [PSR standards](https://www.php-fig.org/psr/psr-7)
 - Moved interfaces to `Zapheus\Contract`
-- Method names of `Routing\Route`
+- Routing - `Dispatcher` accepts `Router`
+- Routing - Method names of `Route`
+- Server - `container` to `setContainer` in `Dispatcher`
 
 ### Removed
-- `Coordinator`, `Middlelayer`
+- `$base_namespace` parameter in `Router`
+- `Coordinator`, `Middlelayer` classes
+- `Ropebridge`, `Mutator` classes
+- `Route::result` static method
 - Implicitly nullable type hints
+- Second argument in `Resolver::resolve`
 
 ## 0.1.0 - 2018-04-23
 

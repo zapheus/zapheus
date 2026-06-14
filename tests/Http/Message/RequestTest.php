@@ -331,7 +331,8 @@ class RequestTest extends Testcase
      */
     protected function doSetUp()
     {
-        /** @var array<string, mixed> */
+        // Simulate the $_SERVER data -----
+        /** @var array<string, string> */
         $server = $_SERVER;
 
         $server['REQUEST_METHOD'] = 'GET';
@@ -340,15 +341,20 @@ class RequestTest extends Testcase
 
         $server['SERVER_NAME'] = 'roug.in';
 
-        $server['SERVER_PORT'] = 8000;
+        $server['SERVER_PORT'] = '8000';
+        // --------------------------------
 
+        // Simulate a file upload in $_FILES -----------
         $_FILES['file']['error'] = 0;
 
-        $file = __DIR__ . '/../../Fixture/Views/LoremIpsum.php';
+        $path = __DIR__ . '/../..';
+
+        $file = $path . '/Fixture/Views/LoremIpsum.php';
 
         $_FILES['file']['name'] = basename($file);
 
         $_FILES['file']['tmp_name'] = $file;
+        // ---------------------------------------------
 
         $request = new Request('GET', '/', $server);
 
@@ -356,6 +362,8 @@ class RequestTest extends Testcase
 
         $factory = $factory->setRequest($request);
 
-        $this->self = $factory->withServerParams($server);
+        $factory->withServerParams($server);
+
+        $this->self = $factory;
     }
 }

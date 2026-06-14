@@ -41,8 +41,9 @@ class DispatcherTest extends Testcase
      */
     public function test_passed_if_closure_middleware_dispatches()
     {
-        $cb = function ($request, $next)
+        $this->self->pipe(function ($request, $next)
         {
+            /** @var \Zapheus\Contract\Http\Message\Response */
             $response = $next($request);
 
             /** @var resource */
@@ -57,12 +58,11 @@ class DispatcherTest extends Testcase
             $maker->setResponse($response);
 
             return $maker->withBody($stream)->make();
-        };
-
-        $this->self->pipe($cb);
+        });
 
         $this->self->pipe(function ($request, $next)
         {
+            /** @var \Zapheus\Contract\Http\Message\Response */
             $response = $next($request);
 
             $response->getBody()->write('Hello');
@@ -120,18 +120,19 @@ class DispatcherTest extends Testcase
      */
     protected function doSetUp()
     {
-        $items = array();
-
-        $items[] = new JsonMiddleware;
+        $items = array(new JsonMiddleware);
 
         $this->self = new Dispatcher($items);
 
-        $server = array();
+        // Simulate data as $_SERVER ---------
+        $server = array('REQUEST_URI' => '/');
 
         $server['REQUEST_METHOD'] = 'GET';
-        $server['REQUEST_URI'] = '/';
+
         $server['SERVER_NAME'] = 'roug.in';
-        $server['SERVER_PORT'] = 8000;
+
+        $server['SERVER_PORT'] = '8000';
+        // -----------------------------------
 
         $factory = new Request;
 

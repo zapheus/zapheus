@@ -9,6 +9,7 @@ use Zapheus\Fixture\Http\Middlewares\JsonMiddleware;
 use Zapheus\Fixture\Providers\TestProvider;
 use Zapheus\Http\Factory\Response as ResponseFactory;
 use Zapheus\Http\Message\Response;
+use Zapheus\Http\Message\Stream;
 use Zapheus\Http\ServerProvider;
 use Zapheus\Routing\Dispatcher;
 use Zapheus\Routing\Resolver;
@@ -20,7 +21,7 @@ use Zapheus\Routing\Router;
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class ApplicationTest extends AbstractTestCase
+class ApplicationTest extends Testcase
 {
     /**
      * @runInSeparateProcess
@@ -43,11 +44,12 @@ class ApplicationTest extends AbstractTestCase
      */
     public function test_passed_if_config_set_with_array()
     {
-        $application = $this->application();
+        $app = new Application;
 
-        $application->config(array('framework' => 'Zapheus'));
+        $app->config(array('framework' => 'Zapheus'));
 
-        $config = $application->get(ServerProvider::CONFIG);
+        /** @var \Zapheus\Contract\Provider\Configuration */
+        $config = $app->get(ServerProvider::CONFIG);
 
         $expect = 'Zapheus';
 
@@ -61,11 +63,12 @@ class ApplicationTest extends AbstractTestCase
      */
     public function test_passed_if_config_set_with_file_path()
     {
-        $application = $this->application();
+        $app = new Application;
 
-        $application->config(__DIR__ . '/../Fixture/Config');
+        $app->config(__DIR__ . '/../Fixture/Config');
 
-        $config = $application->get(ServerProvider::CONFIG);
+        /** @var \Zapheus\Contract\Provider\Configuration */
+        $config = $app->get(ServerProvider::CONFIG);
 
         $expect = 'Zapheus Framework';
 
@@ -89,15 +92,15 @@ class ApplicationTest extends AbstractTestCase
      */
     public function test_passed_if_container_is_set()
     {
-        $application = $this->application();
+        $app = new Application;
 
         $container = new Container;
 
-        $application->setContainer($container);
+        $app->setContainer($container);
 
         $expect = $container;
 
-        $actual = $application->getContainer();
+        $actual = $app->getContainer();
 
         $this->assertEquals($expect, $actual);
     }
@@ -139,13 +142,14 @@ class ApplicationTest extends AbstractTestCase
      */
     public function test_passed_if_route_has_middleware()
     {
-        $interface = 'Zapheus\Contract\Http\Message\Request';
+        $class = 'Zapheus\Contract\Http\Message\Request';
 
         $this->self->add(new ServerProvider);
 
         $app = $this->request('POST', '/json');
 
-        $request = $app->get($interface);
+        /** @var \Zapheus\Contract\Http\Message\Request */
+        $request = $app->get($class);
 
         $expect = array('application/json');
 
@@ -199,27 +203,31 @@ class ApplicationTest extends AbstractTestCase
      */
     protected function doSetUp()
     {
-        parent::doSetUp();
+        $this->self = new Application;
 
-        $this->self = $this->application();
-
+        // Route with its handler as string-based ------
         $controller = $this->define(new HailController);
 
         $handler = $controller . '@greet';
 
         $route = new Route('GET', '/', $handler);
+        // ---------------------------------------------
 
-        $json = new Route('POST', '/json', $handler, new JsonMiddleware);
+        // Same string-based route but with middleware ------
+        $items = array(new JsonMiddleware);
 
+        $json = new Route('POST', '/json', $handler, $items);
+        // --------------------------------------------------
+
+        // Route with a middleware as a callback ----
         $test = new Route('GET', '/test', function ()
         {
             $factory = new ResponseFactory;
 
+            /** @var resource */
             $stream = fopen('php://temp', 'r+');
 
-            ! $stream && $stream = null;
-
-            $body = new \Zapheus\Http\Message\Stream($stream);
+            $body = new Stream($stream);
 
             $body->write('Hello, Zapheus');
 
@@ -229,17 +237,26 @@ class ApplicationTest extends AbstractTestCase
 
             return $factory->make();
         });
+        // ------------------------------------------
 
         $router = new Router(array($route, $json, $test));
 
-        $dispatcher = new Dispatcher($router);
+        // Initialize the route dispatcher ---
+        $dispatch = new Dispatcher($router);
 
-        $this->self->set(Application::DISPATCHER, $dispatcher);
+        $class = Application::DISPATCHER;
 
+        $this->self->set($class, $dispatch);
+        // -----------------------------------
+
+        // Initialize default response with headers --------
         $headers = array('X-Framework' => array('Zapheus'));
 
         $response = new Response(200, $headers);
 
-        $this->self->set(Application::RESPONSE, $response);
+        $class = Application::RESPONSE;
+
+        $this->self->set($class, $response);
+        // -------------------------------------------------
     }
 }

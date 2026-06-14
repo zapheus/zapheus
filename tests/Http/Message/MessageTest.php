@@ -32,9 +32,11 @@ class MessageTest extends Testcase
      */
     public function test_passed_if_all_headers_retrieved()
     {
-        $expect = array('names' => array('Rougin', 'Royce'));
+        $data = array('Rougin', 'Royce');
 
-        $this->self->withHeader('names', array('Rougin', 'Royce'));
+        $expect = array('names' => $data);
+
+        $this->self->withHeader('names', $data);
 
         $actual = $this->self->make()->getHeaders();
 
@@ -46,7 +48,10 @@ class MessageTest extends Testcase
      */
     public function test_passed_if_custom_stream_is_set()
     {
-        $stream = new Stream(fopen('php://temp', 'r+'));
+        /** @var resource */
+        $file = fopen('php://temp', 'r+');
+
+        $stream = new Stream($file);
 
         $stream->write('Hello, world');
 

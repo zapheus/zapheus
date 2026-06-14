@@ -32,4 +32,22 @@ class Testcase extends Legacy
         /** @phpstan-ignore-next-line */
         $this->setExpectedException($exception);
     }
+
+    /**
+     * @param string $message
+     *
+     * @return void
+     */
+    public function doExpectExceptionMessage($message)
+    {
+        /** @phpstan-ignore-next-line */
+        if (method_exists($this, 'expectExceptionMessage'))
+        {
+            $this->expectExceptionMessage($message);
+
+            return;
+        }
+
+        $this->expectExceptionMessageIs($message);
+    }
 }

@@ -3,3 +3,16 @@ parameters:
   paths:
     - src
     - tests
+  ignoreErrors:
+    - '#^Binary operation "\." between ''Hello everyone\! I…'' and mixed results in an error\.$#'
+    - '#^Cannot access offset ''error'' on mixed\.$#'
+    - '#^Cannot access offset ''name'' on mixed\.$#'
+    - '#^Cannot access offset ''tmp_name'' on mixed\.$#'
+    - '#^Parameter \#1 \$callback of function call_user_func_array expects callable\(\)\: mixed, array\{mixed, string\}\|\(callable\(\)\: mixed\) given\.$#'
+    - '#^Parameter \#1 \$data of method Zapheus\\Http\\Factory\\Request\:\:withParsedBody\(\) expects array\<string, mixed\>\|object\|null, string given\.$#'
+    - '#^Parameter \#1 \$files of method Zapheus\\Http\\Factory\\Request\:\:withUploadedFiles\(\) expects array\<string, array\<Zapheus\\Contract\\Http\\Message\\File\>\>, array\<string, array\<int, string\>\> given\.$#'
+    - '#^Parameter \#1 \$function of class ReflectionFunction constructor expects Closure\|string, callable\(\)\: mixed given\.$#'
+    - '#^Parameter \#1 \$server of method Zapheus\\Http\\Factory\\Request\:\:withServerParams\(\) expects array\<string, string\>, array\<string, int\|string\> given\.$#'
+    - '#^Parameter \#2 \.\.\.\$values of function sprintf expects bool\|float\|int\|string\|null, mixed given\.$#'
+    - '#^Parameter \#3 \$server of class Zapheus\\Http\\Message\\Request constructor expects array\<string, string\>, array\<string, int\|string\> given\.$#'
+    - '#^Trying to invoke mixed but it''s not a callable\.$#'

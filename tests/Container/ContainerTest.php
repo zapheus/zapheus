@@ -13,7 +13,7 @@ use Zapheus\Testcase;
 class ContainerTest extends Testcase
 {
     /**
-     * @var \Zapheus\Contract\Container\Container
+     * @var \Zapheus\Contract\Container\Writable
      */
     protected $self;
 

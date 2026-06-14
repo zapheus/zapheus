@@ -26,13 +26,15 @@ class RoutingHandlerTest extends Testcase
      */
     public function test_passed_if_route_from_attribute()
     {
-        $server = array('REQUEST_METHOD' => 'GET');
+        // Simulate data as $_SERVER ---------
+        $server = array('REQUEST_URI' => '/');
 
-        $server['REQUEST_URI'] = '/';
+        $server['REQUEST_METHOD'] = 'GET';
 
         $server['SERVER_NAME'] = 'roug.in';
 
-        $server['SERVER_PORT'] = 8000;
+        $server['SERVER_PORT'] = '8000';
+        // -----------------------------------
 
         $factory = new Request;
 

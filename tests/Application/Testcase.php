@@ -4,14 +4,14 @@ namespace Zapheus\Application;
 
 use Zapheus\Application;
 use Zapheus\Http\Factory\Request;
-use Zapheus\Testcase;
+use Zapheus\Testcase as Zapheus;
 
 /**
  * @package Zapheus
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-abstract class AbstractTestCase extends Testcase
+abstract class Testcase extends Zapheus
 {
     /**
      * @var \Zapheus\Application
@@ -19,15 +19,7 @@ abstract class AbstractTestCase extends Testcase
     protected $self;
 
     /**
-     * @return \Zapheus\Application
-     */
-    protected function application()
-    {
-        return new Application;
-    }
-
-    /**
-     * @param mixed $instance
+     * @param object $instance
      *
      * @return false|string
      */
@@ -41,20 +33,6 @@ abstract class AbstractTestCase extends Testcase
     }
 
     /**
-     * @return void
-     */
-    protected function doSetUp()
-    {
-        $_SERVER['REQUEST_METHOD'] = 'GET';
-
-        $_SERVER['REQUEST_URI'] = '/';
-
-        $_SERVER['SERVER_NAME'] = 'roug.in';
-
-        $_SERVER['SERVER_PORT'] = 8000;
-    }
-
-    /**
      * @param string $method
      * @param string $uri
      *
@@ -64,17 +42,19 @@ abstract class AbstractTestCase extends Testcase
     {
         $interface = Application::REQUEST;
 
-        $_SERVER['REQUEST_METHOD'] = $method;
+        // Simulate data as $_SERVER ----------
+        $server = array('REQUEST_URI' => $uri);
 
-        $_SERVER['REQUEST_URI'] = $uri;
+        $server['REQUEST_METHOD'] = $method;
 
-        $_SERVER['SERVER_NAME'] = 'roug.in';
+        $server['SERVER_NAME'] = 'roug.in';
 
-        $_SERVER['SERVER_PORT'] = 8000;
+        $server['SERVER_PORT'] = '8000';
+        // ------------------------------------
 
         $factory = new Request;
 
-        $factory->withServerParams($_SERVER);
+        $factory->withServerParams($server);
 
         $request = $factory->make();
 

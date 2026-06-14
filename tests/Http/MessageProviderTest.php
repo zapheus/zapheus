@@ -31,6 +31,7 @@ class MessageProviderTest extends Testcase
     {
         $container = $this->self->register($this->container);
 
+        /** @var \Zapheus\Contract\Http\Message\Request */
         $request = $container->get(Application::REQUEST);
 
         $expect = 'roug.in';

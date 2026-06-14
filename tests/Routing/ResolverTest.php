@@ -24,14 +24,16 @@ class ResolverTest extends Testcase
     /**
      * @return void
      */
-    public function test_passed_if_class_parameter_resolved_from_container()
+    public function test_passed_if_class_param_resolved_from_container()
     {
+        /** @var class-string */
         $name = 'Zapheus\Fixture\Http\Controllers\HailController';
 
         $container = new Container;
 
         $container->set($name, new HailController);
 
+        /** @var class-string */
         $laud = 'Zapheus\Fixture\Http\Controllers\LaudController';
 
         $container->set($laud, new LaudController(new HailController));
@@ -95,8 +97,10 @@ class ResolverTest extends Testcase
 
         $factory->setMethod('GET');
 
+        /** @var class-string */
         $hail = 'Zapheus\Fixture\Http\Controllers\HailController';
 
+        /** @var class-string */
         $laud = 'Zapheus\Fixture\Http\Controllers\LaudController';
 
         /** @var callable */
@@ -130,14 +134,15 @@ class ResolverTest extends Testcase
 
         $factory->setUri('/test');
 
-        $instance = 'Zapheus\Fixture\Http\Controllers\TestController';
+        /** @var class-string */
+        $class = 'Zapheus\Fixture\Http\Controllers\TestController';
 
         $expect = 'Hello, world and people';
 
         $factory->setMethod('GET');
 
         /** @var callable */
-        $cb = array($instance, 'greet');
+        $cb = array($class, 'greet');
 
         $factory->setHandler($cb);
 

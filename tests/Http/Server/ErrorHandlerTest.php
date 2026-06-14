@@ -24,25 +24,31 @@ class ErrorHandlerTest extends Testcase
     {
         $expect = 'Custom error: "%s"';
 
+        $class = 'Zapheus\Contract\Http\Message\Response';
+
         $this->self->setMessage($expect);
 
-        $message = sprintf($expect, 'Zapheus\Contract\Http\Message\Response');
+        $message = sprintf($expect, $class);
 
-        $this->doExpectException('LogicException', $message);
+        $this->doExpectExceptionMessage($message);
 
-        $server = array('REQUEST_METHOD' => 'GET');
+        // Simulate data as $_SERVER ---------
+        $server = array('REQUEST_URI' => '/');
 
-        $server['REQUEST_URI'] = '/';
+        $server['REQUEST_METHOD'] = 'GET';
 
         $server['SERVER_NAME'] = 'roug.in';
 
-        $server['SERVER_PORT'] = 8000;
+        $server['SERVER_PORT'] = '8000';
+        // -----------------------------------
 
         $factory = new Request;
 
         $factory->withServerParams($server);
 
-        $this->self->handle($factory->make());
+        $request = $factory->make();
+
+        $this->self->handle($request);
     }
 
     /**

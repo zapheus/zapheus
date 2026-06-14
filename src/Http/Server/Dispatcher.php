@@ -16,9 +16,9 @@ use Zapheus\Contract\Http\Server\Handler;
 class Dispatcher implements Contract
 {
     /**
-     * @var \Zapheus\Contract\Container\Container
+     * @var \Zapheus\Contract\Container\Container|null
      */
-    protected $container;
+    protected $container = null;
 
     /**
      * @var \Zapheus\Contract\Http\Server\Middleware[]
@@ -30,10 +30,7 @@ class Dispatcher implements Contract
      */
     public function __construct(array $stack = array())
     {
-        foreach ($stack as $key => $item)
-        {
-            $this->stack[] = $item;
-        }
+        $this->stack = $stack;
     }
 
     /**
@@ -48,6 +45,21 @@ class Dispatcher implements Contract
         $resolved = $this->resolve(0);
 
         return $resolved->handle($request);
+    }
+
+    /**
+     * Returns the container.
+     *
+     * @return \Zapheus\Contract\Container\Container
+     */
+    public function getContainer()
+    {
+        if (! $this->container)
+        {
+            return new ReflectionContainer;
+        }
+
+        return $this->container;
     }
 
     /**
@@ -129,12 +141,10 @@ class Dispatcher implements Contract
     {
         if (is_string($middleware))
         {
-            if ($this->container === null)
-            {
-                $this->container = new ReflectionContainer;
-            }
+            $app = $this->getContainer();
 
-            return $this->container->get($middleware);
+            /** @var \Zapheus\Contract\Http\Server\Middleware */
+            return $app->get($middleware);
         }
 
         if (is_callable($middleware))
@@ -142,6 +152,7 @@ class Dispatcher implements Contract
             return new ClosureMiddleware($middleware);
         }
 
+        /** @var \Zapheus\Contract\Http\Server\Middleware */
         return $middleware;
     }
 }

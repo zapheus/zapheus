@@ -47,9 +47,8 @@ class Message implements Contract
     {
         if ($this->stream === null)
         {
+            /** @var resource */
             $stream = fopen('php://temp', 'r+');
-
-            ! $stream && $stream = null;
 
             $this->stream = new Stream($stream);
         }

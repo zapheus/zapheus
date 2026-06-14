@@ -53,6 +53,7 @@ class Stream implements Contract
      */
     public function getContents()
     {
+        /** @var string */
         return stream_get_contents($this->stream);
     }
 

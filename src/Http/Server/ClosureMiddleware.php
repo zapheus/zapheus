@@ -38,6 +38,7 @@ class ClosureMiddleware implements Middleware
     {
         $middleware = $this->callback;
 
+        /** @var \Zapheus\Contract\Http\Message\Response */
         return $middleware($request, $handler);
     }
 }

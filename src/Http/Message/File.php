@@ -32,12 +32,12 @@ class File implements Contract
     protected $name;
 
     /**
-     * @var false|integer|null
+     * @var integer|null
      */
     protected $size;
 
     /**
-     * @var false|string
+     * @var string|null
      */
     protected $type;
 
@@ -54,9 +54,19 @@ class File implements Contract
 
         $this->name = $name;
 
-        $this->size = filesize($file);
+        $size = filesize($file);
 
-        $this->type = mime_content_type($file);
+        if ($size !== false)
+        {
+            $this->size = $size;
+        }
+
+        $type = mime_content_type($file);
+
+        if ($type !== false)
+        {
+            $this->type = $type;
+        }
     }
 
     /**
@@ -124,9 +134,8 @@ class File implements Contract
             throw new \RuntimeException($text);
         }
 
+        /** @var resource */
         $stream = fopen($this->file, 'r+');
-
-        $stream = $stream === false ? null : $stream;
 
         return new Stream($stream);
     }

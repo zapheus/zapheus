@@ -39,6 +39,7 @@ class Parameter
             /** @var callable */
             $class = array($this->self, 'getClass');
 
+            /** @var \ReflectionClass<object>|null */
             return call_user_func($class);
         }
 

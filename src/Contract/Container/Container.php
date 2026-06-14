@@ -15,8 +15,8 @@ interface Container
      * @param string $id
      *
      * @return mixed
-     * @throws \Zapheus\Container\Exception\NotFoundException
-     * @throws \Zapheus\Container\Exception\ContainerException
+     * @throws \Zapheus\Container\NotFoundException
+     * @throws \Zapheus\Container\ContainerException
      */
     public function get($id);
 

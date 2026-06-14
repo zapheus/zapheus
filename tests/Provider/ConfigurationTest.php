@@ -115,6 +115,32 @@ class ConfigurationTest extends Testcase
     /**
      * @return void
      */
+    public function test_passed_if_default_returned_for_non_array()
+    {
+        $expect = 'fallback';
+
+        $actual = $this->self->get('user.name.extra', 'fallback');
+
+        $this->assertEquals($expect, $actual);
+    }
+
+    /**
+     * @return void
+     */
+    public function test_passed_if_default_returned_for_null_value()
+    {
+        $this->self->set('app.name', null);
+
+        $expect = 'fallback';
+
+        $actual = $this->self->get('app.name', 'fallback');
+
+        $this->assertEquals($expect, $actual);
+    }
+
+    /**
+     * @return void
+     */
     public function test_passed_if_default_returned_for_unknown()
     {
         $expect = array();
@@ -124,6 +150,28 @@ class ConfigurationTest extends Testcase
         $actual = $this->self->get('app.views');
 
         $this->assertEquals($expect, $actual);
+    }
+
+    /**
+     * @return void
+     */
+    public function test_passed_if_empty_key_is_set()
+    {
+        $actual = $this->self->set('', 'value');
+
+        $this->assertInstanceOf('Zapheus\Provider\Configuration', $actual);
+    }
+
+    /**
+     * @return void
+     */
+    public function test_passed_if_flatten_skips_non_string_key()
+    {
+        $config = new Configuration(array(0 => 'skipped'));
+
+        $actual = $config->all(true);
+
+        $this->assertEquals(array(), $actual);
     }
 
     /**

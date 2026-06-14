@@ -32,6 +32,16 @@ class ContainerTest extends Testcase
     /**
      * @return void
      */
+    public function test_passed_if_container_exception_instantiated()
+    {
+        $actual = new ContainerException;
+
+        $this->assertInstanceOf('InvalidArgumentException', $actual);
+    }
+
+    /**
+     * @return void
+     */
     public function test_passed_if_container_returns_entry()
     {
         $hail = new HailController;
@@ -53,6 +63,16 @@ class ContainerTest extends Testcase
         $this->self->set('hail', new HailController);
 
         $this->assertTrue($this->self->has('hail'));
+    }
+
+    /**
+     * @return void
+     */
+    public function test_passed_if_not_found_exception_instantiated()
+    {
+        $actual = new NotFoundException;
+
+        $this->assertInstanceOf('Zapheus\Container\ContainerException', $actual);
     }
 
     /**

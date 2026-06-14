@@ -2,6 +2,7 @@
 
 namespace Zapheus\Http\Server;
 
+use Zapheus\Container\ReflectionContainer;
 use Zapheus\Fixture\Http\Middlewares\LastMiddleware as FixtureLastMiddleware;
 use Zapheus\Fixture\Http\Middlewares\JsonMiddleware;
 use Zapheus\Http\Factory\Request;
@@ -22,7 +23,7 @@ class DispatcherTest extends Testcase
     protected $request;
 
     /**
-     * @var \Zapheus\Contract\Http\Server\Dispatcher
+     * @var \Zapheus\Http\Server\Dispatcher
      */
     protected $self;
 
@@ -77,6 +78,28 @@ class DispatcherTest extends Testcase
         $response = $this->self->dispatch($this->request);
 
         $actual = $response->getBody();
+
+        $this->assertEquals($expect, $actual);
+    }
+
+    /**
+     * @return void
+     */
+    public function test_passed_if_container_is_customized()
+    {
+        $app = new ReflectionContainer;
+
+        $this->self->setContainer($app);
+
+        $last = 'Zapheus\Fixture\Http\Middlewares\LastMiddleware';
+
+        $this->self->pipe($last);
+
+        $expect = array('application/json');
+
+        $response = $this->self->dispatch($this->request);
+
+        $actual = $response->getHeader('Content-Type');
 
         $this->assertEquals($expect, $actual);
     }

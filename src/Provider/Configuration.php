@@ -33,7 +33,12 @@ class Configuration implements Contract
      */
     public function all($dotify = false)
     {
-        return $dotify ? $this->dotify($this->data) : $this->data;
+        if ($dotify)
+        {
+            return $this->flatten($this->data);
+        }
+
+        return $this->data;
     }
 
     /**
@@ -51,23 +56,29 @@ class Configuration implements Contract
 
         $keys = array_filter(explode('.', $key));
 
-        $length = count($keys);
-
-        for ($i = 0; $i < $length; $i++)
+        foreach ($keys as $index)
         {
-            $index = $keys[$i];
+            if (! is_array($items))
+            {
+                return $default;
+            }
 
-            $items = &$items[$index];
+            if (! array_key_exists($index, $items))
+            {
+                return $default;
+            }
+
+            $items = $items[$index];
         }
 
         if ($items === null)
         {
-            $items = $default;
+            return $default;
         }
 
-        if ($dotify)
+        if ($dotify && is_array($items))
         {
-            return $this->dotify($items);
+            return $this->flatten($items);
         }
 
         return $items;
@@ -82,16 +93,19 @@ class Configuration implements Contract
      */
     public function load($path)
     {
-        $data  = array();
+        $data = array();
+
         $items = array($path);
 
         if (substr($path, -4) !== '.php')
         {
-            $directory = new \RecursiveDirectoryIterator($path);
+            $dir = new \RecursiveDirectoryIterator($path);
 
-            $iterator = new \RecursiveIteratorIterator($directory);
+            $item = new \RecursiveIteratorIterator($dir);
 
-            $regex = new \RegexIterator($iterator, '/^.+\.php$/i', 1);
+            $regex = '/^.+\.php$/i';
+
+            $regex = new \RegexIterator($item, $regex, 1);
 
             $items = array_keys(iterator_to_array($regex));
         }
@@ -107,36 +121,6 @@ class Configuration implements Contract
     }
 
     /**
-     * Converts the data into dot notation values.
-     *
-     * @param array<string, mixed> $data
-     * @param array<string, mixed> $result
-     * @param string               $key
-     *
-     * @return array<string, mixed>
-     */
-    protected function dotify(array $data, $result = array(), $key = '')
-    {
-        foreach ($data as $name => $value)
-        {
-            if (is_array($value) && empty($value) === false)
-            {
-                $text = $key . $name . '.';
-
-                $item = $this->dotify($value, $result, $text);
-
-                $result = array_merge($result, $item);
-
-                continue;
-            }
-
-            $result[$key . $name] = $value;
-        }
-
-        return $result;
-    }
-
-    /**
      * Sets the value to the specified key.
      *
      * @param string $key
@@ -146,11 +130,80 @@ class Configuration implements Contract
      */
     public function set($key, $value)
     {
-        $keys = array_filter(explode('.', $key));
+        $keys = array_values(array_filter(explode('.', $key)));
 
-        $this->save($keys, $this->data, $value);
+        $count = count($keys);
+
+        if ($count === 0)
+        {
+            return $this;
+        }
+
+        if ($count === 1)
+        {
+            $this->data[$keys[0]] = $value;
+
+            return $this;
+        }
+
+        $nested = $value;
+
+        for ($i = $count - 1; $i >= 1; $i--)
+        {
+            $nested = array($keys[$i] => $nested);
+        }
+
+        $root = $keys[0];
+
+        if (isset($this->data[$root]) && is_array($this->data[$root]))
+        {
+            $this->data[$root] = array_replace_recursive($this->data[$root], $nested);
+        }
+        else
+        {
+            $this->data[$root] = $nested;
+        }
 
         return $this;
+    }
+
+    /**
+     * Converts a nested associative array into dot notation.
+     *
+     * @param mixed[] $data
+     * @param string  $prefix
+     *
+     * @return array<string, mixed>
+     */
+    protected function flatten(array $data, $prefix = '')
+    {
+        $result = array();
+
+        foreach ($data as $key => $value)
+        {
+            if (! is_string($key))
+            {
+                continue;
+            }
+
+            $path = $prefix === '' ? $key : $prefix . '.' . $key;
+
+            if (is_array($value) && empty($value) === false)
+            {
+                $items = $this->flatten($value, $path);
+
+                foreach ($items as $k => $v)
+                {
+                    $result[$k] = $v;
+                }
+            }
+            else
+            {
+                $result[$path] = $value;
+            }
+        }
+
+        return $result;
     }
 
     /**
@@ -167,34 +220,8 @@ class Configuration implements Contract
 
         $name = str_replace(array('\\', '/'), '.', $name);
 
-        $regex = preg_replace('/^./i', '', $name);
+        $name = substr($name, 1);
 
-        return basename(strtolower($regex), '.php');
-    }
-
-    /**
-     * Saves the specified key in the list of data.
-     *
-     * @param string[]             &$keys
-     * @param array<string, mixed> &$data
-     * @param mixed                $value
-     *
-     * @return mixed
-     */
-    protected function save(array &$keys, &$data, $value)
-    {
-        $key = array_shift($keys);
-
-        if (! isset($data[$key]))
-        {
-            $data[$key] = array();
-        }
-
-        if (empty($keys))
-        {
-            return $data[$key] = $value;
-        }
-
-        return $this->save($keys, $data[$key], $value);
+        return basename(strtolower($name), '.php');
     }
 }

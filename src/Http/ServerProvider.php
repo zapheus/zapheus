@@ -46,7 +46,7 @@ class ServerProvider implements Provider
 
         $dispatch = new Dispatcher($middlewares);
 
-        $dispatch = $dispatch->container($container);
+        $dispatch = $dispatch->setContainer($container);
 
         return $container->set($interface, $dispatch);
     }

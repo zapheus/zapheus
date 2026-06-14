@@ -50,7 +50,7 @@ class RoutingHandler implements Handler
 
         $dispatch = new Dispatcher($items);
 
-        $dispatch = $dispatch->container($this->container);
+        $dispatch = $dispatch->setContainer($this->container);
 
         return $dispatch->process($request, $handler);
     }

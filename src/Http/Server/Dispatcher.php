@@ -37,20 +37,6 @@ class Dispatcher implements Contract
     }
 
     /**
-     * Sets the container for binding middleware dependencies.
-     *
-     * @param \Zapheus\Contract\Container\Container $container
-     *
-     * @return self
-     */
-    public function container(Container $container)
-    {
-        $this->container = $container;
-
-        return $this;
-    }
-
-    /**
      * Dispatches the defined middleware stack.
      *
      * @param \Zapheus\Contract\Http\Message\Request $request
@@ -62,6 +48,20 @@ class Dispatcher implements Contract
         $resolved = $this->resolve(0);
 
         return $resolved->handle($request);
+    }
+
+    /**
+     * Adds a new middleware to the stack.
+     *
+     * @param mixed $middleware
+     *
+     * @return self
+     */
+    public function pipe($middleware)
+    {
+        $this->stack[] = $this->transform($middleware);
+
+        return $this;
     }
 
     /**
@@ -84,17 +84,38 @@ class Dispatcher implements Contract
     }
 
     /**
-     * Adds a new middleware to the stack.
+     * Sets the container for binding middleware dependencies.
      *
-     * @param mixed $middleware
+     * @param \Zapheus\Contract\Container\Container $container
      *
      * @return self
      */
-    public function pipe($middleware)
+    public function setContainer(Container $container)
     {
-        $this->stack[] = $this->transform($middleware);
+        $this->container = $container;
 
         return $this;
+    }
+
+    /**
+     * Resolves the whole stack through its index.
+     *
+     * @param integer $index
+     *
+     * @return \Zapheus\Contract\Http\Server\Handler
+     */
+    protected function resolve($index)
+    {
+        if (! isset($this->stack[$index]))
+        {
+            return new ErrorHandler;
+        }
+
+        $next = $this->resolve($index + 1);
+
+        $item = $this->transform($this->stack[$index]);
+
+        return new NextHandler($item, $next);
     }
 
     /**
@@ -122,26 +143,5 @@ class Dispatcher implements Contract
         }
 
         return $middleware;
-    }
-
-    /**
-     * Resolves the whole stack through its index.
-     *
-     * @param integer $index
-     *
-     * @return \Zapheus\Contract\Http\Server\Handler
-     */
-    protected function resolve($index)
-    {
-        if (! isset($this->stack[$index]))
-        {
-            return new ErrorHandler;
-        }
-
-        $next = $this->resolve($index + 1);
-
-        $item = $this->transform($this->stack[$index]);
-
-        return new NextHandler($item, $next);
     }
 }

@@ -539,14 +539,14 @@ To ensure compatibility with PHP 5.3 and avoid [deprecation warnings](https://ph
 +public function __construct(array $stack = array())
 ```
 
-Use the existing `container` setter:
+Use the existing `setContainer` setter:
 
 ``` php
 use Zapheus\Http\Server\Dispatcher;
 
 $dispatch = new Dispatcher($stack);
 
-$dispatch->container($container);
+$dispatch->setContainer($container);
 ```
 
 `Zapheus\Routing\RoutingProvider`

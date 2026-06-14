@@ -36,16 +36,25 @@ class Parameter
 
         if (! $php8)
         {
-            return call_user_func(array($this->self, 'getClass'));
+            /** @var callable */
+            $class = array($this->self, 'getClass');
+
+            return call_user_func($class);
         }
 
-        $type = call_user_func(array($this->self, 'getType'));
+        /** @var callable */
+        $class = array($this->self, 'getType');
+
+        $type = call_user_func($class);
 
         $built = true;
 
         if ($type)
         {
-            $built = call_user_func(array($type, 'isBuiltin'));
+            /** @var callable */
+            $class = array($type, 'isBuiltin');
+
+            $built = call_user_func($class);
         }
 
         if ($built)

@@ -14,14 +14,14 @@ class Container implements Writable
     /**
      * @var array<mixed>
      */
-    protected $objects = array();
+    protected $items = array();
 
     /**
-     * @param mixed[] $objects
+     * @param mixed[] $items
      */
-    public function __construct(array $objects = array())
+    public function __construct(array $items = array())
     {
-        $this->objects = $objects;
+        $this->items = $items;
     }
 
     /**
@@ -34,14 +34,14 @@ class Container implements Writable
      */
     public function get($id)
     {
-        if ($this->has($id) === false)
+        if (! $this->has($id))
         {
             $text = 'Alias (' . $id . ') is not defined';
 
             throw new NotFoundException($text);
         }
 
-        return $this->objects[$id];
+        return $this->items[$id];
     }
 
     /**
@@ -53,7 +53,7 @@ class Container implements Writable
      */
     public function has($id)
     {
-        return isset($this->objects[$id]);
+        return isset($this->items[$id]);
     }
 
     /**
@@ -66,7 +66,7 @@ class Container implements Writable
      */
     public function set($id, $concrete)
     {
-        $this->objects[$id] = $concrete;
+        $this->items[$id] = $concrete;
 
         return $this;
     }

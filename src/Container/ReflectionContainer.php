@@ -81,6 +81,4 @@ class ReflectionContainer implements Contract
 
         return $items;
     }
-
-
 }

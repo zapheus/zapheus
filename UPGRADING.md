@@ -630,7 +630,7 @@ Also use `RouteFactory` for building routes:
  /**
   * Returns an array of middlewares.
   *
-  * @return array<integer, \Zapheus\Contract\Http\Server\Middleware>
+  * @return \Zapheus\Contract\Http\Server\Middleware[]
   */
 -public function middlewares();
 +public function getMiddlewares();

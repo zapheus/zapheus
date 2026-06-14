@@ -48,6 +48,7 @@ class Testcase extends Legacy
             return;
         }
 
-        $this->expectExceptionMessageIs($message);
+        /** @phpstan-ignore-next-line */
+        $this->setExpectedException('Exception', $message);
     }
 }

@@ -41,11 +41,11 @@ class ResolverTest extends Testcase
         /** @var callable */
         $cb = array($laud, 'greet');
 
-        $factory->handler($cb);
+        $factory->setHandler($cb);
 
-        $factory->method('GET');
+        $factory->setMethod('GET');
 
-        $factory->uri('/test');
+        $factory->setUri('/test');
 
         $route = $factory->make();
 
@@ -65,11 +65,11 @@ class ResolverTest extends Testcase
     {
         $factory = new RouteFactory;
 
-        $factory->uri('/test');
+        $factory->setUri('/test');
 
-        $factory->method('GET');
+        $factory->setMethod('GET');
 
-        $factory->handler('Zapheus\Fixture\Http\Controllers\HailController@greet');
+        $factory->setHandler('Zapheus\Fixture\Http\Controllers\HailController@greet');
 
         $route = $factory->make();
 
@@ -91,9 +91,9 @@ class ResolverTest extends Testcase
     {
         $factory = new RouteFactory;
 
-        $factory->uri('/test');
+        $factory->setUri('/test');
 
-        $factory->method('GET');
+        $factory->setMethod('GET');
 
         $hail = 'Zapheus\Fixture\Http\Controllers\HailController';
 
@@ -102,7 +102,7 @@ class ResolverTest extends Testcase
         /** @var callable */
         $cb = array($laud, 'greet');
 
-        $factory->handler($cb);
+        $factory->setHandler($cb);
 
         $route = $factory->make();
 
@@ -128,20 +128,20 @@ class ResolverTest extends Testcase
     {
         $factory = new RouteFactory;
 
-        $factory->uri('/test');
+        $factory->setUri('/test');
 
         $instance = 'Zapheus\Fixture\Http\Controllers\TestController';
 
         $expect = 'Hello, world and people';
 
-        $factory->method('GET');
+        $factory->setMethod('GET');
 
         /** @var callable */
         $cb = array($instance, 'greet');
 
-        $factory->handler($cb);
+        $factory->setHandler($cb);
 
-        $factory->middlewares(array(new LastMiddleware));
+        $factory->setMiddlewares(array(new LastMiddleware));
 
         $route = $factory->make();
 

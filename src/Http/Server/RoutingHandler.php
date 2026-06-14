@@ -41,12 +41,12 @@ class RoutingHandler implements Handler
 
         $handler = new ResolverHandler($this->container, $route);
 
-        if (count($route->middlewares()) === 0)
+        if (count($route->getMiddlewares()) === 0)
         {
             return $handler->handle($request);
         }
 
-        $items = $route->middlewares();
+        $items = $route->getMiddlewares();
 
         $dispatch = new Dispatcher($items);
 

@@ -61,7 +61,7 @@ class Dispatcher implements Contract
 
         $factory = $factory->setRoute($route);
 
-        return $factory->parameters($values)->make();
+        return $factory->setParams($values)->make();
     }
 
     /**
@@ -78,9 +78,9 @@ class Dispatcher implements Contract
 
         foreach ($this->router->routes() as $route)
         {
-            $matched = preg_match($route->regex(), $uri, $matches);
+            $matched = preg_match($route->getRegex(), $uri, $matches);
 
-            if ($matched && $route->method() === $method)
+            if ($matched && $route->getMethod() === $method)
             {
                 return array($matches, $route);
             }

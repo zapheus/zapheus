@@ -44,12 +44,12 @@ class Resolver implements Contract
      */
     public function resolve(RouteContract $route)
     {
-        if (is_string($handler = $route->handler()))
+        if (is_string($handler = $route->getHandler()))
         {
             $handler = explode('@', $handler);
         }
 
-        $params = $route->parameters();
+        $params = $route->getParams();
 
         if (is_array($handler))
         {

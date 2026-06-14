@@ -41,27 +41,27 @@ class RouteFactory
      */
     public function setRoute(Contract $route)
     {
-        $this->handler = $route->handler();
+        $this->handler = $route->getHandler();
 
-        $this->method = $route->method();
+        $this->method = $route->getMethod();
 
-        $this->middlewares = $route->middlewares();
+        $this->middlewares = $route->getMiddlewares();
 
-        $this->parameters = $route->parameters();
+        $this->parameters = $route->getParams();
 
-        $this->uri = $route->uri();
+        $this->uri = $route->getUri();
 
         return $this;
     }
 
     /**
-     * @param array<class-string, string>|callable|string $handler
+     * @param \Zapheus\Contract\Http\Server\Middleware $middleware
      *
      * @return self
      */
-    public function handler($handler)
+    public function addMiddleware(Middleware $middleware)
     {
-        $this->handler = $handler;
+        $this->middlewares[] = $middleware;
 
         return $this;
     }
@@ -75,25 +75,25 @@ class RouteFactory
     }
 
     /**
-     * @param string $method
+     * @param array<class-string, string>|callable|string $handler
      *
      * @return self
      */
-    public function method($method)
+    public function setHandler($handler)
     {
-        $this->method = $method;
+        $this->handler = $handler;
 
         return $this;
     }
 
     /**
-     * @param \Zapheus\Contract\Http\Server\Middleware $middleware
+     * @param string $method
      *
      * @return self
      */
-    public function middleware(Middleware $middleware)
+    public function setMethod($method)
     {
-        $this->middlewares[] = $middleware;
+        $this->method = $method;
 
         return $this;
     }
@@ -103,11 +103,11 @@ class RouteFactory
      *
      * @return self
      */
-    public function middlewares(array $middlewares)
+    public function setMiddlewares(array $middlewares)
     {
         foreach ($middlewares as $middleware)
         {
-            $this->middleware($middleware);
+            $this->addMiddleware($middleware);
         }
 
         return $this;
@@ -118,7 +118,7 @@ class RouteFactory
      *
      * @return self
      */
-    public function parameters($parameters)
+    public function setParams($parameters)
     {
         $this->parameters = $parameters;
 
@@ -130,7 +130,7 @@ class RouteFactory
      *
      * @return self
      */
-    public function uri($uri)
+    public function setUri($uri)
     {
         $this->uri = $uri;
 

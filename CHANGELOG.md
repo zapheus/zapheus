@@ -11,6 +11,7 @@ All notable changes to `Zapheus` will be documented in this file.
 ### Changed
 - Conformed `Http` to [PSR standards](https://www.php-fig.org/psr/psr-7)
 - Moved interfaces to `Zapheus\Contract`
+- Method names of `Routing\Route`
 
 ### Removed
 - `Coordinator`, `Middlelayer`

@@ -244,72 +244,6 @@ $dispatcher = (new Dispatcher($stack))
 +public function setMessage($message)
 ```
 
-#### Factories with `with*` methods
-
-Factory classes now use `with*` methods (PSR-07 convention) instead of short fluent setters. All factories support chaining via `set` method to load existing instances, followed by the `with` method to mutate state then use `make` method to build:
-
-``` diff
-+use Zapheus\Http\Factory\Request as RequestFactory;
-+use Zapheus\Http\Factory\Response as ResponseFactory;
-+use Zapheus\Http\Factory\Uri as UriFactory;
-+use Zapheus\Routing\RouteFactory;
-
--$factory = new RouteFactory($route);
-+$factory = new RouteFactory;
-+$factory->setRoute($route);
-
--$factory = new RequestFactory($request);
-+$factory = new RequestFactory;
-+$factory->setRequest($request);
-
--$factory = new ResponseFactory($response);
-+$factory = new ResponseFactory;
-+$factory->setResponse($response);
-
--$factory = new UriFactory($uri);
-+$factory = new UriFactory;
-+$factory->setUri($uri);
-```
-
-Building from scratch with `with` method chaining:
-
-``` diff
-+use Zapheus\Http\Factory\Request as RequestFactory;
-
--$factory = new Zapheus\Http\Factory\Request;
--$factory->server($_SERVER);
--$factory->method('POST');
--$factory->target('/api');
--$factory->data(array('name' => 'Zapheus'));
--$request = $factory->make();
-
-+$factory = new RequestFactory;
-+$request = $factory
-+    ->withServerParams($_SERVER)
-+    ->withMethod('POST')
-+    ->withRequestTarget('/api')
-+    ->withParsedBody(array('name' => 'Zapheus'))
-+    ->make();
-```
-
-``` diff
-+use Zapheus\Http\Factory\Response as ResponseFactory;
-+use Zapheus\Http\Message\Stream;
-
--$factory = new Zapheus\Http\Factory\Response;
--$factory->code(404);
--$factory->write('Not Found');
--$response = $factory->make();
-
-+$factory = new ResponseFactory;
-+$stream = new Stream(fopen('php://temp', 'r+'));
-+$stream->write('Not Found');
-+$response = $factory
-+    ->withStatus(404)
-+    ->withBody($stream)
-+    ->make();
-```
-
 ### Removal of `Ropebridge` and `Mutator`
 
 The `Ropebridge` and `Mutator` / `MutatorInterface` classes have been removed. Use `Application::set()` and `Http\Factory\*` instead:
@@ -367,12 +301,25 @@ Use `RouteFactory` for building routes:
 -$route = new Route('GET', '/test/{name}', $handler, $middlewares, array('name' => 'Zapheus'));
 +$factory = new RouteFactory;
 +$route = $factory
-+    ->method('GET')
-+    ->uri('/test/{name}')
-+    ->handler($handler)
-+    ->middlewares($middlewares)
++    ->setMethod('GET')
++    ->setUri('/test/{name}')
++    ->setHandler($handler)
++    ->setMiddlewares($middlewares)
 +    ->make();
 ```
+
+#### Route contract getter renames
+
+`Route` getter methods have been updated to use the `get` prefix and follow the naming pattern used in the PSR-07/PSR-15 interfaces:
+
+| v0.1.0 | v0.2.0 |
+|---|---|
+| `$route->handler()` | `$route->getHandler()` |
+| `$route->method()` | `$route->getMethod()` |
+| `$route->middlewares()` | `$route->getMiddlewares()` |
+| `$route->parameters()` | `$route->getParams()` |
+| `$route->regex()` | `$route->getRegex()` |
+| `$route->uri()` | `$route->getUri()` |
 
 #### `Zapheus\Routing\Router`
 
@@ -433,7 +380,7 @@ The constructor now accepts a `Router` instance instead of an array of `Route` o
 
 ### Resolver changes
 
-`Resolver::resolve()` now reads parameters from `$route->parameters()` directly. The second `$parameters` argument has been removed:
+`Resolver::resolve()` now reads parameters from `$route->getParams()` directly. The second `$parameters` argument has been removed:
 
 ``` diff
 +use Zapheus\Routing\Resolver;

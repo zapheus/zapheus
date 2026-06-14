@@ -23,7 +23,7 @@ class RouteTest extends Testcase
     {
         $expect = '/test';
 
-        $actual = $this->self->uri();
+        $actual = $this->self->getUri();
 
         $this->assertEquals($expect, $actual);
     }

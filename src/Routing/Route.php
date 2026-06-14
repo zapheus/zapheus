@@ -66,7 +66,7 @@ class Route implements Contract
      *
      * @return array<class-string, string>|callable|string
      */
-    public function handler()
+    public function getHandler()
     {
         return $this->handler;
     }
@@ -76,7 +76,7 @@ class Route implements Contract
      *
      * @return string
      */
-    public function method()
+    public function getMethod()
     {
         return $this->method;
     }
@@ -84,9 +84,9 @@ class Route implements Contract
     /**
      * Returns an array of middlewares.
      *
-     * @return array<int, \Zapheus\Contract\Http\Server\Middleware>
+     * @return array<integer, \Zapheus\Contract\Http\Server\Middleware>
      */
-    public function middlewares()
+    public function getMiddlewares()
     {
         return $this->middlewares;
     }
@@ -96,7 +96,7 @@ class Route implements Contract
      *
      * @return array<string, string>
      */
-    public function parameters()
+    public function getParams()
     {
         return $this->parameters;
     }
@@ -108,7 +108,7 @@ class Route implements Contract
      *
      * @return string
      */
-    public function regex()
+    public function getRegex()
     {
         // Turn "(/)" into "/?"
         $uri = preg_replace('#\(/\)#', '/?', $this->uri);
@@ -128,7 +128,7 @@ class Route implements Contract
      *
      * @return string
      */
-    public function uri()
+    public function getUri()
     {
         return $this->uri;
     }

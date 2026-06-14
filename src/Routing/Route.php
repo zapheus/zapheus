@@ -22,14 +22,14 @@ class Route implements Contract
     protected $method;
 
     /**
-     * @var array<mixed>
+     * @var \Zapheus\Contract\Http\Server\Middleware[]
      */
     protected $middlewares = array();
 
     /**
      * @var array<string, string>
      */
-    protected $parameters = array();
+    protected $params = array();
 
     /**
      * @var string
@@ -37,26 +37,21 @@ class Route implements Contract
     protected $uri;
 
     /**
-     * @param string                                                                   $method
-     * @param string                                                                   $uri
-     * @param array<class-string, string>|callable|string                              $handler
-     * @param array<integer, \Zapheus\Contract\Http\Server\Middleware>|callable|string $middlewares
-     * @param array<string, string>                                                    $parameters
+     * @param string                                      $method
+     * @param string                                      $uri
+     * @param array<class-string, string>|callable|string $handler
+     * @param \Zapheus\Contract\Http\Server\Middleware[]  $middlewares
+     * @param array<string, string>                       $params
      */
-    public function __construct($method, $uri, $handler, $middlewares = array(), $parameters = array())
+    public function __construct($method, $uri, $handler, $middlewares = array(), $params = array())
     {
-        if (! is_array($middlewares))
-        {
-            $middlewares = array($middlewares);
-        }
-
         $this->handler = $handler;
 
         $this->method = $method;
 
         $this->middlewares = $middlewares;
 
-        $this->parameters = $parameters;
+        $this->params = $params;
 
         $this->uri = $uri[0] !== '/' ? '/' . $uri : $uri;
     }
@@ -84,7 +79,7 @@ class Route implements Contract
     /**
      * Returns an array of middlewares.
      *
-     * @return array<integer, \Zapheus\Contract\Http\Server\Middleware>
+     * @return \Zapheus\Contract\Http\Server\Middleware[]
      */
     public function getMiddlewares()
     {
@@ -98,7 +93,7 @@ class Route implements Contract
      */
     public function getParams()
     {
-        return $this->parameters;
+        return $this->params;
     }
 
     /**
@@ -110,14 +105,20 @@ class Route implements Contract
      */
     public function getRegex()
     {
-        // Turn "(/)" into "/?"
+        // Turn "(/)" into "/?" -------------------------
+        /** @var string */
         $uri = preg_replace('#\(/\)#', '/?', $this->uri);
+        // ----------------------------------------------
 
-        // Create capture group for ":parameter", replaces ":parameter"
-        $uri = $this->capture($uri, '/:(' . self::ALLOWED_REGEX . ')/');
+        $regex = self::ALLOWED_REGEX;
 
-        // Create capture group for '{parameter}', replaces "{parameter}"
-        $uri = $this->capture($uri, '/{(' . self::ALLOWED_REGEX . ')}/');
+        // Capture '{parameter}' group" --------------------
+        $uri = $this->capture($uri, '/{(' . $regex . ')}/');
+        // -------------------------------------------------
+
+        // Capture ":parameter" group ---------------------
+        $uri = $this->capture($uri, '/:(' . $regex . ')/');
+        // ------------------------------------------------
 
         // Add start and end matching
         return '@^' . $uri . '$@D';
@@ -139,12 +140,13 @@ class Route implements Contract
      * @param string $pattern
      * @param string $search
      *
-     * @return string|null
+     * @return string
      */
     protected function capture($pattern, $search)
     {
-        $replace = '(?<$1>' . self::ALLOWED_REGEX . ')';
+        $regex = '(?<$1>' . self::ALLOWED_REGEX . ')';
 
-        return preg_replace($search, $replace, $pattern);
+        /** @var string */
+        return preg_replace($search, $regex, $pattern);
     }
 }

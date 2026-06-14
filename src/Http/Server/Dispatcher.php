@@ -21,12 +21,12 @@ class Dispatcher implements Contract
     protected $container;
 
     /**
-     * @var array<integer, \Zapheus\Contract\Http\Server\Middleware>
+     * @var \Zapheus\Contract\Http\Server\Middleware[]
      */
     protected $stack = array();
 
     /**
-     * @param array<integer, \Zapheus\Contract\Http\Server\Middleware> $stack
+     * @param \Zapheus\Contract\Http\Server\Middleware[] $stack
      */
     public function __construct(array $stack = array())
     {

@@ -44,7 +44,9 @@ class Resolver implements Contract
      */
     public function resolve(RouteContract $route)
     {
-        if (is_string($handler = $route->getHandler()))
+        $handler = $route->getHandler();
+
+        if (is_string($handler))
         {
             $handler = explode('@', $handler);
         }
@@ -53,16 +55,17 @@ class Resolver implements Contract
 
         if (is_array($handler))
         {
+            /** @var string */
             $class = $handler[0];
 
+            /** @var string */
             $method = $handler[1];
 
             $handler = array($this->instance($class), $method);
 
             $reflect = new \ReflectionMethod($class, $method);
         }
-
-        if (! is_array($handler))
+        else
         {
             $reflect = new \ReflectionFunction($handler);
         }

@@ -47,9 +47,9 @@ class Router implements Contract
     /**
      * Adds a new route instance in CONNECT HTTP method.
      *
-     * @param string                                                                   $uri
-     * @param callable|string                                                          $handler
-     * @param array<integer, \Zapheus\Contract\Http\Server\Middleware>|callable|string $middlewares
+     * @param string                                     $uri
+     * @param callable|string                            $handler
+     * @param \Zapheus\Contract\Http\Server\Middleware[] $middlewares
      *
      * @return self
      */
@@ -61,9 +61,9 @@ class Router implements Contract
     /**
      * Adds a new route instance in DELETE HTTP method.
      *
-     * @param string                                                                   $uri
-     * @param callable|string                                                          $handler
-     * @param array<integer, \Zapheus\Contract\Http\Server\Middleware>|callable|string $middlewares
+     * @param string                                     $uri
+     * @param callable|string                            $handler
+     * @param \Zapheus\Contract\Http\Server\Middleware[] $middlewares
      *
      * @return self
      */
@@ -75,9 +75,9 @@ class Router implements Contract
     /**
      * Adds a new route instance in GET HTTP method.
      *
-     * @param string                                                                   $uri
-     * @param callable|string                                                          $handler
-     * @param array<integer, \Zapheus\Contract\Http\Server\Middleware>|callable|string $middlewares
+     * @param string                                     $uri
+     * @param callable|string                            $handler
+     * @param \Zapheus\Contract\Http\Server\Middleware[] $middlewares
      *
      * @return self
      */
@@ -101,9 +101,9 @@ class Router implements Contract
     /**
      * Adds a new route instance in HEAD HTTP method.
      *
-     * @param string                                                                   $uri
-     * @param callable|string                                                          $handler
-     * @param array<integer, \Zapheus\Contract\Http\Server\Middleware>|callable|string $middlewares
+     * @param string                                     $uri
+     * @param callable|string                            $handler
+     * @param \Zapheus\Contract\Http\Server\Middleware[] $middlewares
      *
      * @return self
      */
@@ -115,9 +115,9 @@ class Router implements Contract
     /**
      * Adds a new route instance in OPTIONS HTTP method.
      *
-     * @param string                                                                   $uri
-     * @param callable|string                                                          $handler
-     * @param array<integer, \Zapheus\Contract\Http\Server\Middleware>|callable|string $middlewares
+     * @param string                                     $uri
+     * @param callable|string                            $handler
+     * @param \Zapheus\Contract\Http\Server\Middleware[] $middlewares
      *
      * @return self
      */
@@ -129,9 +129,9 @@ class Router implements Contract
     /**
      * Adds a new route instance in PATCH HTTP method.
      *
-     * @param string                                                                   $uri
-     * @param callable|string                                                          $handler
-     * @param array<integer, \Zapheus\Contract\Http\Server\Middleware>|callable|string $middlewares
+     * @param string                                     $uri
+     * @param callable|string                            $handler
+     * @param \Zapheus\Contract\Http\Server\Middleware[] $middlewares
      *
      * @return self
      */
@@ -143,9 +143,9 @@ class Router implements Contract
     /**
      * Adds a new route instance in POST HTTP method.
      *
-     * @param string                                                                   $uri
-     * @param callable|string                                                          $handler
-     * @param array<integer, \Zapheus\Contract\Http\Server\Middleware>|callable|string $middlewares
+     * @param string                                     $uri
+     * @param callable|string                            $handler
+     * @param \Zapheus\Contract\Http\Server\Middleware[] $middlewares
      *
      * @return self
      */
@@ -157,9 +157,9 @@ class Router implements Contract
     /**
      * Adds a new route instance in PURGE HTTP method.
      *
-     * @param string                                                                   $uri
-     * @param callable|string                                                          $handler
-     * @param array<integer, \Zapheus\Contract\Http\Server\Middleware>|callable|string $middlewares
+     * @param string                                     $uri
+     * @param callable|string                            $handler
+     * @param \Zapheus\Contract\Http\Server\Middleware[] $middlewares
      *
      * @return self
      */
@@ -171,9 +171,9 @@ class Router implements Contract
     /**
      * Adds a new route instance in PUT HTTP method.
      *
-     * @param string                                                                   $uri
-     * @param callable|string                                                          $handler
-     * @param array<integer, \Zapheus\Contract\Http\Server\Middleware>|callable|string $middlewares
+     * @param string                                     $uri
+     * @param callable|string                            $handler
+     * @param \Zapheus\Contract\Http\Server\Middleware[] $middlewares
      *
      * @return self
      */
@@ -185,7 +185,7 @@ class Router implements Contract
     /**
      * Returns an array of routes.
      *
-     * @return \Zapheus\Routing\Route[]
+     * @return \Zapheus\Contract\Routing\Route[]
      */
     public function routes()
     {
@@ -195,9 +195,9 @@ class Router implements Contract
     /**
      * Adds a new route instance in TRACE HTTP method.
      *
-     * @param string                                                                   $uri
-     * @param callable|string                                                          $handler
-     * @param array<integer, \Zapheus\Contract\Http\Server\Middleware>|callable|string $middlewares
+     * @param string                                     $uri
+     * @param callable|string                            $handler
+     * @param \Zapheus\Contract\Http\Server\Middleware[] $middlewares
      *
      * @return self
      */
@@ -209,10 +209,10 @@ class Router implements Contract
     /**
      * Prepares a new route instance.
      *
-     * @param string                                                                   $method
-     * @param string                                                                   $uri
-     * @param callable|string                                                          $handler
-     * @param array<integer, \Zapheus\Contract\Http\Server\Middleware>|callable|string $middlewares
+     * @param string                                     $method
+     * @param string                                     $uri
+     * @param callable|string                            $handler
+     * @param \Zapheus\Contract\Http\Server\Middleware[] $middlewares
      *
      * @return \Zapheus\Routing\Route
      */

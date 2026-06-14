@@ -14,14 +14,69 @@ use Zapheus\Contract\Routing\Router as Contract;
  */
 class RoutingProvider implements Provider
 {
-    const DISPATCHER = Application::DISPATCHER;
-
-    const ROUTER = Application::ROUTER;
+    /**
+     * @var \Zapheus\Contract\Routing\Router|null
+     */
+    protected $router = null;
 
     /**
-     * @var \Zapheus\Contract\Routing\Router
+     * Returns the router instance.
+     *
+     * @return \Zapheus\Contract\Routing\Router
      */
-    protected $router;
+    public function getRouter()
+    {
+        if ($this->router)
+        {
+            return $this->router;
+        }
+
+        return new Router;
+    }
+
+    /**
+     * Registers the bindings in the container.
+     *
+     * @param \Zapheus\Contract\Container\Writable $container
+     *
+     * @return \Zapheus\Contract\Container\Writable
+     */
+    public function register(Writable $container)
+    {
+        $name = Application::ROUTER;
+
+        if ($container->has($name))
+        {
+            /** @var \Zapheus\Contract\Routing\Router */
+            $router = $container->get($name);
+
+            $dispatch = new Dispatcher($router);
+
+            $class = Application::DISPATCHER;
+
+            return $container->set($class, $dispatch);
+        }
+
+        /** @var \Zapheus\Contract\Provider\Configuration */
+        $config = $container->get(self::CONFIG);
+
+        $default = $this->getRouter();
+
+        /** @var \Zapheus\Contract\Routing\Router|string */
+        $router = $config->get('app.router', $default);
+
+        if (is_string($router))
+        {
+            /** @var \Zapheus\Contract\Routing\Router */
+            $router = $container->get($router);
+        }
+
+        $dispatch = new Dispatcher($router);
+
+        $class = Application::DISPATCHER;
+
+        return $container->set($class, $dispatch);
+    }
 
     /**
      * Sets the router instance.
@@ -35,39 +90,5 @@ class RoutingProvider implements Provider
         $this->router = $router;
 
         return $this;
-    }
-
-    /**
-     * Registers the bindings in the container.
-     *
-     * @param \Zapheus\Contract\Container\Writable $container
-     *
-     * @return \Zapheus\Contract\Container\Writable
-     */
-    public function register(Writable $container)
-    {
-        if ($container->has(self::ROUTER))
-        {
-            $router = $container->get(self::ROUTER);
-
-            $dispatcher = new Dispatcher($router);
-
-            return $container->set(self::DISPATCHER, $dispatcher);
-        }
-
-        $config = $container->get(self::CONFIG);
-
-        $default = $this->router !== null ? $this->router : new Router;
-
-        $router = $config->get('app.router', $default);
-
-        if (is_string($router))
-        {
-            $router = $container->get($router);
-        }
-
-        $dispatcher = new Dispatcher($router);
-
-        return $container->set(self::DISPATCHER, $dispatcher);
     }
 }

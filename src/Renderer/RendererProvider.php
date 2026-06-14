@@ -20,11 +20,16 @@ class RendererProvider implements Provider
     protected $paths = array();
 
     /**
-     * @param array<string, string>|string $paths
+     * @param string|string[] $paths
      */
     public function __construct($paths = array())
     {
-        $this->paths = is_array($paths) ? $paths : array($paths);
+        if (is_string($paths))
+        {
+            $paths = array($paths);
+        }
+
+        $this->paths = $paths;
     }
 
     /**
@@ -36,12 +41,16 @@ class RendererProvider implements Provider
      */
     public function register(Writable $container)
     {
+        /** @var \Zapheus\Contract\Provider\Configuration */
         $config = $container->get(self::CONFIG);
 
+        /** @var string|string[] */
         $paths = $config->get('app.views', $this->paths);
 
-        $renderer = new Renderer(is_array($paths) ? $paths : array($paths));
+        $self = new Renderer($paths);
 
-        return $container->set(self::RENDERER, $renderer);
+        $class = self::RENDERER;
+
+        return $container->set($class, $self);
     }
 }

@@ -17,31 +17,38 @@ class Renderer implements Contract
     protected $paths = array();
 
     /**
-     * @param array<string, string>|string $paths
+     * @param string|string[] $paths
      */
     public function __construct($paths)
     {
-        $this->paths = is_array($paths) ? $paths : array($paths);
+        if (is_string($paths))
+        {
+            $paths = array($paths);
+        }
+
+        $this->paths = $paths;
     }
 
     /**
      * Renders a file from a specified template.
      *
-     * @param string               $template
+     * @param string               $plate
      * @param array<string, mixed> $data
      *
      * @return string
      * @throws \InvalidArgumentException
      */
-    public function render($template, array $data = array())
+    public function render($plate, array $data = array())
     {
-        $name = str_replace('.', '/', $template);
+        $name = str_replace('.', '/', $plate);
 
         foreach ($this->paths as $key => $path)
         {
             $files = $this->files($path);
 
-            $item = $this->check($files, $path, $key, "$name.php");
+            $temp = $name . '.php';
+
+            $item = $this->check($files, $path, $key, $temp);
 
             if ($item !== null)
             {
@@ -49,36 +56,39 @@ class Renderer implements Contract
             }
         }
 
-        $message = "Template file \"$name\" not found.";
+        $text = "Template file \"$name\" not found.";
 
-        throw new \InvalidArgumentException($message);
+        throw new \InvalidArgumentException($text);
     }
 
     /**
      * Checks if the specified file exists.
      *
-     * @param array<string, string> $files
-     * @param string                $path
-     * @param integer|string        $source
-     * @param string                $template
+     * @param string[]       $files
+     * @param string         $path
+     * @param integer|string $source
+     * @param string         $plate
      *
      * @return string|null
      */
-    protected function check(array $files, $path, $source, $template)
+    protected function check($files, $path, $source, $plate)
     {
+        $regex = '/^\d\//i';
+
         $file = null;
 
-        foreach ($files as $key => $value)
+        foreach ($files as $value)
         {
-            $filepath = str_replace($path, $source, $value);
+            $temp = str_replace($path, $source, $value);
 
-            $filepath = str_replace('\\', '/', $filepath);
+            $temp = str_replace('\\', '/', $temp);
 
-            $filepath = preg_replace('/^\d\//i', '', $filepath);
+            /** @var string */
+            $temp = preg_replace($regex, '', $temp);
 
-            $lowercase = strtolower($filepath) === $template;
+            $lower = strtolower($temp) === $plate;
 
-            if ($filepath === $template || $lowercase)
+            if ($temp === $plate || $lower)
             {
                 return $value;
             }
@@ -90,24 +100,25 @@ class Renderer implements Contract
     /**
      * Extracts the contents of the specified file.
      *
-     * @param string               $filepath
+     * @param string               $path
      * @param array<string, mixed> $data
      *
-     * @return false|string
+     * @return string
      */
-    protected function extract($filepath, array $data)
+    protected function extract($path, array $data)
     {
         extract($data);
 
         ob_start();
 
-        include $filepath;
+        include $path;
 
-        $contents = ob_get_contents();
+        /** @var string */
+        $result = ob_get_contents();
 
         ob_end_clean();
 
-        return $contents;
+        return $result;
     }
 
     /**
@@ -119,11 +130,13 @@ class Renderer implements Contract
      */
     protected function files($path)
     {
-        $directory = new \RecursiveDirectoryIterator($path);
+        $dir = new \RecursiveDirectoryIterator($path);
 
-        $iterator = new \RecursiveIteratorIterator($directory);
+        $item = new \RecursiveIteratorIterator($dir);
 
-        $regex = new \RegexIterator($iterator, '/^.+\.php$/i', 1);
+        $regex = '/^.+\.php$/i';
+
+        $regex = new \RegexIterator($item, $regex, 1);
 
         return array_keys(iterator_to_array($regex));
     }

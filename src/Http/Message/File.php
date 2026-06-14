@@ -34,12 +34,12 @@ class File implements Contract
     /**
      * @var integer|null
      */
-    protected $size;
+    protected $size = null;
 
     /**
      * @var string|null
      */
-    protected $type;
+    protected $type = null;
 
     /**
      * @param string  $file

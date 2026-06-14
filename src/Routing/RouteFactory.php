@@ -18,7 +18,7 @@ class RouteFactory
     protected $method;
 
     /**
-     * @var array<int, \Zapheus\Contract\Http\Server\Middleware>
+     * @var array<integer, \Zapheus\Contract\Http\Server\Middleware>
      */
     protected $middlewares = array();
 
@@ -99,7 +99,7 @@ class RouteFactory
     }
 
     /**
-     * @param array<int, \Zapheus\Contract\Http\Server\Middleware> $middlewares
+     * @param array<integer, \Zapheus\Contract\Http\Server\Middleware> $middlewares
      *
      * @return self
      */

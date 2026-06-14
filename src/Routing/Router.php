@@ -49,7 +49,7 @@ class Router implements Contract
      *
      * @param string                                                               $uri
      * @param callable|string                                                      $handler
-     * @param array<int, \Zapheus\Contract\Http\Server\Middleware>|callable|string $middlewares
+     * @param array<integer, \Zapheus\Contract\Http\Server\Middleware>|callable|string $middlewares
      *
      * @return self
      */
@@ -63,7 +63,7 @@ class Router implements Contract
      *
      * @param string                                                               $uri
      * @param callable|string                                                      $handler
-     * @param array<int, \Zapheus\Contract\Http\Server\Middleware>|callable|string $middlewares
+     * @param array<integer, \Zapheus\Contract\Http\Server\Middleware>|callable|string $middlewares
      *
      * @return self
      */
@@ -77,7 +77,7 @@ class Router implements Contract
      *
      * @param string                                                               $uri
      * @param callable|string                                                      $handler
-     * @param array<int, \Zapheus\Contract\Http\Server\Middleware>|callable|string $middlewares
+     * @param array<integer, \Zapheus\Contract\Http\Server\Middleware>|callable|string $middlewares
      *
      * @return self
      */
@@ -103,7 +103,7 @@ class Router implements Contract
      *
      * @param string                                                               $uri
      * @param callable|string                                                      $handler
-     * @param array<int, \Zapheus\Contract\Http\Server\Middleware>|callable|string $middlewares
+     * @param array<integer, \Zapheus\Contract\Http\Server\Middleware>|callable|string $middlewares
      *
      * @return self
      */
@@ -117,7 +117,7 @@ class Router implements Contract
      *
      * @param string                                                               $uri
      * @param callable|string                                                      $handler
-     * @param array<int, \Zapheus\Contract\Http\Server\Middleware>|callable|string $middlewares
+     * @param array<integer, \Zapheus\Contract\Http\Server\Middleware>|callable|string $middlewares
      *
      * @return self
      */
@@ -131,7 +131,7 @@ class Router implements Contract
      *
      * @param string                                                               $uri
      * @param callable|string                                                      $handler
-     * @param array<int, \Zapheus\Contract\Http\Server\Middleware>|callable|string $middlewares
+     * @param array<integer, \Zapheus\Contract\Http\Server\Middleware>|callable|string $middlewares
      *
      * @return self
      */
@@ -145,7 +145,7 @@ class Router implements Contract
      *
      * @param string                                                               $uri
      * @param callable|string                                                      $handler
-     * @param array<int, \Zapheus\Contract\Http\Server\Middleware>|callable|string $middlewares
+     * @param array<integer, \Zapheus\Contract\Http\Server\Middleware>|callable|string $middlewares
      *
      * @return self
      */
@@ -159,7 +159,7 @@ class Router implements Contract
      *
      * @param string                                                               $uri
      * @param callable|string                                                      $handler
-     * @param array<int, \Zapheus\Contract\Http\Server\Middleware>|callable|string $middlewares
+     * @param array<integer, \Zapheus\Contract\Http\Server\Middleware>|callable|string $middlewares
      *
      * @return self
      */
@@ -173,7 +173,7 @@ class Router implements Contract
      *
      * @param string                                                               $uri
      * @param callable|string                                                      $handler
-     * @param array<int, \Zapheus\Contract\Http\Server\Middleware>|callable|string $middlewares
+     * @param array<integer, \Zapheus\Contract\Http\Server\Middleware>|callable|string $middlewares
      *
      * @return self
      */
@@ -197,7 +197,7 @@ class Router implements Contract
      *
      * @param string                                                               $uri
      * @param callable|string                                                      $handler
-     * @param array<int, \Zapheus\Contract\Http\Server\Middleware>|callable|string $middlewares
+     * @param array<integer, \Zapheus\Contract\Http\Server\Middleware>|callable|string $middlewares
      *
      * @return self
      */
@@ -212,7 +212,7 @@ class Router implements Contract
      * @param string                                                               $method
      * @param string                                                               $uri
      * @param callable|string                                                      $handler
-     * @param array<int, \Zapheus\Contract\Http\Server\Middleware>|callable|string $middlewares
+     * @param array<integer, \Zapheus\Contract\Http\Server\Middleware>|callable|string $middlewares
      *
      * @return \Zapheus\Routing\Route
      */

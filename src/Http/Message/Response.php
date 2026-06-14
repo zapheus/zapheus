@@ -17,7 +17,7 @@ class Response extends Message implements Contract
     protected $code = 200;
 
     /**
-     * @var array<int, string>
+     * @var array<integer, string>
      */
     protected $reasons = array(
         100 => 'Continue',

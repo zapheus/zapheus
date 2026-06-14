@@ -40,7 +40,7 @@ class Route implements Contract
      * @param string                                                               $method
      * @param string                                                               $uri
      * @param array<class-string, string>|callable|string                          $handler
-     * @param array<int, \Zapheus\Contract\Http\Server\Middleware>|callable|string $middlewares
+     * @param array<integer, \Zapheus\Contract\Http\Server\Middleware>|callable|string $middlewares
      * @param array<string, string>                                                $parameters
      */
     public function __construct($method, $uri, $handler, $middlewares = array(), $parameters = array())

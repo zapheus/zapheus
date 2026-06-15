@@ -32,7 +32,7 @@ class Uri implements Contract
     protected $path = '';
 
     /**
-     * @var integer|string|null
+     * @var integer|null
      */
     protected $port = null;
 

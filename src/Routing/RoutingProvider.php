@@ -65,11 +65,13 @@ class RoutingProvider implements Provider
         /** @var \Zapheus\Contract\Routing\Router|string */
         $router = $config->get('app.router', $default);
 
+        // If string, try to retrieve from container ---
         if (is_string($router))
         {
             /** @var \Zapheus\Contract\Routing\Router */
             $router = $container->get($router);
         }
+        // ---------------------------------------------
 
         $dispatch = new Dispatcher($router);
 

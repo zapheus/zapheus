@@ -9,11 +9,12 @@ All notable changes to `Zapheus` will be documented in this file.
 - HTTP factories in `Http\Factory`
 
 ### Changed
-- `Application` implements `Handler`, `Writable`
 - `Application::run` returns `Stream` not `string`
+- `Application` implements `Handler`, `Writable`
 - Message - Conformed to [PSR standards](https://www.php-fig.org/psr/psr-7)
 - Moved interfaces to `Zapheus\Contract`
 - Routing - `Dispatcher` accepts `Router`
+- Routing - `proteceted namespace` to `public setNamespace`
 - Routing - Method names of `Route`
 - Server - `container` to `setContainer` in `Dispatcher`
 

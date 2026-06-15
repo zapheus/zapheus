@@ -2,6 +2,7 @@
 
 namespace Zapheus\Routing;
 
+use Zapheus\Fixture\Http\Middlewares\JsonMiddleware;
 use Zapheus\Testcase;
 
 /**
@@ -49,6 +50,89 @@ class RouterTest extends Testcase
         $actual = $this->self->routes();
 
         $this->assertCount($expect, $actual);
+    }
+
+    /**
+     * @return void
+     */
+    public function test_passed_if_route_is_added_with_callable()
+    {
+        $callback = function ()
+        {
+            return;
+        };
+
+        $this->self->get('/test', 'HailController@greet', $callback);
+
+        $routes = $this->self->routes();
+
+        $route = $routes[0];
+
+        $expect = 1;
+
+        $actual = $route->getMiddlewares();
+
+        $this->assertCount($expect, $actual);
+    }
+
+    /**
+     * @return void
+     */
+    public function test_passed_if_route_is_added_with_middleware()
+    {
+        $middleware = new JsonMiddleware;
+
+        $this->self->get('/test', 'HailController@greet', array($middleware));
+
+        $routes = $this->self->routes();
+
+        $route = $routes[0];
+
+        $expect = 1;
+
+        $actual = $route->getMiddlewares();
+
+        $this->assertCount($expect, $actual);
+    }
+
+    /**
+     * @return void
+     */
+    public function test_passed_if_route_is_added_with_single()
+    {
+        $class = 'Zapheus\Fixture\Http\Middlewares\JsonMiddleware';
+
+        $this->self->get('/test', 'HailController@greet', $class);
+
+        $routes = $this->self->routes();
+
+        $route = $routes[0];
+
+        $expect = 1;
+
+        $actual = $route->getMiddlewares();
+
+        $this->assertCount($expect, $actual);
+    }
+
+    /**
+     * @return void
+     */
+    public function test_passed_if_route_is_added_with_namespace()
+    {
+        $this->self->setNamespace('Zapheus\Fixture\Http\Controllers');
+
+        $this->self->get('/test', 'HailController@greet');
+
+        $expect = 'Zapheus\Fixture\Http\Controllers\HailController@greet';
+
+        $routes = $this->self->routes();
+
+        $route = $routes[0];
+
+        $actual = $route->getHandler();
+
+        $this->assertEquals($expect, $actual);
     }
 
     /**

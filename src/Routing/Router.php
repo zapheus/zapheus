@@ -2,8 +2,10 @@
 
 namespace Zapheus\Routing;
 
+use Zapheus\Contract\Http\Server\Middleware;
 use Zapheus\Contract\Routing\Route as RouteContract;
 use Zapheus\Contract\Routing\Router as Contract;
+use Zapheus\Http\Server\ClosureMiddleware;
 
 /**
  * @package Zapheus
@@ -47,9 +49,9 @@ class Router implements Contract
     /**
      * Adds a new route instance in CONNECT HTTP method.
      *
-     * @param string                                     $uri
-     * @param callable|string                            $handler
-     * @param \Zapheus\Contract\Http\Server\Middleware[] $middlewares
+     * @param string          $uri
+     * @param callable|string $handler
+     * @param mixed|mixed[]   $middlewares
      *
      * @return self
      */
@@ -61,9 +63,9 @@ class Router implements Contract
     /**
      * Adds a new route instance in DELETE HTTP method.
      *
-     * @param string                                     $uri
-     * @param callable|string                            $handler
-     * @param \Zapheus\Contract\Http\Server\Middleware[] $middlewares
+     * @param string          $uri
+     * @param callable|string $handler
+     * @param mixed|mixed[]   $middlewares
      *
      * @return self
      */
@@ -75,9 +77,9 @@ class Router implements Contract
     /**
      * Adds a new route instance in GET HTTP method.
      *
-     * @param string                                     $uri
-     * @param callable|string                            $handler
-     * @param \Zapheus\Contract\Http\Server\Middleware[] $middlewares
+     * @param string          $uri
+     * @param callable|string $handler
+     * @param mixed|mixed[]   $middlewares
      *
      * @return self
      */
@@ -101,9 +103,9 @@ class Router implements Contract
     /**
      * Adds a new route instance in HEAD HTTP method.
      *
-     * @param string                                     $uri
-     * @param callable|string                            $handler
-     * @param \Zapheus\Contract\Http\Server\Middleware[] $middlewares
+     * @param string          $uri
+     * @param callable|string $handler
+     * @param mixed|mixed[]   $middlewares
      *
      * @return self
      */
@@ -115,9 +117,9 @@ class Router implements Contract
     /**
      * Adds a new route instance in OPTIONS HTTP method.
      *
-     * @param string                                     $uri
-     * @param callable|string                            $handler
-     * @param \Zapheus\Contract\Http\Server\Middleware[] $middlewares
+     * @param string          $uri
+     * @param callable|string $handler
+     * @param mixed|mixed[]   $middlewares
      *
      * @return self
      */
@@ -129,9 +131,9 @@ class Router implements Contract
     /**
      * Adds a new route instance in PATCH HTTP method.
      *
-     * @param string                                     $uri
-     * @param callable|string                            $handler
-     * @param \Zapheus\Contract\Http\Server\Middleware[] $middlewares
+     * @param string          $uri
+     * @param callable|string $handler
+     * @param mixed|mixed[]   $middlewares
      *
      * @return self
      */
@@ -143,9 +145,9 @@ class Router implements Contract
     /**
      * Adds a new route instance in POST HTTP method.
      *
-     * @param string                                     $uri
-     * @param callable|string                            $handler
-     * @param \Zapheus\Contract\Http\Server\Middleware[] $middlewares
+     * @param string          $uri
+     * @param callable|string $handler
+     * @param mixed|mixed[]   $middlewares
      *
      * @return self
      */
@@ -157,9 +159,9 @@ class Router implements Contract
     /**
      * Adds a new route instance in PURGE HTTP method.
      *
-     * @param string                                     $uri
-     * @param callable|string                            $handler
-     * @param \Zapheus\Contract\Http\Server\Middleware[] $middlewares
+     * @param string          $uri
+     * @param callable|string $handler
+     * @param mixed|mixed[]   $middlewares
      *
      * @return self
      */
@@ -171,9 +173,9 @@ class Router implements Contract
     /**
      * Adds a new route instance in PUT HTTP method.
      *
-     * @param string                                     $uri
-     * @param callable|string                            $handler
-     * @param \Zapheus\Contract\Http\Server\Middleware[] $middlewares
+     * @param string          $uri
+     * @param callable|string $handler
+     * @param mixed|mixed[]   $middlewares
      *
      * @return self
      */
@@ -193,11 +195,25 @@ class Router implements Contract
     }
 
     /**
+     * Sets the namespace prefix for route handlers.
+     *
+     * @param string $namespace
+     *
+     * @return self
+     */
+    public function setNamespace($namespace)
+    {
+        $this->namespace = $namespace;
+
+        return $this;
+    }
+
+    /**
      * Adds a new route instance in TRACE HTTP method.
      *
-     * @param string                                     $uri
-     * @param callable|string                            $handler
-     * @param \Zapheus\Contract\Http\Server\Middleware[] $middlewares
+     * @param string          $uri
+     * @param callable|string $handler
+     * @param mixed|mixed[]   $middlewares
      *
      * @return self
      */
@@ -209,10 +225,10 @@ class Router implements Contract
     /**
      * Prepares a new route instance.
      *
-     * @param string                                     $method
-     * @param string                                     $uri
-     * @param callable|string                            $handler
-     * @param \Zapheus\Contract\Http\Server\Middleware[] $middlewares
+     * @param string          $method
+     * @param string          $uri
+     * @param callable|string $handler
+     * @param mixed|mixed[]   $middlewares
      *
      * @return \Zapheus\Routing\Route
      */
@@ -227,6 +243,37 @@ class Router implements Contract
             $handler = $namespace . $handler;
         }
 
-        return new Route($method, $uri, $handler, $middlewares);
+        // Convert middlewares from the parameter ---
+        if (! is_array($middlewares))
+        {
+            $middlewares = array($middlewares);
+        }
+
+        $temp = array();
+
+        foreach ($middlewares as $item)
+        {
+            // Instantiate as a class ---
+            if (is_string($item))
+            {
+                $item = new $item;
+            }
+            // --------------------------
+
+            if ($item instanceof Middleware)
+            {
+                $temp[] = $item;
+            }
+
+            if (is_callable($item))
+            {
+                $new = new ClosureMiddleware($item);
+
+                $temp[] = $new;
+            }
+        }
+        // ------------------------------------------
+
+        return new Route($method, $uri, $handler, $temp);
     }
 }

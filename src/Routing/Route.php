@@ -12,7 +12,7 @@ use Zapheus\Contract\Routing\Route as Contract;
 class Route implements Contract
 {
     /**
-     * @var array<class-string, string>|callable|string
+     * @var callable|string
      */
     protected $handler;
 
@@ -37,11 +37,11 @@ class Route implements Contract
     protected $uri;
 
     /**
-     * @param string                                      $method
-     * @param string                                      $uri
-     * @param array<class-string, string>|callable|string $handler
-     * @param \Zapheus\Contract\Http\Server\Middleware[]  $middlewares
-     * @param array<string, string>                       $params
+     * @param string                                     $method
+     * @param string                                     $uri
+     * @param callable|string                            $handler
+     * @param \Zapheus\Contract\Http\Server\Middleware[] $middlewares
+     * @param array<string, string>                      $params
      */
     public function __construct($method, $uri, $handler, $middlewares = array(), $params = array())
     {
@@ -59,7 +59,7 @@ class Route implements Contract
     /**
      * Returns the handler.
      *
-     * @return array<class-string, string>|callable|string
+     * @return callable|string
      */
     public function getHandler()
     {

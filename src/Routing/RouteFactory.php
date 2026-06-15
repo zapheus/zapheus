@@ -8,7 +8,7 @@ use Zapheus\Contract\Routing\Route as Contract;
 class RouteFactory
 {
     /**
-     * @var array<class-string, string>|callable|string
+     * @var callable|string
      */
     protected $handler;
 
@@ -75,7 +75,7 @@ class RouteFactory
     }
 
     /**
-     * @param array<class-string, string>|callable|string $handler
+     * @param callable|string $handler
      *
      * @return self
      */

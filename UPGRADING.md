@@ -610,7 +610,8 @@ Also use `RouteFactory` for building routes:
  /**
   * Returns the handler.
   *
-  * @return array<class-string, string>|callable|string
+- * @return array|callable|string
++ * @return callable|string
   */
 -public function handler();
 +public function getHandler();

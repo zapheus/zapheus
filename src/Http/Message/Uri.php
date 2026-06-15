@@ -22,7 +22,7 @@ class Uri implements Contract
     protected $host = '';
 
     /**
-     * @var string
+     * @var string|null
      */
     protected $pass = null;
 

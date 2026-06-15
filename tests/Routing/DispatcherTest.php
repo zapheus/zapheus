@@ -133,6 +133,7 @@ class DispatcherTest extends Testcase
         // Add route as an anonymous function ------
         $fn = function ($name = 'Doe')
         {
+            /** @phpstan-ignore-next-line */
             $name = sprintf('my name is %s', $name);
 
             $text = 'Hello, $1 and this is a test.';
@@ -146,6 +147,7 @@ class DispatcherTest extends Testcase
         // Add route as a simple callable ---------
         $fn = function ($name)
         {
+            /** @phpstan-ignore-next-line */
             return 'Hello everyone! I am ' . $name;
         };
 

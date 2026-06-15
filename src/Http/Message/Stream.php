@@ -66,6 +66,7 @@ class Stream implements Contract
      */
     public function read($length)
     {
+        /** @phpstan-ignore-next-line */
         return fread($this->stream, $length);
     }
 

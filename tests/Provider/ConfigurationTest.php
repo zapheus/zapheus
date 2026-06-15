@@ -167,6 +167,7 @@ class ConfigurationTest extends Testcase
      */
     public function test_passed_if_flatten_skips_non_string_key()
     {
+        /** @phpstan-ignore-next-line */
         $config = new Configuration(array(0 => 'skipped'));
 
         $actual = $config->all(true);

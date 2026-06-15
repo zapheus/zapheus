@@ -45,6 +45,7 @@ class DispatcherTest extends Testcase
         $this->self->pipe(function ($request, $next)
         {
             /** @var \Zapheus\Contract\Http\Message\Response */
+            /** @phpstan-ignore-next-line */
             $response = $next($request);
 
             /** @var resource */
@@ -64,6 +65,7 @@ class DispatcherTest extends Testcase
         $this->self->pipe(function ($request, $next)
         {
             /** @var \Zapheus\Contract\Http\Message\Response */
+            /** @phpstan-ignore-next-line */
             $response = $next($request);
 
             $response->getBody()->write('Hello');

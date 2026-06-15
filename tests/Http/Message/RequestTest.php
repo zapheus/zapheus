@@ -25,6 +25,7 @@ class RequestTest extends Testcase
     {
         $this->doExpectException('InvalidArgumentException');
 
+        /** @phpstan-ignore-next-line */
         $this->self->withParsedBody('string');
     }
 
@@ -45,6 +46,7 @@ class RequestTest extends Testcase
     {
         $this->doExpectException('InvalidArgumentException');
 
+        /** @phpstan-ignore-next-line */
         $this->self->withUploadedFiles(array('test' => array('not_a_file')));
     }
 
@@ -129,6 +131,7 @@ class RequestTest extends Testcase
 
         $factory = new RequestFactory;
 
+        /** @phpstan-ignore-next-line */
         $factory->withServerParams($server);
 
         $request = $factory->make();
@@ -248,6 +251,7 @@ class RequestTest extends Testcase
 
         $factory = new RequestFactory;
 
+        /** @phpstan-ignore-next-line */
         $factory->withServerParams($server);
 
         $request = $factory->make();
@@ -303,6 +307,7 @@ class RequestTest extends Testcase
 
         $server['HTTPS'] = 'on';
 
+        /** @phpstan-ignore-next-line */
         $request = new Request('GET', '/', $server);
 
         $expect = 'https';
@@ -345,14 +350,17 @@ class RequestTest extends Testcase
         // --------------------------------
 
         // Simulate a file upload in $_FILES -----------
+        /** @phpstan-ignore-next-line */
         $_FILES['file']['error'] = 0;
 
         $path = __DIR__ . '/../..';
 
         $file = $path . '/Fixture/Views/LoremIpsum.php';
 
+        /** @phpstan-ignore-next-line */
         $_FILES['file']['name'] = basename($file);
 
+        /** @phpstan-ignore-next-line */
         $_FILES['file']['tmp_name'] = $file;
         // ---------------------------------------------
 

@@ -67,6 +67,7 @@ class Resolver implements Contract
         }
         else
         {
+            /** @phpstan-ignore-next-line */
             $reflect = new \ReflectionFunction($handler);
         }
 
@@ -74,6 +75,7 @@ class Resolver implements Contract
 
         $params = array_values($params);
 
+        /** @phpstan-ignore-next-line */
         return call_user_func_array($handler, $params);
     }
 

@@ -59,7 +59,7 @@ class ReflectionContainer implements Contract
      *
      * @param \ReflectionMethod $reflect
      *
-     * @return array<integer, mixed>
+     * @return mixed[]
      */
     protected function resolve(\ReflectionMethod $reflect)
     {

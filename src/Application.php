@@ -35,14 +35,14 @@ class Application implements Handler, Writable
     const ROUTER = 'Zapheus\Contract\Routing\Router';
 
     /**
-     * @var \Zapheus\Contract\Container\Writable
-     */
-    protected $self;
-
-    /**
      * @var string[]
      */
     protected $providers = array();
+
+    /**
+     * @var \Zapheus\Contract\Container\Writable|null
+     */
+    protected $self = null;
 
     /**
      * Adds a new provider to be registered.
@@ -71,18 +71,18 @@ class Application implements Handler, Writable
      */
     public function config($data)
     {
+        // Force "$data" to become an array -------
         $items = is_array($data) ? $data : array();
 
         $config = new Configuration($items);
+        // ----------------------------------------
 
         if (is_string($data))
         {
             $config->load($data);
         }
 
-        $class = Provider::CONFIG;
-
-        return $this->set($class, $config);
+        return $this->set(self::CONFIG, $config);
     }
 
     /**
@@ -130,7 +130,7 @@ class Application implements Handler, Writable
      */
     public function getContainer()
     {
-        if ($this->self !== null)
+        if ($this->self)
         {
             return $this->self;
         }

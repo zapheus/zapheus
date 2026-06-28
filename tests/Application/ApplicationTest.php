@@ -6,7 +6,9 @@ use Zapheus\Application;
 use Zapheus\Container\Container;
 use Zapheus\Fixture\Http\Controllers\HailController;
 use Zapheus\Fixture\Http\Middlewares\JsonMiddleware;
+use Zapheus\Fixture\Http\Middlewares\SpoofMethod;
 use Zapheus\Fixture\Providers\TestProvider;
+use Zapheus\Http\Factory\Request as RequestFactory;
 use Zapheus\Http\Factory\Response as ResponseFactory;
 use Zapheus\Http\Message\Response;
 use Zapheus\Http\Message\Stream;
@@ -23,6 +25,25 @@ use Zapheus\Routing\Router;
  */
 class ApplicationTest extends Testcase
 {
+    /**
+     * @runInSeparateProcess
+     *
+     * @return void
+     */
+    public function test_failed_if_post_fails_put_route()
+    {
+        $this->doExpectException('UnexpectedValueException');
+
+        $this->doExpectExceptionMessage('Route "POST /users/1" not found');
+
+        $app = $this->request('POST', '/users/1');
+
+        /** @var \Zapheus\Contract\Http\Message\Request */
+        $request = $app->get(Application::REQUEST);
+
+        $app->handle($request);
+    }
+
     /**
      * @runInSeparateProcess
      *
@@ -201,26 +222,63 @@ class ApplicationTest extends Testcase
     /**
      * @return void
      */
+    public function test_passed_if_spoofed_method_matches()
+    {
+        $this->self->add(new ServerProvider(array(new SpoofMethod)));
+
+        $app = $this->request('POST', '/users/1');
+
+        $class = Application::REQUEST;
+
+        /** @var \Zapheus\Contract\Http\Message\Request */
+        $request = $app->get($class);
+
+        $factory = new RequestFactory;
+
+        $factory->setRequest($request);
+
+        $factory->withParsedBody(array('_method' => 'PUT'));
+
+        $app->set($class, $factory->make());
+
+        /** @var \Zapheus\Contract\Http\Message\Request */
+        $request = $app->get($class);
+
+        $expect = 'Hello, world';
+
+        $response = $app->handle($request);
+
+        /** @var string */
+        $actual = $response->getBody()->__toString();
+
+        $this->assertEquals($expect, $actual);
+    }
+
+    /**
+     * @return void
+     */
     protected function doSetUp()
     {
         $this->self = new Application;
 
-        // Route with its handler as string-based ------
-        $controller = $this->define(new HailController);
+        $routes = array();
 
-        $handler = $controller . '@greet';
+        // Route with its handler as string-based ---
+        $ctrl = $this->define(new HailController);
 
-        $route = new Route('GET', '/', $handler);
-        // ---------------------------------------------
+        $handler = $ctrl . '@greet';
 
-        // Same string-based route but with middleware ------
+        $routes[] = new Route('GET', '/', $handler);
+        // ------------------------------------------
+
+        // Same string-based route but with middleware ----------
         $items = array(new JsonMiddleware);
 
-        $json = new Route('POST', '/json', $handler, $items);
-        // --------------------------------------------------
+        $routes[] = new Route('POST', '/json', $handler, $items);
+        // ------------------------------------------------------
 
-        // Route with a middleware as a callback ----
-        $test = new Route('GET', '/test', function ()
+        // Route with a middleware as a callback ---
+        $cb = function ()
         {
             $factory = new ResponseFactory;
 
@@ -236,10 +294,16 @@ class ApplicationTest extends Testcase
             $factory->withStatus(200);
 
             return $factory->make();
-        });
-        // ------------------------------------------
+        };
 
-        $router = new Router(array($route, $json, $test));
+        $routes[] = new Route('GET', '/test', $cb);
+        // -----------------------------------------
+
+        // Route with a "PUT" as spoofed HTTP method --------
+        $routes[] = new Route('PUT', '/users/:id', $handler);
+
+        $router = new Router($routes);
+        // --------------------------------------------------
 
         // Initialize the route dispatcher ---
         $dispatch = new Dispatcher($router);

@@ -158,17 +158,19 @@ class Application implements Handler, Writable
      */
     public function handle(Request $request)
     {
-        $handler = new RoutingHandler($this->getContainer());
+        $app = $this->getContainer();
 
-        if (! $this->has(Application::MIDDLEWARE))
+        $routing = new RoutingHandler($app);
+
+        if ($this->has(self::MIDDLEWARE))
         {
-            return $handler->handle($request);
+            /** @var \Zapheus\Contract\Http\Server\Dispatcher */
+            $middleware = $this->get(self::MIDDLEWARE);
+
+            return $middleware->process($request, $routing);
         }
 
-        /** @var \Zapheus\Contract\Http\Server\Dispatcher */
-        $dispatch = $this->get(Application::MIDDLEWARE);
-
-        return $dispatch->process($request, $handler);
+        return $routing->handle($request);
     }
 
     /**

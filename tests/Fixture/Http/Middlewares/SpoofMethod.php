@@ -22,9 +22,10 @@ class SpoofMethod implements Middleware
      */
     public function process(Request $request, Handler $handler)
     {
+        /** @var array<string, string> */
         $body = $request->getParsedBody();
 
-        if (is_array($body) && isset($body['_method']) && is_string($body['_method']))
+        if (array_key_exists('_method', $body))
         {
             $factory = new RequestFactory;
 
@@ -32,7 +33,7 @@ class SpoofMethod implements Middleware
 
             $factory->withMethod($body['_method']);
 
-            return $handler->handle($factory->make());
+            $request = $factory->make();
         }
 
         return $handler->handle($request);
